@@ -202,7 +202,7 @@ export function searchText(event) {
 
 // types are FILTER_GROUPS keys; loc is '' (anywhere), a region key ('europe') or a country code ('US').
 // past: list completed events too (the page's "Show completed", off by default).
-export const EMPTY_FILTERS = Object.freeze({ types: [], loc: '', q: '', past: false });
+export const EMPTY_FILTERS = Object.freeze({ types: [], format: '', loc: '', q: '', past: false });
 
 export function matchesLoc(event, loc) {
   if (!loc) return true;
@@ -217,6 +217,7 @@ export function filterEvents(events, filters, ctx) {
   return events.filter((e) => {
     if (!filters.past && status(e, ctx.today) === 'past') return false;
     if (filters.types.length && !filters.types.includes(groupOf(e.type))) return false;
+    if (filters.format && !e.formats.includes(filters.format)) return false;
     if (!matchesLoc(e, filters.loc)) return false;
     if (terms.length) {
       const text = searchText(e);
@@ -239,12 +240,14 @@ export function filtersFromParams(params) {
   const types = (params.get('type') || '').split(',').filter((t) => FILTER_GROUPS[t]);
   let loc = params.get('loc') || '';
   if (!REGIONS[loc]) loc = /^[a-z]{2}$/i.test(loc) ? loc.toUpperCase() : '';
-  return { types, loc, q: params.get('q') || '', past: params.get('past') === '1' };
+  const format = FORMATS[params.get('format')] ? params.get('format') : '';
+  return { types, format, loc, q: params.get('q') || '', past: params.get('past') === '1' };
 }
 
 export function filtersToParams(f) {
   const p = new URLSearchParams();
   if (f.types.length) p.set('type', f.types.join(','));
+  if (f.format) p.set('format', f.format);
   if (f.loc) p.set('loc', f.loc);
   if (f.q.trim()) p.set('q', f.q.trim());
   if (f.past) p.set('past', '1');

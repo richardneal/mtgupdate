@@ -73,11 +73,11 @@ test('search ignores case and accents and matches formats, sets, organizers', ()
 });
 
 test('filters survive the URL', () => {
-  const filters = { types: ['pro', 'rc'], loc: 'US', q: 'standard', past: true };
+  const filters = { types: ['pro', 'rc'], format: 'standard', loc: 'US', q: 'standard', past: true };
   const back = filtersFromParams(new URLSearchParams(filtersToParams(filters).toString()));
   assert.deepEqual(back, filters);
-  assert.deepEqual(filtersFromParams(new URLSearchParams('type=bogus,pro&loc=europe')),
-    { types: ['pro'], loc: 'europe', q: '', past: false });
+  assert.deepEqual(filtersFromParams(new URLSearchParams('type=bogus,pro&loc=europe&format=chess')),
+    { types: ['pro'], format: '', loc: 'europe', q: '', past: false });
 });
 
 test('calendar feed is valid iCalendar', () => {
@@ -116,4 +116,12 @@ test('weekendOf', () => {
   assert.deepEqual(weekendOf('2027-02-14'), { start: '2027-02-12', end: '2027-02-14' }); // Sun
   assert.deepEqual(weekendOf('2027-01-08'), { start: '2027-01-08', end: '2027-01-10' }); // Fri
   assert.equal(weekendOf('2027-01-06'), null); // Wed
+});
+
+test('filter by format', () => {
+  const pioneer = filterEvents(data.events, f({ format: 'pioneer' }), ctx);
+  assert.ok(pioneer.length && pioneer.every((e) => e.formats.includes('pioneer')));
+  const limited = filterEvents(data.events, f({ format: 'limited' }), ctx).map((e) => e.id);
+  assert.ok(limited.includes('2027-pt-nauctis'), 'mixed-format events match each of their formats');
+  assert.ok(!limited.includes('2027-spotlight-dc'), 'Team Limited is its own format');
 });

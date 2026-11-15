@@ -1,5 +1,5 @@
 import {
-  TYPES, FILTER_GROUPS, REGIONS, EMPTY_FILTERS,
+  TYPES, FILTER_GROUPS, REGIONS, FORMATS, EMPTY_FILTERS,
   regionOf, countryName, flag, todayISO, status, dateRange, weekdayRange,
   monthKey, monthLabel, countdown, resolveLink, formatLabel, filterEvents,
   sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc, isWeekend,
@@ -68,6 +68,20 @@ function buildTypeChips() {
   });
 }
 
+// Formats on the schedule, counted against every other filter so each shows what it would give.
+function buildFormats() {
+  const select = $('#format');
+  const pool = filterEvents(data.events, { ...filters, format: '' }, { today });
+  const present = Object.keys(FORMATS).filter((f) => data.events.some((e) => e.formats.includes(f)));
+  select.replaceChildren(
+    el('option', { value: '' }, `All formats (${pool.length})`),
+    ...present.map((f) => el('option', { value: f }, `${FORMATS[f]} (${pool.filter((e) => e.formats.includes(f)).length})`)),
+  );
+  select.value = filters.format;
+  if (select.value !== filters.format) { filters.format = ''; select.value = ''; }
+  select.classList.toggle('set', !!filters.format);
+}
+
 function buildLocations() {
   const select = $('#loc');
   // Count against everything but the location itself, so the menu shows what each choice would give.
@@ -99,6 +113,7 @@ function syncControls() {
     const t = chip.dataset.type;
     chip.setAttribute('aria-pressed', String(t ? filters.types.includes(t) : !filters.types.length));
   }
+  buildFormats();
   buildLocations();
   const loc = $('#loc');
   loc.value = filters.loc;
@@ -106,7 +121,7 @@ function syncControls() {
   loc.classList.toggle('set', !!filters.loc);
   if ($('#q').value !== filters.q) $('#q').value = filters.q;
   $('#past').checked = filters.past;
-  $('#reset').hidden = !(filters.types.length || filters.loc || filters.q.trim());
+  $('#reset').hidden = !(filters.types.length || filters.format || filters.loc || filters.q.trim());
 }
 
 function writeURL() {
@@ -291,6 +306,7 @@ async function main() {
   filters = filtersFromParams(new URLSearchParams(location.search));
   buildTypeChips();
 
+  $('#format').addEventListener('change', (ev) => { filters.format = ev.target.value; update(); });
   $('#loc').addEventListener('change', (ev) => { filters.loc = ev.target.value; update(); });
   $('#past').addEventListener('change', (ev) => { filters.past = ev.target.checked; update(); });
   $('#reset').addEventListener('click', reset);
