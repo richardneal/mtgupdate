@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   validate, filterEvents, filtersFromParams, filtersToParams, status, countdown,
-  dateRange, weekdayRange, toICS, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend, withinWeekend,
+  dateRange, weekdayRange, toICS, feedsTarget, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend, withinWeekend,
 } from '../js/core.js';
 
 const data = JSON.parse(readFileSync(new URL('../data/events.json', import.meta.url), 'utf8'));
@@ -124,4 +124,14 @@ test('filter by format', () => {
   const limited = filterEvents(data.events, f({ format: 'limited' }), ctx).map((e) => e.id);
   assert.ok(limited.includes('2027-pt-nauctis'), 'mixed-format events match each of their formats');
   assert.ok(!limited.includes('2027-spotlight-dc'), 'Team Limited is its own format');
+});
+
+test('qualifying events link to the event they feed', () => {
+  const rc = data.events.find((e) => e.id === '2027-rc-st-louis');
+  assert.deepEqual(feedsTarget(data, rc), { id: '2027-pt-tokyo', label: 'Pro Tour Tokyo' });
+  assert.deepEqual(feedsTarget(data, { feeds: 'A future event' }), { id: null, label: 'A future event' });
+  const bad = structuredClone(data);
+  bad.events.find((e) => e.id === '2027-rc-st-louis').feeds = '2027-pt-nowhere';
+  assert.match(validate(bad).join('\n'), /feeds names no listed event/);
+  assert.match(toICS(data, [rc]).replace(/\r\n /g, ''), /Qualifies for: Pro Tour Tokyo/); // unfold lines first
 });

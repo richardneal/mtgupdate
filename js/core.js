@@ -185,6 +185,14 @@ export function formatLabel(event) {
   return event.formats.map((f) => FORMATS[f] || f).join(' + ');
 }
 
+// What an event qualifies players for: `feeds` is the id of a listed event (shown as a link
+// to it) or, for something we don't list, plain text.
+export function feedsTarget(data, event) {
+  if (!event.feeds) return null;
+  const target = data.events.find((x) => x.id === event.feeds);
+  return target ? { id: target.id, label: target.name } : { id: null, label: event.feeds };
+}
+
 export function placeLabel(event) {
   return `${event.city}, ${countryName(event.country)}`;
 }
@@ -308,7 +316,7 @@ export function toICS(data, events, { calName = 'mtgupdate: competitive paper Ma
       e.organizer && `Organizer: ${e.organizer}`,
       e.venue && `Venue: ${e.venue}`,
       e.prize && `Prizes: ${e.prize}`,
-      e.feeds && `Qualifies for: ${e.feeds}`,
+      e.feeds && `Qualifies for: ${feedsTarget(data, e).label}`,
       e.notes,
       `${SITE}/#${e.id}`,
     ].filter(Boolean).join('\n');
@@ -352,6 +360,9 @@ export function validate(data) {
     if (!Array.isArray(e.formats) || !e.formats.length) errors.push(`${at}: formats must be a non-empty list`);
     else for (const f of e.formats) if (!FORMATS[f]) errors.push(`${at}: unknown format "${f}"`);
     if (!e.city) errors.push(`${at}: missing city`);
+    if (e.feeds && /^\d{4}-[a-z0-9-]+$/.test(e.feeds) && !data.events.some((x) => x.id === e.feeds)) {
+      errors.push(`${at}: feeds names no listed event (${e.feeds})`);
+    }
     if (!/^[A-Z]{2}$/.test(e.country || '')) errors.push(`${at}: country must be an ISO 3166 alpha-2 code`);
     else if (regionOf(e.country) === 'other') errors.push(`${at}: country ${e.country} has no region in js/core.js`);
     if (typeof e.lat !== 'number' || typeof e.lng !== 'number' ||

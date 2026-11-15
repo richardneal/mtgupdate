@@ -24,7 +24,7 @@
       "lat": 39.29,
       "lng": -76.61,
       "organizer": "Star City Games",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -43,7 +43,7 @@
       "lat": 30.27,
       "lng": 120.16,
       "organizer": "Kadou",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -62,7 +62,7 @@
       "lat": 45.42,
       "lng": -75.7,
       "organizer": "Face to Face Games",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -81,7 +81,7 @@
       "lat": 35.44,
       "lng": 139.64,
       "organizer": "BIG MAGIC",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -100,7 +100,7 @@
       "lat": 51.05,
       "lng": 3.72,
       "organizer": "Fanfinity",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -119,7 +119,7 @@
       "lat": 34.05,
       "lng": -118.24,
       "organizer": "Star City Games",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -138,7 +138,7 @@
       "lat": 19.43,
       "lng": -99.13,
       "organizer": "Necrotower",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -157,7 +157,7 @@
       "lat": -34.6,
       "lng": -58.38,
       "organizer": "Devir Brasil",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -176,7 +176,7 @@
       "lat": -33.87,
       "lng": 151.21,
       "organizer": "Let's Play Games",
-      "feeds": "Pro Tour Nauctis",
+      "feeds": "2027-pt-nauctis",
       "links": {
         "info": "rcRound1"
       }
@@ -217,7 +217,7 @@
       "lat": 13.76,
       "lng": 100.5,
       "organizer": "Oracle Events",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -236,7 +236,7 @@
       "lat": 31.23,
       "lng": 121.47,
       "organizer": "Kadou",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -297,7 +297,7 @@
       "lat": 19.43,
       "lng": -99.13,
       "organizer": "Necrotower",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -316,7 +316,7 @@
       "lat": -23.55,
       "lng": -46.63,
       "organizer": "Devir Brasil",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -335,7 +335,7 @@
       "lat": 38.63,
       "lng": -90.2,
       "organizer": "Star City Games",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-st-louis-2027/",
         "info": "rcRound2"
@@ -356,7 +356,7 @@
       "lat": -37.81,
       "lng": 144.96,
       "organizer": "Let's Play Games",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -375,7 +375,7 @@
       "lat": 32.72,
       "lng": -117.16,
       "organizer": "Star City Games",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-san-diego-2027/",
         "info": "rcRound2"
@@ -396,7 +396,7 @@
       "lat": 49.28,
       "lng": -123.12,
       "organizer": "Face to Face Games",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -415,7 +415,7 @@
       "lat": 35.18,
       "lng": 136.91,
       "organizer": "BIG MAGIC",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -434,7 +434,7 @@
       "lat": 43.26,
       "lng": -2.93,
       "organizer": "Fanfinity",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -453,7 +453,7 @@
       "lat": 25.03,
       "lng": 121.57,
       "organizer": "Game Square",
-      "feeds": "Pro Tour at MagicCon: Tokyo",
+      "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
       }
@@ -533,7 +533,7 @@
       "lat": 38.25,
       "lng": -85.76,
       "organizer": "Star City Games",
-      "feeds": "Pro Tour at MagicCon: Las Vegas",
+      "feeds": "2027-pt-las-vegas",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-louisville/",
         "info": "comp2027"
@@ -596,7 +596,7 @@
       "lat": 37.54,
       "lng": -77.44,
       "organizer": "Star City Games",
-      "feeds": "Pro Tour at MagicCon: Las Vegas",
+      "feeds": "2027-pt-las-vegas",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-richmond-2027/",
         "info": "comp2027"

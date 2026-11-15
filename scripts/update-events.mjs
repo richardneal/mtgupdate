@@ -219,7 +219,7 @@ const Fields = z.object({
   organizer: z.string().optional(),
   venue: z.string().optional(),
   prize: z.string().optional(),
-  feeds: z.string().optional().describe('What the event qualifies players for'),
+  feeds: z.string().optional().describe('What the event qualifies players for: the id of that event when the schedule lists it (e.g. 2027-pt-tokyo), otherwise a short description'),
   notes: z.string().optional(),
   links: Links.optional(),
 });

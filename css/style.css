@@ -104,7 +104,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   font: 500 34px/1 var(--display); letter-spacing: -0.01em; text-decoration: none; color: var(--ink);
 }
 .brand b { font-weight: 700; }
-.tagline { flex: 1; color: var(--muted); font-size: 15px; }
+.tagline { flex: 1; color: var(--muted); font-size: 15px; white-space: nowrap; }
 .top-actions { display: flex; gap: 4px; align-self: center; }
 
 .btn {
@@ -155,7 +155,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 .chip.all .swatch { display: none; }
 
 .search {
-  display: flex; align-items: center; width: 210px; min-width: 0;
+  display: flex; align-items: center; flex: 0 1 300px; min-width: 0; align-self: center; margin-left: auto;
   height: 36px; padding: 0 10px; gap: 8px;
   background: var(--paper); border: 1px solid var(--rule-strong); border-radius: 8px;
 }
@@ -226,6 +226,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 .event h3 a { text-decoration: none; }
 .event h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
 .meta { display: flex; flex-wrap: wrap; gap: 2px 14px; margin-top: 4px; color: var(--muted); font-size: 14.5px; }
+.meta .feeds { color: var(--ink); }
 
 .where { display: flex; flex-direction: column; padding-top: 19px; min-width: 0; }
 .city { font-weight: 600; }
@@ -292,6 +293,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 /* ---- Smaller screens ---- */
 
 @media (max-width: 960px) {
+  .tagline { display: none; }
   .month { display: block; }
   .month h2 { position: static; flex-direction: row; align-items: baseline; gap: 8px; padding: 10px 0 2px; }
   .month h2 .y { margin: 0; }
@@ -306,10 +308,11 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   #subscribe span { display: none; }
   .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
   .chip { flex: none; }
-  .filter-tools { width: 100%; flex-wrap: wrap; }
-  .filter-tools .select { flex: 1 1 40%; min-width: 0; }
+  .top-inner { flex-wrap: wrap; row-gap: 12px; }
+  .filter-tools { width: 100%; }
+  .filter-tools .select { flex: 1 1 0; min-width: 0; }
   .filter-tools .select select { width: 100%; max-width: none; }
-  .search { width: auto; flex: 1 1 100%; }
+  .search { order: 3; width: auto; flex: 1 1 100%; }
   .event { grid-template-columns: 78px minmax(0, 1fr); gap: 4px 12px; padding: 14px 0; }
   .event.is-live { margin: 0 -10px; padding-left: 10px; padding-right: 10px; }
   .days { font-size: 30px; white-space: nowrap; }
