@@ -79,7 +79,7 @@ npm ci
 npm run deploy
 ```
 
-`hosting/build.mjs` copies the public files into `hosting/dist`. `hosting/index.mjs` redirects `www.mtgupdate.com` to `mtgupdate.com` and serves `calendar.ics` as `text/calendar`.
+`hosting/build.mjs` copies the public files into `hosting/dist`. `hosting/index.mjs` redirects `www.mtgupdate.com` and plain `http://` to `https://mtgupdate.com`, serves `calendar.ics` as `text/calendar`, and answers two small APIs: `/api/live?channel=` (is a Twitch channel broadcasting) and `/api/melee?id=` (a Melee tournament's title and start date, for the daily check, since melee.gg refuses GitHub's addresses).
 
 ### The domain
 

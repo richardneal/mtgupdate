@@ -4,8 +4,10 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    if (url.hostname === 'www.mtgupdate.com') {
+    // One address: https://mtgupdate.com (www and plain http redirect to it, keeping the path).
+    if (url.hostname === 'www.mtgupdate.com' || (url.protocol === 'http:' && url.hostname === 'mtgupdate.com')) {
       url.hostname = 'mtgupdate.com';
+      url.protocol = 'https:';
       return Response.redirect(url.toString(), 301);
     }
 

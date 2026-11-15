@@ -273,7 +273,7 @@ const MELEE_AHEAD_DAYS = 90;   // look this far ahead (registration pages go up 
 const MELEE_BEHIND_DAYS = 14;  // ...and this far back
 const MELEE_MAX = 8;           // events searched per run
 // melee.gg refuses GitHub's addresses, so pages are checked through the site's Worker.
-const MELEE_CHECK = process.env.MELEE_CHECK_URL || 'https://mtgupdate.richard-f81.workers.dev/api/melee';
+const MELEE_CHECK = process.env.MELEE_CHECK_URL || 'https://mtgupdate.com/api/melee';
 const MELEE_EVERY_DAYS = 3;    // don't search the same event again sooner than this
 
 export function meleeCandidates(data, seen) {
