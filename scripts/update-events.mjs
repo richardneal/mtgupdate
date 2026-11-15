@@ -348,7 +348,10 @@ async function main() {
       markSeen(doc);
       console.log(`  ${doc.title}: ${result.applied.length} applied, ${result.rejected.length} not applied`);
     } catch (err) {
-      if (err instanceof Anthropic.AuthenticationError) throw err;
+      // A refused sign-in fails every document the same way: stop, and fail the run so GitHub emails.
+      if (err instanceof Anthropic.AuthenticationError || /token exchange failed|authentication/i.test(err.message)) {
+        throw new Error(`Couldn't sign in to the Claude API: ${err.message}`);
+      }
       failures.push({ doc, error: err.message });
       console.warn(`! ${doc.title}: ${err.message}`);
     }
@@ -365,8 +368,9 @@ async function main() {
   writeFileSync(paths.summary, summary);
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
   output('events_changed', String(changed));
-  output('seen_changed', 'true');
+  output('seen_changed', String(results.length > 0));
   console.log(changed ? 'Schedule updated.' : 'No changes to the schedule.');
+  if (failures.length && !results.length) throw new Error(`None of the ${failures.length} document(s) could be read.`);
 }
 
 main().catch((err) => {
