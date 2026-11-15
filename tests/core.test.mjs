@@ -58,9 +58,9 @@ test('filter by type: Pro Tours, Worlds and the Limited Championship are one cho
 });
 
 test('filter by region and by country', () => {
-  const eu = filterEvents(data.events, f({ loc: 'europe' }), ctx);
+  const eu = filterEvents(data.events, f({ locs: ['europe'] }), ctx);
   assert.ok(eu.length && eu.every((e) => regionOf(e.country) === 'europe'));
-  const jp = filterEvents(data.events, f({ loc: 'JP', past: true }), ctx);
+  const jp = filterEvents(data.events, f({ locs: ['JP'], past: true }), ctx);
   assert.deepEqual([...new Set(jp.map((e) => e.city))].sort(), ['Aichi', 'Shizuoka', 'Tokyo', 'Yokohama']);
 });
 
@@ -73,11 +73,11 @@ test('search ignores case and accents and matches formats, sets, organizers', ()
 });
 
 test('filters survive the URL', () => {
-  const filters = { types: ['pro', 'rc'], format: 'standard', loc: 'US', q: 'standard', past: true };
+  const filters = { types: ['pro', 'rc'], formats: ['standard', 'pioneer'], locs: ['US', 'europe'], q: 'standard', past: true };
   const back = filtersFromParams(new URLSearchParams(filtersToParams(filters).toString()));
   assert.deepEqual(back, filters);
-  assert.deepEqual(filtersFromParams(new URLSearchParams('type=bogus,pro&loc=europe&format=chess')),
-    { types: ['pro'], format: '', loc: 'europe', q: '', past: false });
+  assert.deepEqual(filtersFromParams(new URLSearchParams('type=bogus,pro&loc=europe,jp,mars&format=chess,modern')),
+    { types: ['pro'], formats: ['modern'], locs: ['europe', 'JP'], q: '', past: false });
 });
 
 test('calendar feed is valid iCalendar', () => {
@@ -119,9 +119,9 @@ test('weekendOf', () => {
 });
 
 test('filter by format', () => {
-  const pioneer = filterEvents(data.events, f({ format: 'pioneer' }), ctx);
+  const pioneer = filterEvents(data.events, f({ formats: ['pioneer'] }), ctx);
   assert.ok(pioneer.length && pioneer.every((e) => e.formats.includes('pioneer')));
-  const limited = filterEvents(data.events, f({ format: 'limited' }), ctx).map((e) => e.id);
+  const limited = filterEvents(data.events, f({ formats: ['limited'] }), ctx).map((e) => e.id);
   assert.ok(limited.includes('2027-pt-nauctis'), 'mixed-format events match each of their formats');
   assert.ok(!limited.includes('2027-spotlight-dc'), 'Team Limited is its own format');
 });
@@ -134,4 +134,15 @@ test('qualifying events link to the event they feed', () => {
   bad.events.find((e) => e.id === '2027-rc-st-louis').feeds = '2027-pt-nowhere';
   assert.match(validate(bad).join('\n'), /feeds names no listed event/);
   assert.match(toICS(data, [rc]).replace(/\r\n /g, ''), /Qualifies for: Pro Tour Tokyo/); // unfold lines first
+});
+
+test('several choices in one filter match any of them', () => {
+  const both = filterEvents(data.events, f({ formats: ['pioneer', 'modern'], past: true }), ctx);
+  assert.ok(both.length && both.every((e) => e.formats.some((x) => x === 'pioneer' || x === 'modern')));
+  assert.ok(both.some((e) => e.formats.includes('pioneer')) && both.some((e) => e.formats.includes('modern')));
+  const places = filterEvents(data.events, f({ locs: ['JP', 'oceania'], past: true }), ctx);
+  assert.deepEqual([...new Set(places.map((e) => e.country))].sort(), ['AU', 'JP']);
+  // Across filters, every one must match.
+  const usPioneer = filterEvents(data.events, f({ formats: ['pioneer'], locs: ['US'] }), ctx);
+  assert.ok(usPioneer.length && usPioneer.every((e) => e.country === 'US' && e.formats.includes('pioneer')));
 });

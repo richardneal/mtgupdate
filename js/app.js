@@ -68,26 +68,19 @@ function buildTypeChips() {
   });
 }
 
-// Formats on the schedule, counted against every other filter so each shows what it would give.
-function buildFormats() {
-  const select = $('#format');
-  const pool = filterEvents(data.events, { ...filters, format: '' }, { today });
-  const present = Object.keys(FORMATS).filter((f) => data.events.some((e) => e.formats.includes(f)));
-  select.replaceChildren(
-    el('option', { value: '' }, `All formats (${pool.length})`),
-    ...present.map((f) => el('option', { value: f }, `${FORMATS[f]} (${pool.filter((e) => e.formats.includes(f)).length})`)),
-  );
-  select.value = filters.format;
-  if (select.value !== filters.format) { filters.format = ''; select.value = ''; }
-  select.classList.toggle('set', !!filters.format);
-}
+// ---- Format and Location menus -------------------------------------------
+// Each is a button that opens a list of checkboxes. Several choices in one menu match any of
+// them; nothing checked means all. Counts follow the other filters, so each choice shows what
+// it would add.
 
-function buildLocations() {
-  const select = $('#loc');
-  // Count against everything but the location itself, so the menu shows what each choice would give.
-  const pool = filterEvents(data.events, { ...filters, loc: '' }, { today });
-  const keep = select.value;
-  select.replaceChildren(el('option', { value: '' }, `Anywhere (${pool.length})`));
+const MENUS = {
+  formats: { el: () => $('#format-menu'), test: (e, v) => e.formats.includes(v) },
+  locs: { el: () => $('#loc-menu'), test: (e, v) => matchesLoc(e, [v]) },
+};
+
+function buildMenus() {
+  const formats = Object.keys(FORMATS).filter((f) => data.events.some((e) => e.formats.includes(f)));
+  fillMenu('formats', formats.map((f) => ({ value: f, label: FORMATS[f] })));
 
   const byRegion = new Map();
   for (const e of data.events) {
@@ -95,17 +88,87 @@ function buildLocations() {
     if (!byRegion.has(r)) byRegion.set(r, new Set());
     byRegion.get(r).add(e.country);
   }
+  const places = [];
   for (const r of Object.keys(REGIONS)) {
     if (!byRegion.has(r)) continue;
-    const n = pool.filter((e) => matchesLoc(e, r)).length;
-    select.append(el('option', { value: r }, `${REGIONS[r]} (${n})`));
+    places.push({ value: r, label: REGIONS[r], kind: 'region' });
     const countries = [...byRegion.get(r)].sort((a, b) => countryName(a).localeCompare(countryName(b)));
-    for (const c of countries) {
-      const nc = pool.filter((e) => e.country === c).length;
-      select.append(el('option', { value: c }, `   ${flag(c)} ${countryName(c)} (${nc})`));
-    }
+    for (const c of countries) places.push({ value: c, label: countryName(c), flag: flag(c), kind: 'country', region: r });
   }
-  select.value = keep;
+  fillMenu('locs', places);
+
+  for (const [key, menu] of Object.entries(MENUS)) {
+    const root = menu.el();
+    const button = root.querySelector('.menu-button');
+    const panel = root.querySelector('.menu-panel');
+    button.addEventListener('click', () => (panel.hidden ? openMenu(root) : closeMenu(root)));
+    root.querySelector('.menu-options').addEventListener('change', (ev) => {
+      const v = ev.target.value;
+      filters[key] = ev.target.checked ? [...filters[key], v] : filters[key].filter((x) => x !== v);
+      // Checking a region covers its countries, so drop any of them picked on their own.
+      if (key === 'locs' && REGIONS[v] && ev.target.checked) {
+        filters.locs = filters.locs.filter((x) => REGIONS[x] || regionOf(x) !== v);
+      }
+      update();
+    });
+    root.querySelector('.menu-clear').addEventListener('click', () => { filters[key] = []; update(); });
+    root.querySelector('.menu-done').addEventListener('click', () => { closeMenu(root); button.focus(); });
+  }
+  document.addEventListener('click', (ev) => {
+    for (const m of Object.values(MENUS)) if (!m.el().contains(ev.target)) closeMenu(m.el());
+  });
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Escape') return;
+    for (const m of Object.values(MENUS)) {
+      const root = m.el();
+      if (!root.querySelector('.menu-panel').hidden) { closeMenu(root); root.querySelector('.menu-button').focus(); }
+    }
+  });
+}
+
+function fillMenu(key, options) {
+  const box = MENUS[key].el().querySelector('.menu-options');
+  box.replaceChildren(...options.map((o) => el('label', { class: `opt${o.kind ? ` ${o.kind}` : ''}`, 'data-region': o.region },
+    el('input', { type: 'checkbox', value: o.value }),
+    o.flag ? el('span', { class: 'opt-flag', 'aria-hidden': 'true' }, o.flag) : null,
+    el('span', { class: 'opt-label' }, o.label),
+    el('span', { class: 'n' }))));
+}
+
+function openMenu(root) {
+  for (const m of Object.values(MENUS)) if (m.el() !== root) closeMenu(m.el());
+  root.querySelector('.menu-panel').hidden = false;
+  root.querySelector('.menu-button').setAttribute('aria-expanded', 'true');
+  root.querySelector('.menu-options input')?.focus();
+}
+
+function closeMenu(root) {
+  root.querySelector('.menu-panel').hidden = true;
+  root.querySelector('.menu-button').setAttribute('aria-expanded', 'false');
+}
+
+function syncMenu(key) {
+  const root = MENUS[key].el();
+  const chosen = filters[key];
+  const pool = filterEvents(data.events, { ...filters, [key]: [] }, { today });
+  const labels = [];
+  for (const opt of root.querySelectorAll('.opt')) {
+    const input = opt.querySelector('input');
+    const v = input.value;
+    const coveredByRegion = key === 'locs' && opt.dataset.region && chosen.includes(opt.dataset.region);
+    input.checked = chosen.includes(v) || coveredByRegion;
+    input.disabled = coveredByRegion;
+    const n = pool.filter((e) => MENUS[key].test(e, v)).length;
+    opt.querySelector('.n').textContent = String(n);
+    opt.classList.toggle('zero', n === 0);
+    if (chosen.includes(v)) labels.push(opt.querySelector('.opt-label').textContent);
+  }
+  const label = !labels.length ? root.dataset.all
+    : labels.length <= 2 ? labels.join(' + ')
+    : `${labels.length} ${root.dataset.noun}`;
+  root.querySelector('.menu-label').textContent = label;
+  root.querySelector('.menu-button').classList.toggle('set', labels.length > 0);
+  root.querySelector('.menu-clear').disabled = !labels.length;
 }
 
 function syncControls() {
@@ -113,15 +176,11 @@ function syncControls() {
     const t = chip.dataset.type;
     chip.setAttribute('aria-pressed', String(t ? filters.types.includes(t) : !filters.types.length));
   }
-  buildFormats();
-  buildLocations();
-  const loc = $('#loc');
-  loc.value = filters.loc;
-  if (loc.value !== filters.loc) { filters.loc = ''; loc.value = ''; }
-  loc.classList.toggle('set', !!filters.loc);
+  syncMenu('formats');
+  syncMenu('locs');
   if ($('#q').value !== filters.q) $('#q').value = filters.q;
   $('#past').checked = filters.past;
-  $('#reset').hidden = !(filters.types.length || filters.format || filters.loc || filters.q.trim());
+  $('#reset').hidden = !(filters.types.length || filters.formats.length || filters.locs.length || filters.q.trim());
 }
 
 function writeURL() {
@@ -309,8 +368,7 @@ async function main() {
   filters = filtersFromParams(new URLSearchParams(location.search));
   buildTypeChips();
 
-  $('#format').addEventListener('change', (ev) => { filters.format = ev.target.value; update(); });
-  $('#loc').addEventListener('change', (ev) => { filters.loc = ev.target.value; update(); });
+  buildMenus();
   $('#past').addEventListener('change', (ev) => { filters.past = ev.target.checked; update(); });
   $('#reset').addEventListener('click', reset);
   let t;

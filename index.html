@@ -58,14 +58,26 @@
     <div class="wrap filter-bar">
       <div class="chips" id="types" role="group" aria-label="Event type"></div>
       <div class="filter-tools">
-        <label class="select">
-          <span class="visually-hidden">Format</span>
-          <select id="format"><option value="">All formats</option></select>
-        </label>
-        <label class="select">
-          <span class="visually-hidden">Location</span>
-          <select id="loc"><option value="">Anywhere</option></select>
-        </label>
+        <div class="menu" id="format-menu" data-key="formats" data-all="All formats" data-noun="formats">
+          <button class="menu-button" type="button" aria-expanded="false" aria-controls="format-panel" aria-label="Format">
+            <span class="menu-label">All formats</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="menu-panel" id="format-panel" role="group" aria-label="Formats" hidden>
+            <div class="menu-options"></div>
+            <div class="menu-foot"><button class="link menu-clear" type="button">Clear</button><button class="link menu-done" type="button">Done</button></div>
+          </div>
+        </div>
+        <div class="menu" id="loc-menu" data-key="locs" data-all="Anywhere" data-noun="locations">
+          <button class="menu-button" type="button" aria-expanded="false" aria-controls="loc-panel" aria-label="Location">
+            <span class="menu-label">Anywhere</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="menu-panel" id="loc-panel" role="group" aria-label="Locations" hidden>
+            <div class="menu-options"></div>
+            <div class="menu-foot"><button class="link menu-clear" type="button">Clear</button><button class="link menu-done" type="button">Done</button></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

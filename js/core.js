@@ -208,13 +208,16 @@ export function searchText(event) {
 
 // ---- Filtering ---------------------------------------------------------
 
-// types are FILTER_GROUPS keys; loc is '' (anywhere), a region key ('europe') or a country code ('US').
+// Each list holds the choices made in one filter; an empty list means "all". An event matches a
+// filter when it matches any of its choices, and must match every filter.
+// types: FILTER_GROUPS keys. formats: FORMATS keys. locs: region keys ('europe') or country codes ('US').
 // past: list completed events too (the page's "Show completed", off by default).
-export const EMPTY_FILTERS = Object.freeze({ types: [], format: '', loc: '', q: '', past: false });
+export const EMPTY_FILTERS = Object.freeze({ types: [], formats: [], locs: [], q: '', past: false });
 
-export function matchesLoc(event, loc) {
-  if (!loc) return true;
-  return REGIONS[loc] ? regionOf(event.country) === loc : event.country === loc;
+export function matchesLoc(event, locs) {
+  const list = Array.isArray(locs) ? locs : locs ? [locs] : [];
+  if (!list.length) return true;
+  return list.some((l) => (REGIONS[l] ? regionOf(event.country) === l : event.country === l));
 }
 
 // ctx: { today }
@@ -225,8 +228,8 @@ export function filterEvents(events, filters, ctx) {
   return events.filter((e) => {
     if (!filters.past && status(e, ctx.today) === 'past') return false;
     if (filters.types.length && !filters.types.includes(groupOf(e.type))) return false;
-    if (filters.format && !e.formats.includes(filters.format)) return false;
-    if (!matchesLoc(e, filters.loc)) return false;
+    if (filters.formats.length && !e.formats.some((f) => filters.formats.includes(f))) return false;
+    if (!matchesLoc(e, filters.locs)) return false;
     if (terms.length) {
       const text = searchText(e);
       if (!terms.every((t) => text.includes(t))) return false;
@@ -245,18 +248,20 @@ export function sortEvents(events) {
 // ---- URL state ---------------------------------------------------------
 
 export function filtersFromParams(params) {
-  const types = (params.get('type') || '').split(',').filter((t) => FILTER_GROUPS[t]);
-  let loc = params.get('loc') || '';
-  if (!REGIONS[loc]) loc = /^[a-z]{2}$/i.test(loc) ? loc.toUpperCase() : '';
-  const format = FORMATS[params.get('format')] ? params.get('format') : '';
-  return { types, format, loc, q: params.get('q') || '', past: params.get('past') === '1' };
+  const list = (name) => [...new Set((params.get(name) || '').split(',').filter(Boolean))];
+  const types = list('type').filter((t) => FILTER_GROUPS[t]);
+  const formats = list('format').filter((f) => FORMATS[f]);
+  const locs = list('loc')
+    .map((l) => (REGIONS[l] ? l : /^[a-z]{2}$/i.test(l) ? l.toUpperCase() : ''))
+    .filter(Boolean);
+  return { types, formats, locs, q: params.get('q') || '', past: params.get('past') === '1' };
 }
 
 export function filtersToParams(f) {
   const p = new URLSearchParams();
   if (f.types.length) p.set('type', f.types.join(','));
-  if (f.format) p.set('format', f.format);
-  if (f.loc) p.set('loc', f.loc);
+  if (f.formats.length) p.set('format', f.formats.join(','));
+  if (f.locs.length) p.set('loc', f.locs.join(','));
   if (f.q.trim()) p.set('q', f.q.trim());
   if (f.past) p.set('past', '1');
   return p;
