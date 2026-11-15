@@ -142,7 +142,7 @@ export function countdown(event, today) {
   if (s === 'live') {
     const day = daysBetween(event.start, today) + 1;
     const total = daysBetween(event.start, event.end) + 1;
-    return total > 1 ? `Live · day ${day} of ${total}` : 'Live today';
+    return total > 1 ? `Live, day ${day} of ${total}` : 'Live today';
   }
   if (s === 'past') return 'Completed';
   const n = daysBetween(today, event.start);
@@ -277,7 +277,7 @@ export function toICS(data, events, { calName = 'mtgupdate: competitive paper Ma
   ];
   for (const e of sortEvents(events)) {
     const desc = [
-      `${TYPES[e.type].label} · ${formatLabel(e)}`,
+      `${TYPES[e.type].label}: ${formatLabel(e)}`,
       e.set && `Set: ${e.set}`,
       e.organizer && `Organizer: ${e.organizer}`,
       e.venue && `Venue: ${e.venue}`,

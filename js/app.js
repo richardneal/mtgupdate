@@ -17,26 +17,13 @@ const el = (tag, attrs = {}, ...children) => {
   for (const c of children.flat()) if (c != null && c !== false) node.append(c);
   return node;
 };
-const icon = (paths) => {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('aria-hidden', 'true');
-  svg.innerHTML = paths;
-  return svg;
-};
-const ICONS = {
-  info: '<path d="M7 17 17 7M9 7h8v8"/>',
-  play: '<path d="M7 5v14l11-7Z"/>',
-  cal: '<path d="M7 2v3M17 2v3M3.5 9h17M5 4.5h14A1.5 1.5 0 0 1 20.5 6v13A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V6A1.5 1.5 0 0 1 5 4.5ZM12 12v5M9.5 14.5h5"/>',
-  list: '<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
-};
 // Links an event may carry, in the order they are shown.
 const LINKS = [
-  ['stream', 'Watch', 'play'],
-  ['coverage', 'Coverage', 'info'],
-  ['results', 'Results', 'list'],
-  ['decklists', 'Decklists', 'list'],
-  ['info', 'Info', 'info'],
+  ['stream', 'Watch live'],
+  ['coverage', 'Coverage'],
+  ['results', 'Results'],
+  ['decklists', 'Decklists'],
+  ['info', 'Info'],
 ];
 
 let data;
@@ -131,56 +118,60 @@ function writeURL() {
 
 function eventLinks(e, s) {
   const out = [];
-  for (const [key, label, ic] of LINKS) {
+  for (const [key, label] of LINKS) {
     const url = resolveLink(data, e.links?.[key]);
     if (!url) continue;
     if (key === 'stream' && s === 'past') continue;
     out.push(el('a', {
       class: `act${key === 'stream' && s === 'live' ? ' live' : ''}`,
       href: url, target: '_blank', rel: 'noopener',
-    }, icon(ICONS[ic]), label));
+    }, label));
   }
   if (s !== 'past') {
     out.push(el('button', {
-      class: 'act', type: 'button', title: 'Add to your calendar (.ics)',
+      class: 'act', type: 'button', title: 'Download this event as an .ics file',
       onclick: () => downloadICS([e], `${e.id}.ics`),
-    }, icon(ICONS.cal), 'Calendar'));
+    }, 'Add to calendar'));
   }
   return out;
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// The big numbers in the date column: "9–10" within a month, "30 – 1" across two.
+function dayBlock(e) {
+  const [, m1, d1] = e.start.split('-').map(Number);
+  const [, m2, d2] = e.end.split('-').map(Number);
+  const days = e.start === e.end ? `${d1}` : `${d1}–${d2}`;
+  return el('time', { class: 'when', datetime: e.start, 'aria-label': `${dateRange(e.start, e.end)}, ${weekdayRange(e.start, e.end)}` },
+    el('span', { class: 'days' }, days),
+    el('span', { class: 'dow' }, m1 === m2 ? weekdayRange(e.start, e.end) : `${MONTHS[m1 - 1]} ${d1} – ${MONTHS[m2 - 1]} ${d2}`));
 }
 
 function renderEvent(e) {
   const s = status(e, today);
   const meta = [
-    e.organizer,
+    e.organizer && `Hosted by ${e.organizer}`,
     e.venue,
     e.prize,
     e.feeds && `Qualifies for ${e.feeds}`,
     e.notes && !e.venue && !e.prize ? e.notes : null,
   ].filter(Boolean);
 
-  return el('li', {
-    class: `event t-${e.type} is-${s}`, id: e.id,
-  },
-  el('div', { class: 'when' },
-    el('span', { class: 'date' }, dateRange(e.start, e.end)),
-    el('span', { class: 'dow' }, weekdayRange(e.start, e.end))),
-  el('div', { class: 'what' },
-    el('div', { class: 'kicker' },
-      el('span', { class: 'badge' }, TYPES[e.type].short),
-      el('span', { class: 'fmt' }, formatLabel(e))),
-    el('h3', {}, el('a', { href: `#${e.id}` }, e.name)),
-    meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null),
-  el('div', { class: 'where' },
-    el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)),
-    el('span', { class: 'place' },
-      el('span', { class: 'city' }, e.city),
-      el('span', { class: 'country' }, countryName(e.country)))),
-  el('div', { class: 'side' },
-    el('span', { class: 'countdown' },
-      s === 'live' ? el('span', { class: 'live-dot', 'aria-hidden': 'true' }) : null,
-      countdown(e, today)),
-    el('div', { class: 'actions' }, eventLinks(e, s))));
+  return el('li', { class: `event t-${e.type} is-${s}`, id: e.id },
+    dayBlock(e),
+    el('div', { class: 'what' },
+      el('p', { class: 'fmt' }, formatLabel(e)),
+      el('h3', {}, el('a', { href: `#${e.id}` }, e.name)),
+      meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null),
+    el('p', { class: 'where' },
+      el('span', { class: 'city' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), e.city),
+      el('span', { class: 'country' }, countryName(e.country))),
+    el('div', { class: 'side' },
+      el('p', { class: 'countdown' },
+        s === 'live' ? el('span', { class: 'live-dot', 'aria-hidden': 'true' }) : null,
+        countdown(e, today)),
+      el('p', { class: 'actions' }, eventLinks(e, s))));
 }
 
 function render() {
@@ -188,11 +179,10 @@ function render() {
   const shown = sortEvents(filterEvents(data.events, filters, { today }));
   const upcoming = shown.filter((e) => status(e, today) !== 'past').length;
 
-  const count = $('#count');
-  count.replaceChildren(
+  $('#count').replaceChildren(
     el('strong', {}, String(shown.length)),
     shown.length === 1 ? ' event' : ' events',
-    filters.past && upcoming !== shown.length ? ` (${upcoming} still to come)` : '',
+    filters.past && upcoming !== shown.length ? `, ${upcoming} still to come` : '',
   );
 
   if (!shown.length) {
@@ -208,10 +198,12 @@ function render() {
     if (!months.has(k)) months.set(k, []);
     months.get(k).push(e);
   }
-  list.replaceChildren(...[...months].map(([k, events]) =>
-    el('section', { class: 'month', 'aria-label': monthLabel(k) },
-      el('h2', {}, monthLabel(k), el('span', { class: 'n' }, String(events.length))),
-      el('ol', {}, events.map(renderEvent)))));
+  list.replaceChildren(...[...months].map(([k, events]) => {
+    const [month, year] = monthLabel(k).split(' ');
+    return el('section', { class: 'month', 'aria-label': monthLabel(k) },
+      el('h2', {}, el('span', { class: 'm' }, month), el('span', { class: 'y' }, year)),
+      el('ol', {}, events.map(renderEvent)));
+  }));
 }
 
 function update({ url = true } = {}) {

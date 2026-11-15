@@ -30,7 +30,7 @@ test('status and countdown', () => {
   assert.equal(status(e, '2026-11-12'), 'upcoming');
   assert.equal(status(e, '2026-11-14'), 'live');
   assert.equal(status(e, '2026-11-16'), 'past');
-  assert.equal(countdown(e, '2026-11-14'), 'Live · day 2 of 3');
+  assert.equal(countdown(e, '2026-11-14'), 'Live, day 2 of 3');
   assert.equal(countdown(e, '2026-11-12'), 'Tomorrow');
   assert.equal(countdown(e, '2026-11-03'), 'in 10 days');
   assert.equal(countdown(e, '2026-12-01'), 'Completed');

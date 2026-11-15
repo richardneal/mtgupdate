@@ -116,7 +116,7 @@
       "formats": ["limited", "standard"],
       "set": "Star Trek",
       "city": "Atlanta", "country": "US", "lat": 33.75, "lng": -84.39,
-      "venue": "MagicCon: Atlanta · Georgia World Congress Center",
+      "venue": "MagicCon: Atlanta, Georgia World Congress Center",
       "notes": "Star Trek Booster Draft and Standard. The winner is invited to the 2027 Limited Championship.",
       "links": { "info": "worlds32", "stream": "https://www.twitch.tv/magic" }
     },
@@ -129,7 +129,7 @@
       "formats": ["limited"], "set": "Star Trek",
       "city": "Lille", "country": "FR", "lat": 50.63, "lng": 3.06,
       "organizer": "Fanfinity",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -140,7 +140,7 @@
       "formats": ["limited"], "set": "Star Trek",
       "city": "Minneapolis", "country": "US", "lat": 44.98, "lng": -93.27,
       "organizer": "Star City Games",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -283,7 +283,7 @@
       "formats": ["limited"], "set": "Nauctis",
       "city": "Zagreb", "country": "HR", "lat": 45.81, "lng": 15.98,
       "organizer": "Fanfinity",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -294,7 +294,7 @@
       "formats": ["limited"], "set": "Nauctis",
       "city": "Toronto", "country": "CA", "lat": 43.65, "lng": -79.38,
       "organizer": "Face to Face Games",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -316,7 +316,7 @@
       "formats": ["modern"], "set": "Marvel Darkhold Destiny",
       "city": "Seattle", "country": "US", "lat": 47.61, "lng": -122.33,
       "organizer": "Star City Games",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -349,7 +349,7 @@
       "formats": ["modern"], "set": "Marvel Darkhold Destiny",
       "city": "Beijing", "country": "CN", "lat": 39.90, "lng": 116.41,
       "organizer": "Kadou",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -360,7 +360,7 @@
       "formats": ["limited"], "set": "Kamigawa: Titanbreach",
       "city": "Hartford", "country": "US", "lat": 41.76, "lng": -72.67,
       "organizer": "Star City Games",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -382,7 +382,7 @@
       "formats": ["limited"], "set": "Kamigawa: Titanbreach",
       "city": "Shizuoka", "country": "JP", "lat": 34.98, "lng": 138.38,
       "organizer": "BIG MAGIC",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -393,7 +393,7 @@
       "formats": ["limited"], "set": "Kamigawa: Titanbreach",
       "city": "Montreal", "country": "CA", "lat": 45.50, "lng": -73.57,
       "organizer": "Face to Face Games",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -404,7 +404,7 @@
       "formats": ["team-limited"],
       "city": "Washington, DC", "country": "US", "lat": 38.91, "lng": -77.04,
       "organizer": "Star City Games",
-      "prize": "$60,000 · Top 4 teams earn Pro Tour invitations",
+      "prize": "$60,000 prize pool; Top 4 teams earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -426,7 +426,7 @@
       "formats": ["team-limited"],
       "city": "Utrecht", "country": "NL", "lat": 52.09, "lng": 5.12,
       "organizer": "Fanfinity",
-      "prize": "$60,000 · Top 4 teams earn Pro Tour invitations",
+      "prize": "$60,000 prize pool; Top 4 teams earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -437,7 +437,7 @@
       "formats": ["team-limited"],
       "city": "Sydney", "country": "AU", "lat": -33.87, "lng": 151.21,
       "organizer": "Let's Play Games",
-      "prize": "$60,000 · Top 4 teams earn Pro Tour invitations",
+      "prize": "$60,000 prize pool; Top 4 teams earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -448,7 +448,7 @@
       "formats": ["pioneer"], "set": "Zhalfir",
       "city": "Valencia", "country": "ES", "lat": 39.47, "lng": -0.38,
       "organizer": "Fanfinity",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
@@ -459,7 +459,7 @@
       "formats": ["pioneer"], "set": "Zhalfir",
       "city": "Dallas–Fort Worth", "country": "US", "lat": 32.90, "lng": -97.04,
       "organizer": "Star City Games",
-      "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": { "info": "comp2027" }
     },
     {
