@@ -23,6 +23,7 @@ const LINKS = [
   ['coverage', 'Coverage'],
   ['results', 'Results'],
   ['decklists', 'Decklists'],
+  ['melee', 'Melee'],
   ['event', 'Event page'],
   ['info', 'Info'],
 ];
@@ -269,7 +270,9 @@ function dayBlock(e) {
 function renderEvent(e) {
   const s = status(e, today);
   const meta = [
-    e.organizer && `Hosted by ${e.organizer}`,
+    e.organizer && (data.organizers?.[e.organizer]
+      ? ['Hosted by ', el('a', { class: 'org', href: data.organizers[e.organizer], target: '_blank', rel: 'noopener' }, e.organizer)]
+      : `Hosted by ${e.organizer}`),
     e.venue && (() => {
       const place = venuePlace(e);
       if (!place) return e.venue;

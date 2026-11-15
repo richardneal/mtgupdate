@@ -164,3 +164,8 @@ test('map links search for the building when named, else the city', () => {
   assert.equal(venuePlace(tokyo), null);
   assert.match(mapsUrl(tokyo), /query=Tokyo%2C%20Japan$/);
 });
+
+test('organizer sites are https', () => {
+  assert.ok(Object.keys(data.organizers).length > 0);
+  assert.match(validate({ ...data, organizers: { X: 'http://insecure' } }).join('\n'), /organizers\.X/);
+});

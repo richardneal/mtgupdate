@@ -61,12 +61,12 @@
     {
       "name": "Let's Play Games",
       "hosts": "Australia and New Zealand Regional Championships and Spotlight stops",
-      "check": "No 2027 page found as of 2026-11-14. A store listing gave the Sydney RC as Nov 6–8, 2026 against magic.gg's Oct 23–25; confirm with the organizer if a page turns up."
+      "check": "No 2027 page found as of 2026-11-14. A store listing gave the Sydney RC as Nov 6–8, 2026 against magic.gg's Oct 23–25; confirm with the organizer if a page turns up. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
     },
     {
       "name": "Kadou",
       "hosts": "Regional Championships and Spotlight stops in mainland China",
-      "check": "No English schedule page known."
+      "check": "No English schedule page known. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
     },
     {
       "name": "Necrotower",
@@ -81,12 +81,12 @@
     {
       "name": "Game Square",
       "hosts": "Chinese Taipei Regional Championships",
-      "check": "No schedule page known."
+      "check": "No schedule page known. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
     },
     {
       "name": "Oracle Events",
       "hosts": "Southeast Asia Regional Championships",
-      "check": "No schedule page known."
+      "check": "No schedule page known. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
     }
   ]
 }

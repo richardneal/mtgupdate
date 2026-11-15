@@ -369,6 +369,9 @@ export function validate(data) {
   const ids = new Set();
   const iso = /^\d{4}-\d{2}-\d{2}$/;
   if (!iso.test(data.updated || '')) errors.push('updated: missing or not YYYY-MM-DD');
+  for (const [name, url] of Object.entries(data.organizers || {})) {
+    if (!/^https:\/\//.test(url)) errors.push(`organizers.${name}: not an https URL`);
+  }
   for (const [i, e] of (data.events || []).entries()) {
     const at = `events[${i}] (${e.id || 'no id'})`;
     if (!/^[a-z0-9-]+$/.test(e.id || '')) errors.push(`${at}: id must be lowercase-kebab`);

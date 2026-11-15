@@ -28,10 +28,11 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
 | `type` | `pt`, `worlds`, `lc`, `rc` or `spotlight` (see `TYPES` in `js/core.js`) |
 | `start`, `end` | Dates at the venue, `YYYY-MM-DD` |
 | `formats` | Any of `limited`, `team-limited`, `standard`, `pioneer`, `modern`, `legacy`, `vintage`, `pauper` |
+| `organizer` | Its name; if the top-level `organizers` map has the name, the page links it to that site |
 | `country` | ISO 3166 alpha-2 code; its region comes from `COUNTRY_REGION` in `js/core.js` |
 | `lat`, `lng` | City coordinates |
 | optional | `set`, `organizer`, `venue`, `feeds` (what it qualifies for: the id of a listed event, which the page links to, or plain text), `notes` |
-| `links` | Any of `event` (the organizer's page), `info`, `stream`, `coverage`, `results`, `decklists`: a full `https://` URL, or a key of the top-level `sources` map |
+| `links` | Any of `event` (the organizer's page), `info`, `stream`, `coverage`, `results`, `decklists`, `melee` (the melee.gg tournament): a full `https://` URL, or a key of the top-level `sources` map |
 
 Then bump `updated` and run:
 

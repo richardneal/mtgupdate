@@ -202,7 +202,7 @@ function makeClient() {
 // records back into one change per event for applyChanges().
 const FIELDS = ['type', 'name', 'start', 'end', 'formats', 'set', 'city', 'country', 'lat', 'lng',
   'organizer', 'venue', 'feeds', 'notes',
-  'links.event', 'links.info', 'links.coverage', 'links.results', 'links.decklists', 'links.stream'];
+  'links.event', 'links.info', 'links.coverage', 'links.results', 'links.decklists', 'links.melee', 'links.stream'];
 const Output = z.object({
   changes: z.array(z.object({
     id: z.string().describe('An existing id for an update; a new lowercase-kebab id like 2027-spotlight-lille for an add'),
@@ -223,7 +223,7 @@ Rules:
 - Only use facts the document states. Never guess dates, venues or cities. The schedule doesn't list prize pools; ignore them. If the document doesn't change anything we list, return no changes; most articles won't.
 - Report only facts that are new or different. If the schedule already says the same thing, even in other words ("Star City Games" and "SCG"), leave it alone: never reword, shorten or restyle existing text.
 - Only paper events of the types above. Not Magic Online or Arena events, not RCQs or store events, not other games.
-- Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, format, what it qualifies for, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists).
+- Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, format, what it qualifies for, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists). A melee.gg tournament page for the event (pairings, standings, decklists) is links.melee.
 - Add an event only when the document clearly announces one we don't list, with its dates and city. Give lat and lng for the city, its ISO country code, and an id of the form <year>-<type>-<city>.
 - Events run Friday to Sunday, or Saturday and Sunday. Use the dates of the event itself as the source gives them; a convention's Friday-to-Sunday dates are right for an event held at it unless the source says the event runs fewer days.
 - An organizer's own schedule page is the most reliable source for its events' dates and venues. Write a venue at a convention as "<Convention name>, <venue name>", e.g. "SCG CON Richmond, Greater Richmond Convention Center".

@@ -11,6 +11,14 @@
     "spotlightStarTrek": "https://magic.gg/news/start-your-voyage-at-magic-spotlight-star-trek-in-lille-and-minneapolis",
     "spotlightNauctis": "https://magic.gg/news/explore-new-depths-at-magic-spotlight-nauctis-in-zagreb-and-toronto"
   },
+  "organizers": {
+    "Star City Games": "https://scgcon.starcitygames.com/",
+    "Fanfinity": "https://www.fanfinity.gg/",
+    "Face to Face Games": "https://f2ftour.com/",
+    "BIG MAGIC": "https://mtg.bigmagic.net/",
+    "Devir Brasil": "https://devir.com.br/",
+    "Necrotower": "https://necrotower.com/"
+  },
   "events": [
     {
       "id": "2026-rc-baltimore",
@@ -204,7 +212,8 @@
         "info": "worlds32",
         "stream": "https://www.twitch.tv/magic",
         "coverage": "https://magic.gg/news/magic-world-championship-32-day-one-highlights",
-        "decklists": "https://magic.gg/news/magic-world-championship-32-standard-decklists"
+        "decklists": "https://magic.gg/news/magic-world-championship-32-standard-decklists",
+        "melee": "https://melee.gg/Tournament/View/471980"
       }
     },
     {
