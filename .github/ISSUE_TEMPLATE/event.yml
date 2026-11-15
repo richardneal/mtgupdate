@@ -1,0 +1,28 @@
+name: Event correction or missing event
+description: Report a wrong date, venue or detail, or an event mtgupdate doesn't list yet.
+title: "Event: "
+labels: [event data]
+body:
+  - type: input
+    id: event
+    attributes:
+      label: Event
+      description: Its name and city, or a link to it on mtgupdate.com.
+      placeholder: Spotlight: Star Trek, Lille
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What's wrong or missing
+      description: The details as they should be, such as dates, venue, format or organizer.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: A link to the organizer's or Wizards' page that confirms it.
+      placeholder: https://
+    validations:
+      required: true
