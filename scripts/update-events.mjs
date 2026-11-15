@@ -231,9 +231,11 @@ Rules:
 - Today is ${today}. Past events can still get results, decklist and coverage links.`;
 
 function compactSchedule(data) {
-  return JSON.stringify(data.events.map((e) => ({
-    id: e.id, type: e.type, name: e.name, start: e.start, end: e.end, formats: e.formats,
-    city: e.city, country: e.country, organizer: e.organizer, venue: e.venue, links: e.links,
+  // Everything Claude might be asked to change, so it can tell what the schedule already says.
+  // (Leaving prize out once made it "add" prizes that were already listed.) Links show as URLs.
+  return JSON.stringify(data.events.map(({ lat, lng, ...e }) => ({
+    ...e,
+    links: e.links && Object.fromEntries(Object.entries(e.links).map(([k, v]) => [k, data.sources?.[v] || v])),
   })));
 }
 
