@@ -258,7 +258,6 @@
       "lat": 50.63,
       "lng": 3.06,
       "organizer": "Fanfinity",
-      "prize": "$50,000 prize pool",
       "links": {
         "info": "spotlightStarTrek"
       },
@@ -279,7 +278,6 @@
       "lat": 44.98,
       "lng": -93.27,
       "organizer": "Star City Games",
-      "prize": "$50,000 prize pool",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-minneapolis-2027/",
         "info": "spotlightStarTrek"
@@ -498,7 +496,6 @@
       "lat": 45.81,
       "lng": 15.98,
       "organizer": "Fanfinity",
-      "prize": "$50,000 prize pool",
       "links": {
         "info": "spotlightNauctis"
       },
@@ -519,7 +516,6 @@
       "lat": 43.65,
       "lng": -79.38,
       "organizer": "Face to Face Games",
-      "prize": "$50,000 prize pool",
       "links": {
         "info": "spotlightNauctis"
       },
@@ -561,12 +557,12 @@
       "lat": 47.61,
       "lng": -122.33,
       "organizer": "Star City Games",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-seattle/",
         "info": "comp2027"
       },
-      "venue": "SCG CON Seattle, Seattle Convention Center Arch"
+      "venue": "SCG CON Seattle, Seattle Convention Center Arch",
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-pt-tokyo",
@@ -624,10 +620,10 @@
       "lat": 39.9,
       "lng": 116.41,
       "organizer": "Kadou",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "info": "comp2027"
-      }
+      },
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-spotlight-hartford",
@@ -644,12 +640,12 @@
       "lat": 41.76,
       "lng": -72.67,
       "organizer": "Star City Games",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-hartford/",
         "info": "comp2027"
       },
-      "venue": "SCG CON Hartford, Connecticut Convention Center"
+      "venue": "SCG CON Hartford, Connecticut Convention Center",
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-limited-championship",
@@ -685,10 +681,10 @@
       "lat": 45.5,
       "lng": -73.57,
       "organizer": "Face to Face Games",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "info": "comp2027"
-      }
+      },
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-spotlight-shizuoka",
@@ -705,10 +701,10 @@
       "lat": 34.98,
       "lng": 138.38,
       "organizer": "BIG MAGIC",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "info": "comp2027"
-      }
+      },
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-spotlight-dc",
@@ -724,12 +720,12 @@
       "lat": 38.91,
       "lng": -77.04,
       "organizer": "Star City Games",
-      "prize": "$60,000 prize pool; Top 4 teams earn Pro Tour invitations",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-washington-d-c-2/",
         "info": "comp2027"
       },
-      "venue": "SCG CON Washington, DC, Walter E. Washington Convention Center"
+      "venue": "SCG CON Washington, DC, Walter E. Washington Convention Center",
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-pt-las-vegas",
@@ -765,10 +761,10 @@
       "lat": -33.87,
       "lng": 151.21,
       "organizer": "Let's Play Games",
-      "prize": "$60,000 prize pool; Top 4 teams earn Pro Tour invitations",
       "links": {
         "info": "comp2027"
-      }
+      },
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-spotlight-utrecht",
@@ -784,10 +780,10 @@
       "lat": 52.09,
       "lng": 5.12,
       "organizer": "Fanfinity",
-      "prize": "$60,000 prize pool; Top 4 teams earn Pro Tour invitations",
       "links": {
         "info": "comp2027"
-      }
+      },
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-spotlight-valencia",
@@ -804,10 +800,10 @@
       "lat": 39.47,
       "lng": -0.38,
       "organizer": "Fanfinity",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "info": "comp2027"
-      }
+      },
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-spotlight-dfw",
@@ -824,12 +820,12 @@
       "lat": 32.75,
       "lng": -97.33,
       "organizer": "Star City Games",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-dallas-2027/",
         "info": "comp2027"
       },
-      "venue": "SCG CON Dallas, Fort Worth Convention Center"
+      "venue": "SCG CON Dallas, Fort Worth Convention Center",
+      "feeds": "a Pro Tour (to be announced)"
     },
     {
       "id": "2027-worlds-33",

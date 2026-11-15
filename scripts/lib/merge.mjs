@@ -4,7 +4,7 @@ import { validate, withinWeekend } from '../../js/core.js';
 
 const REQUIRED_FOR_ADD = ['type', 'name', 'start', 'end', 'formats', 'city', 'country', 'lat', 'lng'];
 const EDITABLE = ['name', 'start', 'end', 'formats', 'set', 'city', 'country', 'lat', 'lng',
-  'organizer', 'venue', 'prize', 'feeds', 'notes'];
+  'organizer', 'venue', 'feeds', 'notes'];
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 

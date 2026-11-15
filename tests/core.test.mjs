@@ -73,11 +73,11 @@ test('search ignores case and accents and matches formats, sets, organizers', ()
 });
 
 test('filters survive the URL', () => {
-  const filters = { types: ['pro', 'rc'], formats: ['standard', 'pioneer'], locs: ['US', 'europe'], q: 'standard', past: true };
+  const filters = { types: ['pro', 'rc'], formats: ['standard', 'pioneer'], locs: ['US', 'europe'], rcOnly: true, q: 'standard', past: true };
   const back = filtersFromParams(new URLSearchParams(filtersToParams(filters).toString()));
   assert.deepEqual(back, filters);
   assert.deepEqual(filtersFromParams(new URLSearchParams('type=bogus,pro&loc=europe,jp,mars&format=chess,modern')),
-    { types: ['pro'], formats: ['modern'], locs: ['europe', 'JP'], q: '', past: false });
+    { types: ['pro'], formats: ['modern'], locs: ['europe', 'JP'], rcOnly: false, q: '', past: false });
 });
 
 test('calendar feed is valid iCalendar', () => {
@@ -145,4 +145,13 @@ test('several choices in one filter match any of them', () => {
   // Across filters, every one must match.
   const usPioneer = filterEvents(data.events, f({ formats: ['pioneer'], locs: ['US'] }), ctx);
   assert.ok(usPioneer.length && usPioneer.every((e) => e.country === 'US' && e.formats.includes('pioneer')));
+});
+
+test('location can apply to Regional Championships only', () => {
+  const r = filterEvents(data.events, f({ locs: ['US'], rcOnly: true }), ctx);
+  const rcs = r.filter((e) => e.type === 'rc');
+  assert.ok(rcs.length && rcs.every((e) => e.country === 'US'), 'RCs only in the US');
+  assert.ok(r.some((e) => e.type !== 'rc' && e.country !== 'US'), 'everything else, anywhere');
+  const all = filterEvents(data.events, f(), ctx).filter((e) => e.type !== 'rc');
+  assert.equal(r.filter((e) => e.type !== 'rc').length, all.length);
 });

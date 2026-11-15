@@ -17,8 +17,8 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
   "formats": ["limited"], "set": "Star Trek",
   "city": "Lille", "country": "FR", "lat": 50.63, "lng": 3.06,
   "organizer": "Fanfinity",
-  "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
-  "links": { "info": "comp2027" }
+  "feeds": "2027-pt-tokyo",
+  "links": { "info": "spotlightStarTrek" }
 }
 ```
 
@@ -30,7 +30,7 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
 | `formats` | Any of `limited`, `team-limited`, `standard`, `pioneer`, `modern`, `legacy`, `vintage`, `pauper` |
 | `country` | ISO 3166 alpha-2 code; its region comes from `COUNTRY_REGION` in `js/core.js` |
 | `lat`, `lng` | City coordinates |
-| optional | `set`, `organizer`, `venue`, `prize`, `feeds` (what it qualifies for: the id of a listed event, which the page links to, or plain text), `notes` |
+| optional | `set`, `organizer`, `venue`, `feeds` (what it qualifies for: the id of a listed event, which the page links to, or plain text), `notes` |
 | `links` | Any of `event` (the organizer's page), `info`, `stream`, `coverage`, `results`, `decklists`: a full `https://` URL, or a key of the top-level `sources` map |
 
 Then bump `updated` and run:

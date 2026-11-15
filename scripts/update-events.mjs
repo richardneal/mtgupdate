@@ -201,7 +201,7 @@ function makeClient() {
 // with every field optional was rejected as "Schema is too complex".) toChanges() groups the
 // records back into one change per event for applyChanges().
 const FIELDS = ['type', 'name', 'start', 'end', 'formats', 'set', 'city', 'country', 'lat', 'lng',
-  'organizer', 'venue', 'prize', 'feeds', 'notes',
+  'organizer', 'venue', 'feeds', 'notes',
   'links.event', 'links.info', 'links.coverage', 'links.results', 'links.decklists', 'links.stream'];
 const Output = z.object({
   changes: z.array(z.object({
@@ -220,10 +220,10 @@ const INSTRUCTIONS = `You keep the schedule for mtgupdate.com, a site listing la
 Event types we list: ${Object.entries(TYPES).map(([k, t]) => `${k} (${t.label})`).join(', ')}. Formats: ${Object.keys(FORMATS).join(', ')}.
 
 Rules:
-- Only use facts the document states. Never guess dates, venues, cities or prizes. If the document doesn't change anything we list, return no changes; most articles won't.
-- Report only facts that are new or different. If the schedule already says the same thing, even in other words ("$50,000 prize pool" and "$50,000"), leave it alone: never reword, shorten or restyle existing text.
+- Only use facts the document states. Never guess dates, venues or cities. The schedule doesn't list prize pools; ignore them. If the document doesn't change anything we list, return no changes; most articles won't.
+- Report only facts that are new or different. If the schedule already says the same thing, even in other words ("Star City Games" and "SCG"), leave it alone: never reword, shorten or restyle existing text.
 - Only paper events of the types above. Not Magic Online or Arena events, not RCQs or store events, not other games.
-- Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, prize, format, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists).
+- Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, format, what it qualifies for, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists).
 - Add an event only when the document clearly announces one we don't list, with its dates and city. Give lat and lng for the city, its ISO country code, and an id of the form <year>-<type>-<city>.
 - Events run Friday to Sunday, or Saturday and Sunday. Use the dates of the event itself as the source gives them; a convention's Friday-to-Sunday dates are right for an event held at it unless the source says the event runs fewer days.
 - An organizer's own schedule page is the most reliable source for its events' dates and venues. Write a venue at a convention as "<Convention name>, <venue name>", e.g. "SCG CON Richmond, Greater Richmond Convention Center".
@@ -232,7 +232,7 @@ Rules:
 
 function compactSchedule(data) {
   // Everything Claude might be asked to change, so it can tell what the schedule already says.
-  // (Leaving prize out once made it "add" prizes that were already listed.) Links show as URLs.
+  // (Leaving fields out once made it "add" facts that were already listed.) Links show as URLs.
   return JSON.stringify(data.events.map(({ lat, lng, ...e }) => ({
     ...e,
     links: e.links && Object.fromEntries(Object.entries(e.links).map(([k, v]) => [k, data.sources?.[v] || v])),

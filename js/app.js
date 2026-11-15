@@ -19,7 +19,7 @@ const el = (tag, attrs = {}, ...children) => {
 };
 // Links an event may carry, in the order they are shown.
 const LINKS = [
-  ['stream', 'Watch live'],
+  ['stream', 'Stream'],
   ['coverage', 'Coverage'],
   ['results', 'Results'],
   ['decklists', 'Decklists'],
@@ -166,7 +166,9 @@ function syncMenu(key) {
   const label = !labels.length ? root.dataset.all
     : labels.length <= 2 ? labels.join(' + ')
     : `${labels.length} ${root.dataset.noun}`;
-  root.querySelector('.menu-label').textContent = label;
+  const scoped = key === 'locs' && filters.rcOnly && labels.length;
+  root.querySelector('.menu-label').textContent = scoped ? `${label} (RCs only)` : label;
+  if (key === 'locs') $('#rconly').checked = filters.rcOnly;
   root.querySelector('.menu-button').classList.toggle('set', labels.length > 0);
   root.querySelector('.menu-clear').disabled = !labels.length;
 }
@@ -197,9 +199,11 @@ function eventLinks(e, s) {
     const url = resolveLink(data, e.links?.[key]);
     if (!url) continue;
     if (key === 'stream' && s === 'past') continue;
+    // A Twitch stream during the event shows as "Watch live" once checkLiveStreams() confirms
+    // the channel is broadcasting; until then, and between broadcasts, it is a plain link.
+    const twitch = key === 'stream' && s === 'live' && twitchChannel(url);
     out.push(el('a', {
-      class: `act${key === 'stream' && s === 'live' ? ' live' : ''}`,
-      href: url, target: '_blank', rel: 'noopener',
+      class: 'act', href: url, target: '_blank', rel: 'noopener', 'data-twitch': twitch || null,
     }, label));
   }
   if (s !== 'past') {
@@ -209,6 +213,34 @@ function eventLinks(e, s) {
     }, 'Add to calendar'));
   }
   return out;
+}
+
+// ---- Is the stream up? ------------------------------------------------------
+
+const liveChannels = new Map(); // channel -> true/false, from /api/live
+
+function twitchChannel(url) {
+  const m = /^https:\/\/(?:www\.)?twitch\.tv\/([a-z0-9_]{3,25})\/?$/i.exec(url);
+  return m ? m[1].toLowerCase() : null;
+}
+
+function showLiveStreams() {
+  for (const a of document.querySelectorAll('a[data-twitch]')) {
+    const up = liveChannels.get(a.dataset.twitch) === true;
+    a.classList.toggle('live', up);
+    a.textContent = up ? 'Watch live' : 'Stream';
+  }
+}
+
+async function checkLiveStreams() {
+  const channels = [...new Set([...document.querySelectorAll('a[data-twitch]')].map((a) => a.dataset.twitch))];
+  await Promise.all(channels.map(async (c) => {
+    try {
+      const res = await fetch(`/api/live?channel=${encodeURIComponent(c)}`);
+      if (res.ok) liveChannels.set(c, (await res.json()).live === true);
+    } catch { /* offline or no API (local preview): leave it a plain link */ }
+  }));
+  showLiveStreams();
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -230,12 +262,11 @@ function renderEvent(e) {
   const meta = [
     e.organizer && `Hosted by ${e.organizer}`,
     e.venue,
-    e.prize,
     e.feeds && (() => {
       const t = feedsTarget(data, e);
       return t.id ? ['Qualifies for ', el('a', { class: 'feeds', href: `#${t.id}` }, t.label)] : `Qualifies for ${t.label}`;
     })(),
-    e.notes && !e.venue && !e.prize ? e.notes : null,
+    e.notes && !e.venue ? e.notes : null,
   ].filter(Boolean);
 
   return el('li', { class: `event t-${e.type} is-${s}`, id: e.id },
@@ -284,6 +315,7 @@ function render() {
       el('h2', {}, el('span', { class: 'm' }, month), el('span', { class: 'y' }, year)),
       el('ol', {}, events.map(renderEvent)));
   }));
+  showLiveStreams();
 }
 
 // With "Show completed" on, completed events sit above the rest: bring the next event (or the
@@ -369,6 +401,7 @@ async function main() {
   buildTypeChips();
 
   buildMenus();
+  $('#rconly').addEventListener('change', (ev) => { filters.rcOnly = ev.target.checked; update(); });
   $('#past').addEventListener('change', (ev) => { filters.past = ev.target.checked; update(); });
   $('#reset').addEventListener('click', reset);
   let t;
@@ -403,6 +436,8 @@ async function main() {
   if (linked) showTarget();
   else scrollToNow('instant');
   addEventListener('hashchange', showTarget);
+  checkLiveStreams();
+  setInterval(checkLiveStreams, 2 * 60 * 1000);
 }
 
 main();

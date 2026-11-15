@@ -209,6 +209,12 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 .opt.zero .opt-label { color: var(--faint); }
 .opt:has(input:disabled) { cursor: default; }
 .opt:has(input:disabled) .opt-label { color: var(--muted); }
+.menu-scope {
+  display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px;
+  border-top: 1px solid var(--rule); font-size: 14.5px; cursor: pointer; user-select: none;
+}
+.menu-scope input { width: 15px; height: 15px; margin: 2px 0 0; accent-color: var(--ink); flex: none; }
+.menu-scope small { display: block; color: var(--muted); font-size: 13px; }
 .menu-foot { display: flex; justify-content: space-between; padding: 8px 14px; border-top: 1px solid var(--rule); }
 .menu-foot .link:disabled { opacity: 0.4; cursor: default; text-decoration: none; }
 
