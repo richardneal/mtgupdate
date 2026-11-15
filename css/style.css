@@ -328,6 +328,40 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 .empty, .loading { padding: 56px 0; text-align: center; color: var(--muted); }
 .empty .btn { margin-top: 14px; }
 
+/* ---- View toggle ---- */
+
+.view-toggle { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 8px; overflow: hidden; }
+.view-toggle button {
+  height: 30px; padding: 0 12px; border: 0; background: var(--paper); color: var(--muted);
+  font: 500 14px var(--text); cursor: pointer;
+}
+.view-toggle button + button { border-left: 1px solid var(--rule-strong); }
+.view-toggle button[aria-pressed="true"] { background: var(--ink); color: var(--paper); font-weight: 600; }
+
+/* ---- Compact view: a line per event, grouped by weekend ---- */
+
+.weekend + .weekend { border-top: 1px solid var(--rule); }
+.wk { margin: 0; padding: 12px 0 4px; color: var(--muted); font: 600 17px/1.2 var(--display); letter-spacing: 0.01em; }
+.crow-main {
+  display: grid; grid-template-columns: 58px minmax(0, 1fr) 140px 200px 120px; gap: 14px; align-items: baseline;
+  width: 100%; margin: 0 -8px; padding: 6px 8px; box-sizing: content-box;
+  border: 0; border-radius: 6px; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+}
+.crow-main:hover { background: var(--raise); }
+.c-days { color: var(--muted); font-size: 13.5px; }
+.c-name { color: var(--accent); font: 600 18px/1.2 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.c-fmt { color: var(--muted); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-place { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-place .flag { margin-right: 4px; }
+.c-status { text-align: right; font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.crow.is-live .crow-main { background: color-mix(in srgb, var(--accent) var(--tint-mix), var(--paper)); }
+.crow.is-live .c-status { color: var(--accent); }
+.crow.is-past .c-name, .crow.is-past .c-place { color: var(--muted); }
+.crow.is-past .c-status { color: var(--faint); font-weight: 400; }
+.crow-details ul { list-style: none; margin: 0 0 8px; padding: 0; }
+.crow-details .event { border-top: 1px dashed var(--rule-strong); }
+.crow.is-target .crow-main { animation: target 2.4s ease-out; }
+
 /* ---- Footer ---- */
 
 .foot { margin-top: 72px; border-top: 1px solid var(--rule); }
@@ -345,6 +379,8 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .month h2 { position: static; flex-direction: row; align-items: baseline; gap: 8px; padding: 10px 0 2px; }
   .month h2 .y { margin: 0; }
   .event { grid-template-columns: 96px minmax(0, 1fr) 170px; }
+  .crow-main { grid-template-columns: 58px minmax(0, 1fr) 170px 110px; }
+  .c-fmt { display: none; }
   .side { grid-column: 2 / -1; flex-direction: row; align-items: baseline; padding-top: 0; text-align: left; }
 }
 
@@ -368,6 +404,11 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .filter-tools .menu:last-child .menu-panel { left: auto; right: 0; }
   .search { order: 3; width: auto; flex: 1 1 100%; }
   .event { grid-template-columns: 78px minmax(0, 1fr); gap: 4px 12px; padding: 14px 0; }
+  .crow-main { grid-template-columns: minmax(0, 1fr) auto; gap: 0 10px; }
+  .c-days { display: none; }
+  .c-name { grid-column: 1; }
+  .c-status { grid-column: 2; grid-row: 1; }
+  .c-place { grid-column: 1 / -1; color: var(--muted); font-size: 13.5px; }
   .event.is-live { margin: 0 -10px; padding-left: 10px; padding-right: 10px; }
   .days { font-size: 30px; white-space: nowrap; }
   .when { grid-row: span 3; }

@@ -2,7 +2,7 @@ import {
   TYPES, FILTER_GROUPS, REGIONS, FORMATS, feedsTarget, EMPTY_FILTERS, venuePlace, mapsUrl,
   regionOf, countryName, flag, todayISO, status, dateRange, weekdayRange,
   monthKey, monthLabel, countdown, resolveLink, formatLabel, filterEvents,
-  sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc,
+  sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc, weekendOf,
 } from './core.js';
 
 const $ = (sel) => document.querySelector(sel);
@@ -30,6 +30,9 @@ const LINKS = [
 
 let data;
 let filters = { ...EMPTY_FILTERS };
+// 'list' (every detail) or 'compact' (a line per event, grouped by weekend). Kept in the URL
+// and remembered for the next visit.
+let view = 'list';
 const today = todayISO();
 
 // ---- Theme ---------------------------------------------------------------
@@ -183,11 +186,14 @@ function syncControls() {
   syncMenu('locs');
   if ($('#q').value !== filters.q) $('#q').value = filters.q;
   $('#past').checked = filters.past;
+  for (const b of document.querySelectorAll('.view-toggle button')) b.setAttribute('aria-pressed', String(b.dataset.view === view));
   $('#reset').hidden = !(filters.types.length || filters.formats.length || filters.locs.length || filters.q.trim());
 }
 
 function writeURL() {
-  const p = filtersToParams(filters).toString();
+  const params = filtersToParams(filters);
+  if (view === 'compact') params.set('view', 'compact');
+  const p = params.toString();
   const url = `${location.pathname}${p ? `?${p}` : ''}${location.hash}`;
   history.replaceState(null, '', url);
 }
@@ -267,7 +273,7 @@ function dayBlock(e) {
       : weekdayRange(e.start, e.end)));
 }
 
-function renderEvent(e) {
+function renderEvent(e, { row = true } = {}) {
   const s = status(e, today);
   const meta = [
     e.organizer && (data.organizers?.[e.organizer]
@@ -286,7 +292,7 @@ function renderEvent(e) {
     e.notes && !e.venue ? e.notes : null,
   ].filter(Boolean);
 
-  return el('li', { class: `event t-${e.type} is-${s}`, id: e.id },
+  return el('li', { class: `event t-${e.type} is-${s}`, id: row ? e.id : null, 'data-row': row || null },
     dayBlock(e),
     el('div', { class: 'what' },
       el('p', { class: 'fmt' }, formatLabel(e)),
@@ -300,6 +306,66 @@ function renderEvent(e) {
       el('span', { class: 'country' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country))),
     el('div', { class: 'side' },
       el('p', { class: 'countdown', 'data-text': countdown(e, today) }, countdown(e, today))));
+}
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const dayLabel = (iso) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  return `${WEEKDAYS[d.getUTCDay()]} ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
+};
+
+// One line per event; clicking it opens the full details underneath.
+function renderCompactRow(e) {
+  const s = status(e, today);
+  const details = el('div', { class: 'crow-details', id: `${e.id}-details`, hidden: true });
+  const button = el('button', {
+    class: 'crow-main', type: 'button', 'aria-expanded': 'false', 'aria-controls': `${e.id}-details`,
+    onclick: () => toggleRow(li),
+  },
+  el('span', { class: 'c-days' }, weekdayRange(e.start, e.end)),
+  el('span', { class: 'c-name' }, e.name),
+  el('span', { class: 'c-fmt' }, formatLabel(e)),
+  el('span', { class: 'c-place' }, `${e.city}, `, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country)),
+  el('span', { class: 'c-status countdown', 'data-text': countdown(e, today) }, countdown(e, today)));
+  const li = el('li', { class: `crow t-${e.type} is-${s}`, id: e.id, 'data-row': true }, button, details);
+  return li;
+}
+
+function toggleRow(li, open) {
+  const button = li.querySelector('.crow-main');
+  const details = li.querySelector('.crow-details');
+  const show = open ?? details.hidden;
+  if (show && !details.childElementCount) {
+    const e = data.events.find((x) => x.id === li.id);
+    details.append(el('ul', {}, renderEvent(e, { row: false })));
+    showLiveStreams();
+  }
+  details.hidden = !show;
+  button.setAttribute('aria-expanded', String(show));
+}
+
+// Months, then the weekends in them (nearly every event runs over one), then the events.
+function renderCompact(shown) {
+  const weekends = new Map();
+  for (const e of shown) {
+    const w = weekendOf(e.start) || { start: e.start, end: e.end };
+    if (!weekends.has(w.start)) weekends.set(w.start, { ...w, events: [] });
+    weekends.get(w.start).events.push(e);
+  }
+  const months = new Map();
+  for (const w of weekends.values()) {
+    const k = monthKey(w.start);
+    if (!months.has(k)) months.set(k, []);
+    months.get(k).push(w);
+  }
+  return [...months].map(([k, ws]) => {
+    const [month, year] = monthLabel(k).split(' ');
+    return el('section', { class: 'month compact', 'aria-label': monthLabel(k) },
+      el('h2', {}, el('span', { class: 'm' }, month), el('span', { class: 'y' }, year)),
+      el('div', { class: 'weekends' }, ws.map((w) => el('section', { class: 'weekend', 'aria-label': `${dayLabel(w.start)} to ${dayLabel(w.end)}` },
+        el('h3', { class: 'wk' }, `${dayLabel(w.start)} – ${dayLabel(w.end)}`),
+        el('ol', {}, w.events.map(renderCompactRow))))));
+  });
 }
 
 function render() {
@@ -317,6 +383,12 @@ function render() {
     list.replaceChildren(el('div', { class: 'empty' },
       el('p', {}, 'No events match these filters.'),
       el('button', { class: 'btn', type: 'button', onclick: reset }, 'Clear filters')));
+    return;
+  }
+
+  if (view === 'compact') {
+    list.replaceChildren(...renderCompact(shown));
+    showLiveStreams();
     return;
   }
 
@@ -339,12 +411,15 @@ function render() {
 // one happening now) to the top of the view. With only completed events, show the most recent.
 function scrollToNow(behavior) {
   const list = $('#list');
-  const next = list.querySelector('.event:not(.is-past)');
-  const events = list.querySelectorAll('.event');
-  if (!events.length) return;
-  let anchor = next || events[events.length - 1];
-  // At the start of a month, show the month's name too.
-  if (anchor === anchor.parentElement.firstElementChild) anchor = anchor.closest('.month');
+  const next = list.querySelector('[data-row]:not(.is-past)');
+  const rows = list.querySelectorAll('[data-row]');
+  if (!rows.length) return;
+  let anchor = next || rows[rows.length - 1];
+  // At the start of a weekend or month, show its heading too.
+  if (anchor === anchor.parentElement.firstElementChild) {
+    const weekend = anchor.closest('.weekend');
+    anchor = weekend && weekend !== weekend.parentElement.firstElementChild ? weekend : anchor.closest('.month');
+  }
   if (anchor === list.firstElementChild) {
     // Nothing above it to skip: just make sure the list's start is in view.
     if (window.scrollY > $('#events').offsetTop) $('#events').scrollIntoView({ behavior });
@@ -392,6 +467,7 @@ function showTarget() {
   }
   const node = document.getElementById(id);
   if (!node) return;
+  if (node.classList.contains('crow')) toggleRow(node, true);
   node.scrollIntoView({ block: 'center' });
   node.classList.remove('is-target');
   void node.offsetWidth;
@@ -414,11 +490,22 @@ async function main() {
   $('#updated').textContent = data.updated;
   $('#updated').setAttribute('datetime', data.updated);
 
-  filters = filtersFromParams(new URLSearchParams(location.search));
+  const params = new URLSearchParams(location.search);
+  filters = filtersFromParams(params);
+  let saved = null;
+  try { saved = localStorage.getItem('view'); } catch { /* storage unavailable */ }
+  view = (params.get('view') || saved) === 'compact' ? 'compact' : 'list';
   buildTypeChips();
 
   buildMenus();
   $('#rconly').addEventListener('change', (ev) => { filters.rcOnly = ev.target.checked; update(); });
+  for (const b of document.querySelectorAll('.view-toggle button')) {
+    b.addEventListener('click', () => {
+      view = b.dataset.view;
+      try { localStorage.setItem('view', view); } catch { /* storage unavailable */ }
+      update();
+    });
+  }
   $('#past').addEventListener('change', (ev) => { filters.past = ev.target.checked; update(); });
   $('#reset').addEventListener('click', reset);
   let t;

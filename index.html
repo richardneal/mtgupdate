@@ -97,6 +97,10 @@
       <p id="count" aria-live="polite"></p>
       <div class="summary-actions">
         <button class="link" id="reset" type="button" hidden>Clear filters</button>
+        <div class="view-toggle" role="group" aria-label="View">
+          <button type="button" data-view="list" aria-pressed="true">List</button>
+          <button type="button" data-view="compact" aria-pressed="false">Compact</button>
+        </div>
         <label class="toggle"><input id="past" type="checkbox"> Show completed</label>
       </div>
     </div>
