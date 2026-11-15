@@ -69,7 +69,7 @@ test('groups per-field records into one change per event', () => {
   assert.equal(atl.action, 'add');
   assert.deepEqual(atl.fields, { type: 'rc', formats: ['pioneer', 'team-limited'], lat: 33.75, country: 'US' });
   assert.deepEqual(tokyo.fields, { links: { coverage: 'https://example.com/c' }, venue: 'Tokyo Big Sight' });
-  assert.equal(tokyo.reason, 'Coverage. Venue.');
+  assert.equal(tokyo.reason, 'Coverage.', 'one reason per change, not one per field');
 });
 
 test('a rename needs the new name in the quoted source', () => {

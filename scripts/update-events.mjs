@@ -239,7 +239,7 @@ function compactSchedule(data) {
   })));
 }
 
-async function extract(client, data, doc) {
+async function extract(client, schedule, doc) {
   const text = (doc.text ?? '').slice(0, MAX_CHARS);
   const response = await client.beta.messages.parse({
     model: 'claude-opus-5-5',
@@ -249,7 +249,7 @@ async function extract(client, data, doc) {
     output_config: { effort: 'high', format: betaZodOutputFormat(Output) },
     system: [
       { type: 'text', text: INSTRUCTIONS },
-      { type: 'text', text: `Current schedule:\n${compactSchedule(data)}`, cache_control: { type: 'ephemeral' } },
+      { type: 'text', text: `Current schedule:\n${schedule}`, cache_control: { type: 'ephemeral' } },
     ],
     messages: [{
       role: 'user',
@@ -259,6 +259,8 @@ async function extract(client, data, doc) {
   if (response.stop_reason === 'refusal') throw new Error(`declined (${response.stop_details?.category ?? 'no category'})`);
   if (response.stop_reason === 'max_tokens') throw new Error('response was cut off');
   if (!response.parsed_output) throw new Error('no usable output');
+  const u = response.usage;
+  console.log(`    tokens: ${u.input_tokens} in, ${u.cache_read_input_tokens || 0} cached, ${u.cache_creation_input_tokens || 0} written to cache, ${u.output_tokens} out`);
   return toChanges(response.parsed_output.changes);
 }
 
@@ -387,12 +389,15 @@ async function main() {
   if (!docs.length && !meleeQueue.length) return;
 
   const client = makeClient();
+  // Every document sees the schedule as it was at the start of the run, so the cached prompt
+  // prefix stays the same all run. Changes found earlier still apply: the merge skips repeats.
+  const schedule = compactSchedule(data);
   const results = [];
   const failures = [];
   for (const doc of docs.slice(0, MAX_DOCS)) {
     try {
       if (doc.text === undefined) doc.text = doc.content ? pageText(doc.content) : pageText(await get(doc.url));
-      const changes = await extract(client, data, doc);
+      const changes = await extract(client, schedule, doc);
       const result = applyChanges(data, changes, { source: doc.url });
       data = result.data;
       results.push({ doc, ...result });

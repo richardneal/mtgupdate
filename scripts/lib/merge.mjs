@@ -111,6 +111,6 @@ export function toChanges(records) {
     }
   }
   return [...byId.values()].map(({ reasons, evidence, ...c }) => ({
-    ...c, reason: reasons.join(' '), evidence: evidence.join(' … '),
+    ...c, reason: reasons[0] || '', evidence: evidence.join(' … '),
   }));
 }
