@@ -221,6 +221,7 @@ Event types we list: ${Object.entries(TYPES).map(([k, t]) => `${k} (${t.label})`
 
 Rules:
 - Only use facts the document states. Never guess dates, venues, cities or prizes. If the document doesn't change anything we list, return no changes; most articles won't.
+- Report only facts that are new or different. If the schedule already says the same thing, even in other words ("$50,000 prize pool" and "$50,000"), leave it alone: never reword, shorten or restyle existing text.
 - Only paper events of the types above. Not Magic Online or Arena events, not RCQs or store events, not other games.
 - Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, prize, format, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists).
 - Add an event only when the document clearly announces one we don't list, with its dates and city. Give lat and lng for the city, its ISO country code, and an id of the form <year>-<type>-<city>.
