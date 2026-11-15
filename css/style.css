@@ -202,13 +202,13 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 }
 .month h2 .y { color: var(--faint); font-weight: 500; font-size: 20px; margin-top: 4px; }
 .month ol { list-style: none; margin: 0; padding: 0; }
+.month, .event { scroll-margin-top: calc(var(--filters-h, 0px) + 6px); }
 
 .event {
   display: grid; grid-template-columns: 104px minmax(0, 1fr) 180px 168px;
   gap: 18px; align-items: start;
   padding: 16px 0 17px;
   border-top: 1px solid var(--rule);
-  scroll-margin-top: calc(var(--filters-h, 0px) + 16px);
 }
 .event:first-child { border-top: 0; }
 
@@ -304,7 +304,6 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .tagline { display: none; }
   .top-actions { margin-left: auto; }
   #subscribe span { display: none; }
-  .filters { position: static; }
   .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
   .chip { flex: none; }
   .filter-tools { width: 100%; }

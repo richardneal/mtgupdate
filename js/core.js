@@ -34,19 +34,20 @@ export const FORMATS = {
 
 export const REGIONS = {
   na: 'North America',
-  latam: 'Latin America',
+  sa: 'South America',
   europe: 'Europe',
   asia: 'Asia',
   oceania: 'Oceania',
 };
 
 const COUNTRY_REGION = {
-  US: 'na', CA: 'na',
-  MX: 'latam', BR: 'latam', AR: 'latam', CL: 'latam', CO: 'latam', PE: 'latam',
+  // North America includes Mexico, Central America and the Caribbean.
+  US: 'na', CA: 'na', MX: 'na', GT: 'na', CR: 'na', PA: 'na', PR: 'na', DO: 'na',
+  BR: 'sa', AR: 'sa', CL: 'sa', CO: 'sa', PE: 'sa', UY: 'sa', EC: 'sa', VE: 'sa',
   FR: 'europe', HR: 'europe', NL: 'europe', ES: 'europe', BE: 'europe', DE: 'europe',
   GB: 'europe', IT: 'europe', PL: 'europe', CZ: 'europe', PT: 'europe', SE: 'europe',
   AT: 'europe', CH: 'europe', IE: 'europe', DK: 'europe', NO: 'europe', FI: 'europe',
-  ZA: 'europe', AE: 'europe', TR: 'europe',
+  TR: 'europe',
   JP: 'asia', CN: 'asia', TW: 'asia', TH: 'asia', KR: 'asia', SG: 'asia', PH: 'asia',
   MY: 'asia', HK: 'asia', ID: 'asia', VN: 'asia',
   AU: 'oceania', NZ: 'oceania',
@@ -97,8 +98,8 @@ export function addDays(iso, n) {
   return d.toISOString().slice(0, 10);
 }
 
-// Big events run over a Friday-to-Sunday weekend. Given any day of it, returns the weekend;
-// for a weekday it returns null.
+// Big events fall within one Friday-to-Sunday weekend: most run all three days,
+// some only Saturday and Sunday. Given any day of it, returns that weekend; null for a weekday.
 export function weekendOf(iso) {
   const back = { 5: 0, 6: 1, 0: 2 }[new Date(utcDay(iso)).getUTCDay()];
   if (back === undefined) return null;
@@ -106,9 +107,16 @@ export function weekendOf(iso) {
   return { start, end: addDays(start, 2) };
 }
 
+// True when the event runs the full Friday-to-Sunday weekend.
 export function isWeekend(event) {
   const w = weekendOf(event.start);
   return !!w && w.start === event.start && w.end === event.end;
+}
+
+// True when every day of the event falls within one weekend.
+export function withinWeekend(event) {
+  const w = weekendOf(event.start);
+  return !!w && event.end >= event.start && event.end <= w.end;
 }
 
 export function status(event, today) {
@@ -193,6 +201,7 @@ export function searchText(event) {
 // ---- Filtering ---------------------------------------------------------
 
 // types are FILTER_GROUPS keys; loc is '' (anywhere), a region key ('europe') or a country code ('US').
+// past: list completed events too (the page's "Show completed", off by default).
 export const EMPTY_FILTERS = Object.freeze({ types: [], loc: '', q: '', past: false });
 
 export function matchesLoc(event, loc) {

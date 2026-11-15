@@ -13,7 +13,7 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
   "id": "2027-spotlight-lille",
   "type": "spotlight",
   "name": "Spotlight: Star Trek",
-  "start": "2027-01-08", "end": "2027-01-10",
+  "start": "2027-01-09", "end": "2027-01-10",
   "formats": ["limited"], "set": "Star Trek",
   "city": "Lille", "country": "FR", "lat": 50.63, "lng": 3.06,
   "organizer": "Fanfinity",
@@ -31,7 +31,7 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
 | `country` | ISO 3166 alpha-2 code; its region comes from `COUNTRY_REGION` in `js/core.js` |
 | `lat`, `lng` | City coordinates |
 | optional | `set`, `organizer`, `venue`, `prize`, `feeds` (what it qualifies for), `notes` |
-| `links` | Any of `info`, `stream`, `coverage`, `results`, `decklists`: a full `https://` URL, or a key of the top-level `sources` map |
+| `links` | Any of `event` (the organizer's page), `info`, `stream`, `coverage`, `results`, `decklists`: a full `https://` URL, or a key of the top-level `sources` map |
 
 Then bump `updated` and run:
 
@@ -46,6 +46,19 @@ It is a static site with no build step and no dependencies: `index.html`, `css/s
 
 ```sh
 npm run dev     # http://localhost:8642
+```
+
+## Automatic updates
+
+Once a day the **Check for event updates** workflow (`.github/workflows/update-events.yml`) runs `scripts/update-events.mjs`. It reads the sources in [`sources/sources.json`](sources/sources.json): magic.gg news, Wizards announcements, Star City Games articles and organizer schedule pages such as SCG CON. Each new article that mentions premier events, and each organizer page whose text changed, goes to Claude, which reports what the schedule should add or change. Changes that pass the same checks as a hand edit go into a pull request, with every change listed beside the words in its source. Review and merge it to publish. What was read is kept in `sources/seen.json`, so nothing is read twice.
+
+`sources/sources.json` also records, for each organizer, what it hosts and where to check its schedule. Organizer pages are the most reliable source for dates and venues. To watch a new source, such as an independent series' schedule, add an entry there.
+
+The workflow needs an `ANTHROPIC_API_KEY` repository secret. To read one page right away, run the workflow from the Actions tab with its URL. Locally:
+
+```sh
+node scripts/update-events.mjs --dry-run      # list what would be read
+ANTHROPIC_API_KEY=... node scripts/update-events.mjs --only https://magic.gg/news/...
 ```
 
 ## Hosting

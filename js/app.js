@@ -23,6 +23,7 @@ const LINKS = [
   ['coverage', 'Coverage'],
   ['results', 'Results'],
   ['decklists', 'Decklists'],
+  ['event', 'Event page'],
   ['info', 'Info'],
 ];
 
@@ -145,7 +146,7 @@ function dayBlock(e) {
   const days = e.start === e.end ? `${d1}` : `${d1}–${d2}`;
   return el('time', { class: 'when', datetime: e.start, 'aria-label': `${dateRange(e.start, e.end)}, ${weekdayRange(e.start, e.end)}` },
     el('span', { class: 'days' }, days),
-    // Every event runs Friday to Sunday, so the weekdays only show when one doesn't.
+    // Most events run Friday to Sunday, so the weekdays only show when one doesn't.
     m1 !== m2 ? el('span', { class: 'dow' }, `${MONTHS[m1 - 1]} ${d1} – ${MONTHS[m2 - 1]} ${d2}`)
       : isWeekend(e) ? null : el('span', { class: 'dow' }, weekdayRange(e.start, e.end)));
 }
@@ -184,7 +185,7 @@ function render() {
   $('#count').replaceChildren(
     el('strong', {}, String(shown.length)),
     shown.length === 1 ? ' event' : ' events',
-    filters.past && upcoming !== shown.length ? `, ${upcoming} still to come` : '',
+    !filters.past || upcoming === shown.length ? '' : upcoming ? `, ${upcoming} still to come` : ', all completed',
   );
 
   if (!shown.length) {
@@ -208,10 +209,30 @@ function render() {
   }));
 }
 
-function update({ url = true } = {}) {
+// With "Show completed" on, completed events sit above the rest: bring the next event (or the
+// one happening now) to the top of the view. With only completed events, show the most recent.
+function scrollToNow(behavior) {
+  const list = $('#list');
+  const next = list.querySelector('.event:not(.is-past)');
+  const events = list.querySelectorAll('.event');
+  if (!events.length) return;
+  let anchor = next || events[events.length - 1];
+  // At the start of a month, show the month's name too.
+  if (anchor === anchor.parentElement.firstElementChild) anchor = anchor.closest('.month');
+  if (anchor === list.firstElementChild) {
+    // Nothing above it to skip: just make sure the list's start is in view.
+    if (window.scrollY > $('#events').offsetTop) $('#events').scrollIntoView({ behavior });
+    return;
+  }
+  anchor.scrollIntoView({ block: 'start', behavior });
+}
+
+function update({ url = true, scroll = true } = {}) {
   syncControls();
   render();
   if (url) writeURL();
+  // An instant jump: completed events appear or vanish above the view, which a smooth scroll fights.
+  if (scroll) scrollToNow('instant');
 }
 
 function reset() {
@@ -236,10 +257,13 @@ function showTarget() {
   const id = decodeURIComponent(location.hash.slice(1));
   const e = id && data.events.find((x) => x.id === id);
   if (!e) return;
-  let changed = false;
-  if (status(e, today) === 'past' && !filters.past) { filters.past = true; changed = true; }
-  if (!filterEvents([e], filters, { today }).length) { filters = { ...EMPTY_FILTERS, past: filters.past }; changed = true; }
-  if (changed) update();
+  // A link to a completed event turns on "Show completed"; clear filters that would hide it.
+  if (!filterEvents([e], filters, { today }).length) {
+    const past = filters.past || status(e, today) === 'past';
+    if (!filterEvents([e], { ...filters, past }, { today }).length) filters = { ...EMPTY_FILTERS };
+    filters.past = past;
+    update({ scroll: false });
+  }
   const node = document.getElementById(id);
   if (!node) return;
   node.scrollIntoView({ block: 'center' });
@@ -285,13 +309,14 @@ async function main() {
 
   // Keep month headings stuck just under the filter bar.
   const bar = $('.filters');
-  new ResizeObserver(() => {
-    const sticky = getComputedStyle(bar).position === 'sticky';
-    document.documentElement.style.setProperty('--filters-h', sticky ? `${bar.offsetHeight}px` : '0px');
-  }).observe(bar);
+  const setBarHeight = () => document.documentElement.style.setProperty('--filters-h', `${bar.offsetHeight}px`);
+  setBarHeight();
+  new ResizeObserver(setBarHeight).observe(bar);
 
-  update({ url: false });
-  showTarget();
+  update({ url: false, scroll: false });
+  const linked = data.events.some((e) => `#${e.id}` === decodeURIComponent(location.hash));
+  if (linked) showTarget();
+  else scrollToNow('instant');
   addEventListener('hashchange', showTarget);
 }
 

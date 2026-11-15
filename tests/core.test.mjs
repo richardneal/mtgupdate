@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   validate, filterEvents, filtersFromParams, filtersToParams, status, countdown,
-  dateRange, weekdayRange, toICS, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend,
+  dateRange, weekdayRange, toICS, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend, withinWeekend,
 } from '../js/core.js';
 
 const data = JSON.parse(readFileSync(new URL('../data/events.json', import.meta.url), 'utf8'));
@@ -43,7 +43,7 @@ test('date labels', () => {
   assert.equal(weekdayRange('2027-01-09', '2027-01-10'), 'Sat–Sun');
 });
 
-test('completed events are hidden unless asked for', () => {
+test('completed events are left out unless asked for', () => {
   const upcoming = filterEvents(data.events, f(), ctx);
   assert.ok(upcoming.every((e) => e.end >= ctx.today));
   assert.ok(upcoming.some((e) => e.id === '2026-worlds-32'), 'a live event counts as upcoming');
@@ -60,8 +60,8 @@ test('filter by type: Pro Tours, Worlds and the Limited Championship are one cho
 test('filter by region and by country', () => {
   const eu = filterEvents(data.events, f({ loc: 'europe' }), ctx);
   assert.ok(eu.length && eu.every((e) => regionOf(e.country) === 'europe'));
-  const jp = filterEvents(data.events, f({ loc: 'JP' }), ctx);
-  assert.deepEqual([...new Set(jp.map((e) => e.city))].sort(), ['Aichi', 'Shizuoka', 'Tokyo']);
+  const jp = filterEvents(data.events, f({ loc: 'JP', past: true }), ctx);
+  assert.deepEqual([...new Set(jp.map((e) => e.city))].sort(), ['Aichi', 'Shizuoka', 'Tokyo', 'Yokohama']);
 });
 
 test('search ignores case and accents and matches formats, sets, organizers', () => {
@@ -97,9 +97,18 @@ test('flags', () => {
   assert.equal(flag('x'), '');
 });
 
-test('every event runs Friday to Sunday', () => {
-  const off = data.events.filter((e) => !isWeekend(e)).map((e) => `${e.id} ${e.start}–${e.end}`);
+test('every event falls within one Friday-to-Sunday weekend', () => {
+  const off = data.events.filter((e) => !withinWeekend(e)).map((e) => `${e.id} ${e.start}–${e.end}`);
   assert.deepEqual(off, []);
+});
+
+test('isWeekend and withinWeekend', () => {
+  assert.ok(isWeekend({ start: '2027-01-08', end: '2027-01-10' }));
+  assert.ok(!isWeekend({ start: '2027-01-09', end: '2027-01-10' }));
+  assert.ok(withinWeekend({ start: '2027-01-09', end: '2027-01-10' })); // Sat–Sun
+  assert.ok(withinWeekend({ start: '2027-02-14', end: '2027-02-14' })); // Sun
+  assert.ok(!withinWeekend({ start: '2027-05-22', end: '2027-05-24' })); // Sat–Mon
+  assert.ok(!withinWeekend({ start: '2027-01-07', end: '2027-01-09' })); // Thu–Sat
 });
 
 test('weekendOf', () => {

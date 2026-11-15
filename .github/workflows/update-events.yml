@@ -1,0 +1,71 @@
+name: Check for event updates
+
+# Reads new articles and changed organizer pages listed in sources/sources.json, asks Claude
+# what they change in data/events.json, and opens a pull request with the changes for review.
+# Merging the pull request deploys the site. Needs the ANTHROPIC_API_KEY repository secret.
+on:
+  schedule:
+    # Daily, away from the top of the hour when GitHub schedules are busiest.
+    - cron: "41 14 * * *"
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Read just this page (optional), e.g. a new announcement"
+        required: false
+
+concurrency:
+  group: update-events
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Read new announcements
+        id: update
+        run: node scripts/update-events.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ONLY_URL: ${{ inputs.url }}
+
+      - name: Test the updated schedule
+        if: steps.update.outputs.events_changed == 'true'
+        run: npm test
+
+      - name: Open a pull request
+        if: steps.update.outputs.events_changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: auto/event-updates
+          delete-branch: true
+          title: "Event updates from new announcements"
+          body-path: .update-summary.md
+          commit-message: "Update events from new announcements"
+          add-paths: |
+            data/events.json
+            calendar.ics
+            sources/seen.json
+
+      # Nothing to change on the site, but remember what was read so it isn't read again.
+      - name: Save what was read
+        if: steps.update.outputs.events_changed != 'true' && steps.update.outputs.seen_changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/seen.json
+          git diff --cached --quiet || { git commit -m "Record sources read by the event update check"; git push; }

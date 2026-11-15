@@ -55,7 +55,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-rc-yokohama@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20261002
+DTSTART;VALUE=DATE:20261003
 DTEND;VALUE=DATE:20261005
 SUMMARY:Regional Championship – Yokohama
 LOCATION:Yokohama\, Japan
@@ -116,7 +116,7 @@ BEGIN:VEVENT
 UID:2026-rc-buenos-aires@mtgupdate.com
 DTSTAMP:20261114T000000Z
 DTSTART;VALUE=DATE:20261023
-DTEND;VALUE=DATE:20261026
+DTEND;VALUE=DATE:20261025
 SUMMARY:Regional Championship – Buenos Aires
 LOCATION:Buenos Aires\, Argentina
 GEO:-34.6;-58.38
@@ -192,7 +192,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-lille@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270108
+DTSTART;VALUE=DATE:20270109
 DTEND;VALUE=DATE:20270111
 SUMMARY:Spotlight: Star Trek – Lille
 LOCATION:Lille\, France
@@ -208,14 +208,16 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-minneapolis@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270108
+DTSTART;VALUE=DATE:20270109
 DTEND;VALUE=DATE:20270111
 SUMMARY:Spotlight: Star Trek – Minneapolis
-LOCATION:Minneapolis\, USA
+LOCATION:SCG CON Minneapolis\, Minneapolis Convention Center\, Minneapolis\
+ , USA
 GEO:44.98;-93.27
 DESCRIPTION:Spotlight Series: Limited\nSet: Star Trek\nOrganizer: Star City
-  Games\nPrizes: $50\,000 prize pool\; Top 8 earn Pro Tour invitations\nhtt
- ps://mtgupdate.com/#2027-spotlight-minneapolis
+  Games\nVenue: SCG CON Minneapolis\, Minneapolis Convention Center\nPrizes
+ : $50\,000 prize pool\; Top 8 earn Pro Tour invitations\nhttps://mtgupdate
+ .com/#2027-spotlight-minneapolis
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Spotlight Series
@@ -259,26 +261,12 @@ DTSTAMP:20261114T000000Z
 DTSTART;VALUE=DATE:20270122
 DTEND;VALUE=DATE:20270125
 SUMMARY:Regional Championship – St. Louis
-LOCATION:St. Louis\, USA
+LOCATION:SCG CON St. Louis\, America’s Center Convention Complex\, St. Lo
+ uis\, USA
 GEO:38.63;-90.2
-DESCRIPTION:Regional Championship: Standard\nOrganizer: Star City Games\nQu
- alifies for: Pro Tour at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-rc-s
- t-louis
-URL:https://magic.gg/news/play-update-2026-27-round-3-regional-championship
- -promos-and-qualifiers
-CATEGORIES:Regional Championship
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:2027-rc-aichi@mtgupdate.com
-DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270205
-DTEND;VALUE=DATE:20270208
-SUMMARY:Regional Championship – Aichi
-LOCATION:Aichi\, Japan
-GEO:35.18;136.91
-DESCRIPTION:Regional Championship: Standard\nOrganizer: BIG MAGIC\nQualifie
- s for: Pro Tour at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-rc-aichi
+DESCRIPTION:Regional Championship: Standard\nOrganizer: Star City Games\nVe
+ nue: SCG CON St. Louis\, America’s Center Convention Complex\nQualifies 
+ for: Pro Tour at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-rc-st-louis
 URL:https://magic.gg/news/play-update-2026-27-round-3-regional-championship
  -promos-and-qualifiers
 CATEGORIES:Regional Championship
@@ -306,11 +294,11 @@ DTSTAMP:20261114T000000Z
 DTSTART;VALUE=DATE:20270205
 DTEND;VALUE=DATE:20270208
 SUMMARY:Regional Championship – San Diego
-LOCATION:San Diego\, USA
+LOCATION:SCG CON San Diego\, San Diego Convention Center\, San Diego\, USA
 GEO:32.72;-117.16
-DESCRIPTION:Regional Championship: Standard\nOrganizer: Star City Games\nQu
- alifies for: Pro Tour at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-rc-s
- an-diego
+DESCRIPTION:Regional Championship: Standard\nOrganizer: Star City Games\nVe
+ nue: SCG CON San Diego\, San Diego Convention Center\nQualifies for: Pro T
+ our at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-rc-san-diego
 URL:https://magic.gg/news/play-update-2026-27-round-3-regional-championship
  -promos-and-qualifiers
 CATEGORIES:Regional Championship
@@ -320,13 +308,28 @@ BEGIN:VEVENT
 UID:2027-rc-vancouver@mtgupdate.com
 DTSTAMP:20261114T000000Z
 DTSTART;VALUE=DATE:20270205
-DTEND;VALUE=DATE:20270208
+DTEND;VALUE=DATE:20270207
 SUMMARY:Regional Championship – Vancouver
 LOCATION:Vancouver\, Canada
 GEO:49.28;-123.12
 DESCRIPTION:Regional Championship: Standard\nOrganizer: Face to Face Games\
  nQualifies for: Pro Tour at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-r
  c-vancouver
+URL:https://magic.gg/news/play-update-2026-27-round-3-regional-championship
+ -promos-and-qualifiers
+CATEGORIES:Regional Championship
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-rc-aichi@mtgupdate.com
+DTSTAMP:20261114T000000Z
+DTSTART;VALUE=DATE:20270206
+DTEND;VALUE=DATE:20270208
+SUMMARY:Regional Championship – Aichi
+LOCATION:Aichi\, Japan
+GEO:35.18;136.91
+DESCRIPTION:Regional Championship: Standard\nOrganizer: BIG MAGIC\nQualifie
+ s for: Pro Tour at MagicCon: Tokyo\nhttps://mtgupdate.com/#2027-rc-aichi
 URL:https://magic.gg/news/play-update-2026-27-round-3-regional-championship
  -promos-and-qualifiers
 CATEGORIES:Regional Championship
@@ -350,7 +353,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-rc-taipei@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270212
+DTSTART;VALUE=DATE:20270214
 DTEND;VALUE=DATE:20270215
 SUMMARY:Regional Championship – Taipei
 LOCATION:Taipei\, Chinese Taipei
@@ -381,7 +384,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-zagreb@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270312
+DTSTART;VALUE=DATE:20270313
 DTEND;VALUE=DATE:20270315
 SUMMARY:Spotlight: Nauctis – Zagreb
 LOCATION:Zagreb\, Croatia
@@ -397,7 +400,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-toronto@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270319
+DTSTART;VALUE=DATE:20270320
 DTEND;VALUE=DATE:20270322
 SUMMARY:Spotlight: Nauctis – Toronto
 LOCATION:Toronto\, Canada
@@ -416,11 +419,13 @@ DTSTAMP:20261114T000000Z
 DTSTART;VALUE=DATE:20270416
 DTEND;VALUE=DATE:20270419
 SUMMARY:Regional Championship – Louisville
-LOCATION:Louisville\, USA
+LOCATION:SCG CON Louisville\, Kentucky International Convention Center\, Lo
+ uisville\, USA
 GEO:38.25;-85.76
-DESCRIPTION:Regional Championship: Pioneer\nOrganizer: Star City Games\nQua
- lifies for: Pro Tour at MagicCon: Las Vegas\nhttps://mtgupdate.com/#2027-r
- c-louisville
+DESCRIPTION:Regional Championship: Pioneer\nOrganizer: Star City Games\nVen
+ ue: SCG CON Louisville\, Kentucky International Convention Center\nQualifi
+ es for: Pro Tour at MagicCon: Las Vegas\nhttps://mtgupdate.com/#2027-rc-lo
+ uisville
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Regional Championship
@@ -429,14 +434,15 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-seattle@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270423
+DTSTART;VALUE=DATE:20270424
 DTEND;VALUE=DATE:20270426
 SUMMARY:Spotlight: Marvel Darkhold Destiny – Seattle
-LOCATION:Seattle\, USA
+LOCATION:SCG CON Seattle\, Seattle Convention Center Arch\, Seattle\, USA
 GEO:47.61;-122.33
 DESCRIPTION:Spotlight Series: Modern\nSet: Marvel Darkhold Destiny\nOrganiz
- er: Star City Games\nPrizes: $50\,000 prize pool\; Top 8 earn Pro Tour inv
- itations\nhttps://mtgupdate.com/#2027-spotlight-seattle
+ er: Star City Games\nVenue: SCG CON Seattle\, Seattle Convention Center Ar
+ ch\nPrizes: $50\,000 prize pool\; Top 8 earn Pro Tour invitations\nhttps:/
+ /mtgupdate.com/#2027-spotlight-seattle
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Spotlight Series
@@ -464,11 +470,12 @@ DTSTAMP:20261114T000000Z
 DTSTART;VALUE=DATE:20270521
 DTEND;VALUE=DATE:20270524
 SUMMARY:Regional Championship – Richmond
-LOCATION:Richmond\, USA
+LOCATION:SCG CON Richmond\, Greater Richmond Convention Center\, Richmond\,
+  USA
 GEO:37.54;-77.44
-DESCRIPTION:Regional Championship: Pioneer\nOrganizer: Star City Games\nQua
- lifies for: Pro Tour at MagicCon: Las Vegas\nhttps://mtgupdate.com/#2027-r
- c-richmond
+DESCRIPTION:Regional Championship: Pioneer\nOrganizer: Star City Games\nVen
+ ue: SCG CON Richmond\, Greater Richmond Convention Center\nQualifies for: 
+ Pro Tour at MagicCon: Las Vegas\nhttps://mtgupdate.com/#2027-rc-richmond
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Regional Championship
@@ -477,7 +484,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-beijing@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270521
+DTSTART;VALUE=DATE:20270522
 DTEND;VALUE=DATE:20270524
 SUMMARY:Spotlight: Marvel Darkhold Destiny – Beijing
 LOCATION:Beijing\, China
@@ -493,14 +500,15 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-hartford@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270611
+DTSTART;VALUE=DATE:20270612
 DTEND;VALUE=DATE:20270614
 SUMMARY:Spotlight: Kamigawa: Titanbreach – Hartford
-LOCATION:Hartford\, USA
+LOCATION:SCG CON Hartford\, Connecticut Convention Center\, Hartford\, USA
 GEO:41.76;-72.67
 DESCRIPTION:Spotlight Series: Limited\nSet: Kamigawa: Titanbreach\nOrganize
- r: Star City Games\nPrizes: $50\,000 prize pool\; Top 8 earn Pro Tour invi
- tations\nhttps://mtgupdate.com/#2027-spotlight-hartford
+ r: Star City Games\nVenue: SCG CON Hartford\, Connecticut Convention Cente
+ r\nPrizes: $50\,000 prize pool\; Top 8 earn Pro Tour invitations\nhttps://
+ mtgupdate.com/#2027-spotlight-hartford
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Spotlight Series
@@ -525,7 +533,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-montreal@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270723
+DTSTART;VALUE=DATE:20270724
 DTEND;VALUE=DATE:20270726
 SUMMARY:Spotlight: Kamigawa: Titanbreach – Montreal
 LOCATION:Montreal\, Canada
@@ -541,7 +549,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-shizuoka@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270723
+DTSTART;VALUE=DATE:20270724
 DTEND;VALUE=DATE:20270726
 SUMMARY:Spotlight: Kamigawa: Titanbreach – Shizuoka
 LOCATION:Shizuoka\, Japan
@@ -557,14 +565,16 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-dc@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270813
+DTSTART;VALUE=DATE:20270814
 DTEND;VALUE=DATE:20270816
 SUMMARY:Spotlight: Team Limited – Washington\, DC
-LOCATION:Washington\, DC\, USA
+LOCATION:SCG CON Washington\, DC\, Walter E. Washington Convention Center\,
+  Washington\, DC\, USA
 GEO:38.91;-77.04
-DESCRIPTION:Spotlight Series: Team Limited\nOrganizer: Star City Games\nPri
- zes: $60\,000 prize pool\; Top 4 teams earn Pro Tour invitations\nhttps://
- mtgupdate.com/#2027-spotlight-dc
+DESCRIPTION:Spotlight Series: Team Limited\nOrganizer: Star City Games\nVen
+ ue: SCG CON Washington\, DC\, Walter E. Washington Convention Center\nPriz
+ es: $60\,000 prize pool\; Top 4 teams earn Pro Tour invitations\nhttps://m
+ tgupdate.com/#2027-spotlight-dc
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Spotlight Series
@@ -589,7 +599,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-sydney@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270903
+DTSTART;VALUE=DATE:20270904
 DTEND;VALUE=DATE:20270906
 SUMMARY:Spotlight: Team Limited – Sydney
 LOCATION:Sydney\, Australia
@@ -605,7 +615,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-utrecht@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20270903
+DTSTART;VALUE=DATE:20270904
 DTEND;VALUE=DATE:20270906
 SUMMARY:Spotlight: Team Limited – Utrecht
 LOCATION:Utrecht\, Netherlands
@@ -621,7 +631,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-valencia@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20271015
+DTSTART;VALUE=DATE:20271016
 DTEND;VALUE=DATE:20271018
 SUMMARY:Spotlight: Zhalfir – Valencia
 LOCATION:Valencia\, Spain
@@ -637,14 +647,16 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-spotlight-dfw@mtgupdate.com
 DTSTAMP:20261114T000000Z
-DTSTART;VALUE=DATE:20271022
+DTSTART;VALUE=DATE:20271023
 DTEND;VALUE=DATE:20271025
 SUMMARY:Spotlight: Zhalfir – Dallas–Fort Worth
-LOCATION:Dallas–Fort Worth\, USA
-GEO:32.9;-97.04
+LOCATION:SCG CON Dallas\, Fort Worth Convention Center\, Dallas–Fort Wort
+ h\, USA
+GEO:32.75;-97.33
 DESCRIPTION:Spotlight Series: Pioneer\nSet: Zhalfir\nOrganizer: Star City G
- ames\nPrizes: $50\,000 prize pool\; Top 8 earn Pro Tour invitations\nhttps
- ://mtgupdate.com/#2027-spotlight-dfw
+ ames\nVenue: SCG CON Dallas\, Fort Worth Convention Center\nPrizes: $50\,0
+ 00 prize pool\; Top 8 earn Pro Tour invitations\nhttps://mtgupdate.com/#20
+ 27-spotlight-dfw
 URL:https://magic.wizards.com/en/news/announcements/everything-new-for-comp
  etitive-play-in-2027
 CATEGORIES:Spotlight Series

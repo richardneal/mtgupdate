@@ -1,0 +1,92 @@
+{
+  "about": "Where scripts/update-events.mjs looks for new or changed event information, and how to check each place. Organizer pages are the most authoritative source for dates and venues; Wizards' announcements are authoritative for which events exist. Kinds: 'magicgg-news' and 'wizards-news' are article lists (each new matching article is read once), 'rss' is a feed (same), 'page' is one page read again whenever its text changes. 'match' and 'exclude' are case-insensitive regexes tested against an article's title, URL and categories.",
+  "sources": [
+    {
+      "id": "magicgg",
+      "name": "magic.gg news",
+      "kind": "magicgg-news",
+      "url": "https://magic.gg/news",
+      "check": "Wizards' competitive news site. Announces Spotlight stops, Regional Championship rounds (\"Play Update\" posts), Pro Tour and Worlds fact sheets, and posts final standings, decklists and metagame breakdowns after each event. Use it for new events, invitations and prizes, and for results, decklists and coverage links on events already listed.",
+      "match": "pro[- ]tour|regional[- ]championship|\\brcq?s?\\b|spotlight|world[- ]championship|limited[- ]championship|premier[- ]play|play[- ]update|magiccon|fact[- ]sheet|final[- ]standings|decklists|viewers?[- ]guide|top[- ]8",
+      "exclude": "arena|mtgo|magic[- ]online|\\bmocs\\b"
+    },
+    {
+      "id": "wizards",
+      "name": "Wizards of the Coast announcements",
+      "kind": "wizards-news",
+      "url": "https://magic.wizards.com/en/news/announcements",
+      "check": "Season-level announcements: the yearly competitive calendar, MagicCon locations, new event series and format changes. The list gives no dates, so each matching announcement is read once.",
+      "match": "competitive|premier[- ]play|pro[- ]tour|regional|spotlight|world[- ]championship|limited[- ]championship|magiccon|organized[- ]play",
+      "exclude": "arena|mtgo|magic[- ]online"
+    },
+    {
+      "id": "scg-articles",
+      "name": "Star City Games articles",
+      "kind": "rss",
+      "url": "https://articles.starcitygames.com/feed/",
+      "check": "SCG's news feed, with full article text. SCG hosts the US Regional Championships and US Spotlight stops at SCG CON, and often reports schedule and promo news before magic.gg does. Only Magic articles about competitive events matter.",
+      "match": "pro[- ]tour|regional[- ]championship|\\brcq?s?\\b|spotlight|world[- ]championship|limited[- ]championship|premier[- ]play|magiccon|scg[- ]con|competitive",
+      "exclude": "riftbound|lorcana|flesh and blood|pok[eé]mon|sorcery|star wars|commander vs|spike feeders"
+    },
+    {
+      "id": "scgcon",
+      "name": "SCG CON schedule",
+      "organizer": "Star City Games",
+      "kind": "page",
+      "url": "https://scgcon.starcitygames.com/",
+      "check": "The organizer's own list of every upcoming SCG CON: city, convention dates and venue, with a link per show (scgcon.starcitygames.com/event/...). An SCG CON runs Friday to Sunday; the premier event inside it may run all three days or only two. Use it to confirm dates and venues of US Regional Championships and US Spotlight stops (venue as \"SCG CON <City>, <Convention center>\", links.event as the show's page). A show that hosts no event we list is not an event to add."
+    }
+  ],
+  "organizers": [
+    {
+      "name": "Star City Games",
+      "hosts": "US Regional Championships and US Spotlight stops (at SCG CON)",
+      "check": "SCG CON schedule (source 'scgcon'); event pages at https://scgcon.starcitygames.com/event/<show>/"
+    },
+    {
+      "name": "Fanfinity",
+      "hosts": "Europe, Middle East and Africa Regional Championships and European Spotlight stops",
+      "check": "No 2027 schedule page found as of 2026-11-14. Look for one at https://fanfinity.gg and add it here as a 'page' source when it appears."
+    },
+    {
+      "name": "Face to Face Games",
+      "hosts": "Canadian Regional Championships and Canadian Spotlight stops (at F2F Tour weekends)",
+      "check": "Tour weekends are listed at https://facetofacegames.com/pages/destination-events and announced at https://magic.facetofacegames.com. No 2027 dates found as of 2026-11-14; add the destination events page as a 'page' source once 2027 stops appear."
+    },
+    {
+      "name": "BIG MAGIC",
+      "hosts": "Japanese Regional Championships and Japanese Spotlight stops",
+      "check": "Event pages under https://ssl.bigmagic.net (Japanese, some English). No 2027 pages found as of 2026-11-14."
+    },
+    {
+      "name": "Let's Play Games",
+      "hosts": "Australia and New Zealand Regional Championships and Spotlight stops",
+      "check": "No 2027 page found as of 2026-11-14. A store listing gave the Sydney RC as Nov 6–8, 2026 against magic.gg's Oct 23–25; confirm with the organizer if a page turns up."
+    },
+    {
+      "name": "Kadou",
+      "hosts": "Regional Championships and Spotlight stops in mainland China",
+      "check": "No English schedule page known."
+    },
+    {
+      "name": "Necrotower",
+      "hosts": "Mexico, Central America and Caribbean Regional Championships",
+      "check": "No schedule page known."
+    },
+    {
+      "name": "Devir Brasil",
+      "hosts": "South American Regional Championships",
+      "check": "No schedule page known."
+    },
+    {
+      "name": "Game Square",
+      "hosts": "Chinese Taipei Regional Championships",
+      "check": "No schedule page known."
+    },
+    {
+      "name": "Oracle Events",
+      "hosts": "Southeast Asia Regional Championships",
+      "check": "No schedule page known."
+    }
+  ]
+}
