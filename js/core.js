@@ -52,7 +52,7 @@ const COUNTRY_REGION = {
   AU: 'oceania', NZ: 'oceania',
 };
 
-// Names Magic's organised play uses where they differ from the browser's.
+// Names Magic's organized play uses where they differ from the browser's.
 const COUNTRY_NAMES = { TW: 'Chinese Taipei', US: 'USA' };
 
 export function regionOf(country) {
