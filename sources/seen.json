@@ -8,12 +8,29 @@
     "https://magic.gg/news/inside-the-team-rooms-of-world-championship-32": "2026-11-15",
     "https://magic.gg/news/the-week-that-was-around-the-world-on-the-pro-tour": "2026-11-15",
     "https://magic.gg/news/metagame-mentor-mapping-the-standard-frontier-before-magic-world-championship-32": "2026-11-15",
-    "https://magic.gg/news/the-cards-competitors-love-standard-favorites-ahead-of-world-championship-32": "2026-11-15"
+    "https://magic.gg/news/the-cards-competitors-love-standard-favorites-ahead-of-world-championship-32": "2026-11-15",
+    "https://magic.gg/news/world-championship-32-viewers-guide": "2026-11-15",
+    "https://magic.gg/news/metagame-mentor-modern-developments-at-rcs-in-southeast-asia-australia-new-zealand-and-south-america": "2026-11-15",
+    "https://magic.gg/news/magic-spotlight-fracture-hartford-2026-final-standings": "2026-11-15",
+    "https://magic.gg/news/magic-spotlight-fracture-on-stranger-tides": "2026-11-15",
+    "https://magic.gg/news/start-your-voyage-at-magic-spotlight-star-trek-in-lille-and-minneapolis": "2026-11-15",
+    "https://magic.wizards.com/en/news/announcements/everything-new-for-competitive-play-in-2027": "2026-11-15",
+    "https://articles.starcitygames.com/magic-the-gathering/magiccon-atlanta-preview-panel-shows-first-nauctis-cards-upcoming-books-netflix-series/": "2026-11-15"
   },
   "pages": {
     "https://scgcon.starcitygames.com/": {
       "hash": "c72f34a04115096b",
       "checked": "2026-11-15"
     }
+  },
+  "melee": {
+    "2027-rc-bangkok": "2026-11-15",
+    "2027-rc-shanghai": "2026-11-15",
+    "2027-spotlight-lille": "2026-11-15",
+    "2027-spotlight-minneapolis": "2026-11-15",
+    "2027-rc-mexico-city": "2026-11-15",
+    "2027-rc-sao-paulo": "2026-11-15",
+    "2027-rc-st-louis": "2026-11-15",
+    "2027-rc-melbourne": "2026-11-15"
   }
 }

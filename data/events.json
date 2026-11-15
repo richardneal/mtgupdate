@@ -169,7 +169,8 @@
       "organizer": "Devir Brasil",
       "feeds": "2027-pt-nauctis",
       "links": {
-        "info": "rcRound1"
+        "info": "rcRound1",
+        "coverage": "https://magic.gg/news/metagame-mentor-modern-developments-at-rcs-in-southeast-asia-australia-new-zealand-and-south-america"
       }
     },
     {
@@ -188,7 +189,28 @@
       "organizer": "Let's Play Games",
       "feeds": "2027-pt-nauctis",
       "links": {
-        "info": "rcRound1"
+        "info": "rcRound1",
+        "coverage": "https://magic.gg/news/metagame-mentor-modern-developments-at-rcs-in-southeast-asia-australia-new-zealand-and-south-america"
+      }
+    },
+    {
+      "id": "2026-spotlight-hartford",
+      "type": "spotlight",
+      "name": "Spotlight: Reality Fracture",
+      "start": "2026-10-23",
+      "end": "2026-10-25",
+      "formats": [
+        "standard"
+      ],
+      "set": "Reality Fracture",
+      "city": "Hartford",
+      "country": "US",
+      "lat": 41.7658,
+      "lng": -72.6734,
+      "organizer": "Star City Games",
+      "feeds": "2027-pt-tokyo",
+      "links": {
+        "coverage": "https://magic.gg/news/magic-spotlight-fracture-on-stranger-tides"
       }
     },
     {
@@ -291,7 +313,8 @@
       "organizer": "Star City Games",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-minneapolis-2027/",
-        "info": "spotlightStarTrek"
+        "info": "spotlightStarTrek",
+        "melee": "https://melee.gg/Tournament/View/470210"
       },
       "venue": "SCG CON Minneapolis, Minneapolis Convention Center",
       "feeds": "2027-pt-tokyo"
@@ -351,7 +374,8 @@
       "feeds": "2027-pt-tokyo",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-st-louis-2027/",
-        "info": "rcRound2"
+        "info": "rcRound2",
+        "melee": "https://melee.gg/Tournament/View/439572"
       },
       "venue": "SCG CON St. Louis, America’s Center Convention Complex"
     },

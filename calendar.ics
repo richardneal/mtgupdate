@@ -143,6 +143,21 @@ CATEGORIES:Regional Championship
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
+UID:2026-spotlight-hartford@mtgupdate.com
+DTSTAMP:20261115T000000Z
+DTSTART;VALUE=DATE:20261023
+DTEND;VALUE=DATE:20261026
+SUMMARY:Spotlight: Reality Fracture – Hartford
+LOCATION:Hartford\, USA
+GEO:41.7658;-72.6734
+DESCRIPTION:Spotlight Series: Standard\nSet: Reality Fracture\nOrganizer: S
+ tar City Games\nQualifies for: Pro Tour Tokyo\nhttps://mtgupdate.com/#2026
+ -spotlight-hartford
+URL:https://mtgupdate.com/#2026-spotlight-hartford
+CATEGORIES:Spotlight Series
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
 UID:2026-worlds-32@mtgupdate.com
 DTSTAMP:20261115T000000Z
 DTSTART;VALUE=DATE:20261113
