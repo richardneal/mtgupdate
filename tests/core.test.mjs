@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   validate, filterEvents, filtersFromParams, filtersToParams, status, countdown,
-  dateRange, weekdayRange, toICS, regionOf, flag, EMPTY_FILTERS,
+  dateRange, weekdayRange, toICS, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend,
 } from '../js/core.js';
 
 const data = JSON.parse(readFileSync(new URL('../data/events.json', import.meta.url), 'utf8'));
@@ -37,7 +37,7 @@ test('status and countdown', () => {
 });
 
 test('date labels', () => {
-  assert.equal(dateRange('2027-01-09', '2027-01-10'), 'Jan 9–10');
+  assert.equal(dateRange('2027-01-08', '2027-01-10'), 'Jan 8–10');
   assert.equal(dateRange('2027-01-30', '2027-02-01'), 'Jan 30 – Feb 1');
   assert.equal(dateRange('2027-02-14', '2027-02-14'), 'Feb 14');
   assert.equal(weekdayRange('2027-01-09', '2027-01-10'), 'Sat–Sun');
@@ -95,4 +95,16 @@ test('calendar feed is valid iCalendar', () => {
 test('flags', () => {
   assert.equal(flag('US'), '🇺🇸');
   assert.equal(flag('x'), '');
+});
+
+test('every event runs Friday to Sunday', () => {
+  const off = data.events.filter((e) => !isWeekend(e)).map((e) => `${e.id} ${e.start}–${e.end}`);
+  assert.deepEqual(off, []);
+});
+
+test('weekendOf', () => {
+  assert.deepEqual(weekendOf('2027-01-09'), { start: '2027-01-08', end: '2027-01-10' }); // Sat
+  assert.deepEqual(weekendOf('2027-02-14'), { start: '2027-02-12', end: '2027-02-14' }); // Sun
+  assert.deepEqual(weekendOf('2027-01-08'), { start: '2027-01-08', end: '2027-01-10' }); // Fri
+  assert.equal(weekendOf('2027-01-06'), null); // Wed
 });

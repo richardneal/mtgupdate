@@ -97,6 +97,20 @@ export function addDays(iso, n) {
   return d.toISOString().slice(0, 10);
 }
 
+// Big events run over a Friday-to-Sunday weekend. Given any day of it, returns the weekend;
+// for a weekday it returns null.
+export function weekendOf(iso) {
+  const back = { 5: 0, 6: 1, 0: 2 }[new Date(utcDay(iso)).getUTCDay()];
+  if (back === undefined) return null;
+  const start = addDays(iso, -back);
+  return { start, end: addDays(start, 2) };
+}
+
+export function isWeekend(event) {
+  const w = weekendOf(event.start);
+  return !!w && w.start === event.start && w.end === event.end;
+}
+
 export function status(event, today) {
   if (today < event.start) return 'upcoming';
   if (today > event.end) return 'past';

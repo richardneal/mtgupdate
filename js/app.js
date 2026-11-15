@@ -2,7 +2,7 @@ import {
   TYPES, FILTER_GROUPS, REGIONS, EMPTY_FILTERS,
   regionOf, countryName, flag, todayISO, status, dateRange, weekdayRange,
   monthKey, monthLabel, countdown, resolveLink, formatLabel, filterEvents,
-  sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc,
+  sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc, isWeekend,
 } from './core.js';
 
 const $ = (sel) => document.querySelector(sel);
@@ -145,7 +145,9 @@ function dayBlock(e) {
   const days = e.start === e.end ? `${d1}` : `${d1}–${d2}`;
   return el('time', { class: 'when', datetime: e.start, 'aria-label': `${dateRange(e.start, e.end)}, ${weekdayRange(e.start, e.end)}` },
     el('span', { class: 'days' }, days),
-    el('span', { class: 'dow' }, m1 === m2 ? weekdayRange(e.start, e.end) : `${MONTHS[m1 - 1]} ${d1} – ${MONTHS[m2 - 1]} ${d2}`));
+    // Every event runs Friday to Sunday, so the weekdays only show when one doesn't.
+    m1 !== m2 ? el('span', { class: 'dow' }, `${MONTHS[m1 - 1]} ${d1} – ${MONTHS[m2 - 1]} ${d2}`)
+      : isWeekend(e) ? null : el('span', { class: 'dow' }, weekdayRange(e.start, e.end)));
 }
 
 function renderEvent(e) {

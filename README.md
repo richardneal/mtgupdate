@@ -13,11 +13,11 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
   "id": "2027-spotlight-lille",
   "type": "spotlight",
   "name": "Spotlight: Star Trek",
-  "start": "2027-01-09", "end": "2027-01-10",
+  "start": "2027-01-08", "end": "2027-01-10",
   "formats": ["limited"], "set": "Star Trek",
   "city": "Lille", "country": "FR", "lat": 50.63, "lng": 3.06,
   "organizer": "Fanfinity",
-  "prize": "$50,000 · Top 8 earn Pro Tour invitations",
+  "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
   "links": { "info": "comp2027" }
 }
 ```
