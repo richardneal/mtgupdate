@@ -281,7 +281,8 @@ function renderEvent(e) {
   return el('li', { class: `event t-${e.type} is-${s}`, id: e.id },
     dayBlock(e),
     el('div', { class: 'what' },
-      el('p', { class: 'fmt' }, formatLabel(e)),
+      // The format, unless the name already says it ("Spotlight: Team Limited").
+      e.name.includes(formatLabel(e)) ? null : el('p', { class: 'fmt' }, formatLabel(e)),
       el('h3', {}, el('a', { href: `#${e.id}` }, e.name)),
       meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null,
       el('p', { class: 'actions' }, eventLinks(e, s))),
