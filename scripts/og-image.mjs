@@ -18,7 +18,8 @@ const data = JSON.parse(readFileSync(join(root, 'data/events.json'), 'utf8'));
 const today = todayISO();
 const ROWS = 5;
 
-const COLORS = { spotlight: '#f59a4f', rc: '#6cc27a', pt: '#6ea6f5', lc: '#ee88bb', worlds: '#a991f5' };
+// One color per filter chip, as on the site.
+const COLORS = { spotlight: '#f59a4f', rc: '#6cc27a', pt: '#6ea6f5', lc: '#6ea6f5', worlds: '#6ea6f5' };
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const upcoming = sortEvents(data.events).filter((e) => status(e, today) !== 'past').slice(0, ROWS);
@@ -59,7 +60,7 @@ const html = `<!doctype html>
   .date { color: var(--accent); font: 700 46px/1 "Barlow Condensed", sans-serif; white-space: nowrap; }
   .what { display: flex; flex-direction: column; min-width: 0; }
   .name { font: 600 32px/1.1 "Barlow Condensed", sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sub { color: var(--accent); font-size: 19px; font-weight: 600; margin-top: 2px; }
+  .sub { color: #a2a9b8; font-size: 19px; font-weight: 600; margin-top: 2px; }
   .where { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
   .city { font-size: 26px; font-weight: 600; }
   .country { color: #a2a9b8; font-size: 21px; }

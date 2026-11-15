@@ -17,8 +17,6 @@
   --spotlight: #d06a12;
   --rc: #2f8a3a;
   --pt: #2366c4;
-  --lc: #b4407a;
-  --worlds: #6a4fc0;
   --tint-mix: 9%;
 
   --display: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
@@ -41,8 +39,6 @@
     --spotlight: #f59a4f;
     --rc: #6cc27a;
     --pt: #6ea6f5;
-    --lc: #ee88bb;
-    --worlds: #a991f5;
     --tint-mix: 14%;
   }
 }
@@ -60,16 +56,15 @@
   --spotlight: #f59a4f;
   --rc: #6cc27a;
   --pt: #6ea6f5;
-  --lc: #ee88bb;
-  --worlds: #a991f5;
   --tint-mix: 14%;
 }
 
 .t-spotlight { --accent: var(--spotlight); }
 .t-rc        { --accent: var(--rc); }
 .t-pt        { --accent: var(--pt); }
-.t-lc        { --accent: var(--lc); }
-.t-worlds    { --accent: var(--worlds); }
+/* One color per filter chip: Worlds and the Limited Championship share the Pro Tour's. */
+.t-lc        { --accent: var(--pt); }
+.t-worlds    { --accent: var(--pt); }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -268,7 +263,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 .dow { margin-top: 5px; color: var(--muted); font-size: 14px; }
 
 .what { min-width: 0; padding-top: 1px; }
-.fmt { color: var(--accent); font-size: 14px; font-weight: 600; }
+.fmt { color: var(--muted); font-size: 14px; font-weight: 600; }
 .event h3 { margin: 1px 0 0; font: 600 23px/1.1 var(--display); letter-spacing: 0; }
 .event h3 a { text-decoration: none; }
 .event h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
