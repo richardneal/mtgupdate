@@ -294,10 +294,10 @@ function renderEvent(e) {
       meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null,
       el('p', { class: 'actions' }, eventLinks(e, s))),
     el('p', { class: 'where' },
-      el('span', { class: 'city' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)),
+      el('span', { class: 'city' },
         // With a venue named, its link is in the details; otherwise the city opens the map.
         venuePlace(e) ? e.city : el('a', { class: 'map', href: mapsUrl(e), target: '_blank', rel: 'noopener', title: 'Open in Google Maps' }, e.city)),
-      el('span', { class: 'country' }, countryName(e.country))),
+      el('span', { class: 'country' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country))),
     el('div', { class: 'side' },
       el('p', { class: 'countdown', 'data-text': countdown(e, today) }, countdown(e, today))));
 }

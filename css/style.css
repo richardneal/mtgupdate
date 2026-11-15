@@ -275,7 +275,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 
 .where { display: flex; flex-direction: column; padding-top: 19px; min-width: 0; }
 .city { font-weight: 600; }
-.flag { margin-right: 7px; }
+.flag { margin-right: 6px; }
 .country { color: var(--muted); font-size: 14.5px; }
 
 .side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 19px; text-align: right; }
