@@ -54,7 +54,15 @@ Once a day the **Check for event updates** workflow (`.github/workflows/update-e
 
 `sources/sources.json` also records, for each organizer, what it hosts and where to check its schedule. Organizer pages are the most reliable source for dates and venues. To watch a new source, such as an independent series' schedule, add an entry there.
 
-The workflow needs an `ANTHROPIC_API_KEY` repository secret. To read one page right away, run the workflow from the Actions tab with its URL. Locally:
+The workflow signs in to the Claude API with its own GitHub identity (Workload Identity Federation), so no API key is stored in the repository. In the Claude Console, under **Settings → Workload identity → Connect workload → GitHub Actions**, register GitHub's issuer (`https://token.actions.githubusercontent.com`) and a rule that matches only this repository's `main` branch:
+
+- Subject: `repo:richardneal/mtgupdate:ref:refs/heads/main` (scheduled and manual runs on `main` both have this subject)
+- Audience: `https://api.anthropic.com`
+- Claim `repository_owner`: `richardneal`
+
+Then add the IDs it gives you as repository **variables** (not secrets; they aren't sensitive) under Settings → Secrets and variables → Actions → Variables: `ANTHROPIC_FEDERATION_RULE_ID` (`fdrl_...`), `ANTHROPIC_ORGANIZATION_ID`, `ANTHROPIC_SERVICE_ACCOUNT_ID` (`svac_...`), and `ANTHROPIC_WORKSPACE_ID` (`wrkspc_...`) if the rule covers more than one workspace.
+
+To read one page right away, run the workflow from the Actions tab with its URL. Locally, with an API key:
 
 ```sh
 node scripts/update-events.mjs --dry-run      # list what would be read

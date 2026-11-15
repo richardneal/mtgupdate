@@ -2,7 +2,9 @@ name: Check for event updates
 
 # Reads new articles and changed organizer pages listed in sources/sources.json, asks Claude
 # what they change in data/events.json, and opens a pull request with the changes for review.
-# Merging the pull request deploys the site. Needs the ANTHROPIC_API_KEY repository secret.
+# Merging the pull request deploys the site. Signs in to the Claude API with the job's GitHub
+# identity (Workload Identity Federation), so no API key is stored: the ANTHROPIC_* repository
+# variables name the federation rule, organization and service account. See README.
 on:
   schedule:
     # Daily, away from the top of the hour when GitHub schedules are busiest.
@@ -20,6 +22,7 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write  # lets the job sign in to the Claude API as itself
 
 jobs:
   check:
@@ -40,7 +43,10 @@ jobs:
         id: update
         run: node scripts/update-events.mjs
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_FEDERATION_RULE_ID: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          ANTHROPIC_ORGANIZATION_ID: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          ANTHROPIC_SERVICE_ACCOUNT_ID: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          ANTHROPIC_WORKSPACE_ID: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
           ONLY_URL: ${{ inputs.url }}
 
       - name: Test the updated schedule

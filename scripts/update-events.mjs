@@ -8,13 +8,19 @@
 //   node scripts/update-events.mjs --only URL   read just this page (also: ONLY_URL=...)
 //   node scripts/update-events.mjs --mark-seen  record everything currently listed as read
 //
-// Needs ANTHROPIC_API_KEY unless --dry-run or --mark-seen.
+// Claude credentials (not needed for --dry-run or --mark-seen):
+// - In GitHub Actions: Workload Identity Federation. The job's GitHub identity token is exchanged
+//   for a short-lived Anthropic token; no API key is stored. Needs the ANTHROPIC_FEDERATION_RULE_ID,
+//   ANTHROPIC_ORGANIZATION_ID and ANTHROPIC_SERVICE_ACCOUNT_ID repository variables (and
+//   ANTHROPIC_WORKSPACE_ID if the rule covers several workspaces) and `id-token: write`.
+// - Locally: ANTHROPIC_API_KEY, or an `ant auth login` profile.
 
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
+import { oidcFederationProvider } from '@anthropic-ai/sdk/lib/credentials/oidc-federation';
 import { z } from 'zod';
 import { TYPES, FORMATS, toICS, todayISO } from '../js/core.js';
 import { applyChanges } from './lib/merge.mjs';
@@ -154,6 +160,43 @@ async function collect(sources, seen) {
 
 // ---- Asking Claude ---------------------------------------------------------
 
+const AUDIENCE = 'https://api.anthropic.com';
+
+// In GitHub Actions, sign in with the job's own identity. GitHub's identity tokens last about
+// five minutes and each can be exchanged only once, so fetch a fresh one every time the SDK
+// renews its Anthropic token rather than reading one saved at the start of the job.
+function makeClient() {
+  const env = process.env;
+  const requestURL = env.ACTIONS_ID_TOKEN_REQUEST_URL;
+  const requestToken = env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+  if (env.ANTHROPIC_FEDERATION_RULE_ID && env.ANTHROPIC_ORGANIZATION_ID) {
+    if (!requestURL || !requestToken) {
+      throw new Error('Federation is configured but GitHub gave the job no identity token. The workflow needs `permissions: id-token: write`.');
+    }
+    return new Anthropic({
+      credentials: oidcFederationProvider({
+        identityTokenProvider: async () => {
+          const res = await fetch(`${requestURL}&audience=${encodeURIComponent(AUDIENCE)}`, {
+            headers: { Authorization: `Bearer ${requestToken}` },
+          });
+          if (!res.ok) throw new Error(`GitHub identity token request failed: HTTP ${res.status}`);
+          return (await res.json()).value;
+        },
+        federationRuleId: env.ANTHROPIC_FEDERATION_RULE_ID,
+        organizationId: env.ANTHROPIC_ORGANIZATION_ID,
+        serviceAccountId: env.ANTHROPIC_SERVICE_ACCOUNT_ID || undefined,
+        workspaceId: env.ANTHROPIC_WORKSPACE_ID || undefined,
+        baseURL: 'https://api.anthropic.com',
+        fetch,
+      }),
+    });
+  }
+  if (env.GITHUB_ACTIONS && !env.ANTHROPIC_API_KEY) {
+    throw new Error('No Claude credentials: set the ANTHROPIC_FEDERATION_RULE_ID, ANTHROPIC_ORGANIZATION_ID and ANTHROPIC_SERVICE_ACCOUNT_ID repository variables (see README, Automatic updates).');
+  }
+  return new Anthropic();
+}
+
 const Links = z.object({
   event: z.string().optional().describe("The organizer's page for this event"),
   info: z.string().optional().describe('The announcement or information page'),
@@ -292,7 +335,7 @@ async function main() {
   }
   if (!docs.length) return;
 
-  const client = new Anthropic();
+  const client = makeClient();
   const results = [];
   const failures = [];
   for (const doc of docs.slice(0, MAX_DOCS)) {
