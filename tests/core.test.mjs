@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   validate, filterEvents, filtersFromParams, filtersToParams, status, countdown,
-  dateRange, weekdayRange, toICS, feedsTarget, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend, withinWeekend,
+  dateRange, weekdayRange, toICS, feedsTarget, venuePlace, mapsUrl, regionOf, flag, EMPTY_FILTERS, weekendOf, isWeekend, withinWeekend,
 } from '../js/core.js';
 
 const data = JSON.parse(readFileSync(new URL('../data/events.json', import.meta.url), 'utf8'));
@@ -154,4 +154,13 @@ test('location can apply to Regional Championships only', () => {
   assert.ok(r.some((e) => e.type !== 'rc' && e.country !== 'US'), 'everything else, anywhere');
   const all = filterEvents(data.events, f(), ctx).filter((e) => e.type !== 'rc');
   assert.equal(r.filter((e) => e.type !== 'rc').length, all.length);
+});
+
+test('map links search for the building when named, else the city', () => {
+  const dc = data.events.find((e) => e.id === '2027-spotlight-dc');
+  assert.equal(venuePlace(dc), 'Walter E. Washington Convention Center');
+  assert.match(mapsUrl(dc), /query=Walter%20E\.%20Washington%20Convention%20Center%2C%20Washington%2C%20DC%2C%20USA$/);
+  const tokyo = data.events.find((e) => e.id === '2027-pt-tokyo'); // "MagicCon: Tokyo": no building
+  assert.equal(venuePlace(tokyo), null);
+  assert.match(mapsUrl(tokyo), /query=Tokyo%2C%20Japan$/);
 });

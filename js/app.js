@@ -1,5 +1,5 @@
 import {
-  TYPES, FILTER_GROUPS, REGIONS, FORMATS, feedsTarget, EMPTY_FILTERS,
+  TYPES, FILTER_GROUPS, REGIONS, FORMATS, feedsTarget, EMPTY_FILTERS, venuePlace, mapsUrl,
   regionOf, countryName, flag, todayISO, status, dateRange, weekdayRange,
   monthKey, monthLabel, countdown, resolveLink, formatLabel, filterEvents,
   sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc,
@@ -270,7 +270,12 @@ function renderEvent(e) {
   const s = status(e, today);
   const meta = [
     e.organizer && `Hosted by ${e.organizer}`,
-    e.venue,
+    e.venue && (() => {
+      const place = venuePlace(e);
+      if (!place) return e.venue;
+      const lead = e.venue.slice(0, e.venue.length - place.length);
+      return [lead, el('a', { class: 'map', href: mapsUrl(e), target: '_blank', rel: 'noopener', title: 'Open in Google Maps' }, place)];
+    })(),
     e.feeds && (() => {
       const t = feedsTarget(data, e);
       return t.id ? ['Qualifies for ', el('a', { class: 'feeds', href: `#${t.id}` }, t.label)] : `Qualifies for ${t.label}`;
@@ -286,7 +291,9 @@ function renderEvent(e) {
       meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null,
       el('p', { class: 'actions' }, eventLinks(e, s))),
     el('p', { class: 'where' },
-      el('span', { class: 'city' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), e.city),
+      el('span', { class: 'city' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)),
+        // With a venue named, its link is in the details; otherwise the city opens the map.
+        venuePlace(e) ? e.city : el('a', { class: 'map', href: mapsUrl(e), target: '_blank', rel: 'noopener', title: 'Open in Google Maps' }, e.city)),
       el('span', { class: 'country' }, countryName(e.country))),
     el('div', { class: 'side' },
       el('p', { class: 'countdown', 'data-text': countdown(e, today) }, countdown(e, today))));

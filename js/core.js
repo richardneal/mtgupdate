@@ -194,6 +194,19 @@ export function feedsTarget(data, event) {
   return target ? { id: target.id, label: target.name } : { id: null, label: event.feeds };
 }
 
+// Google Maps search for where an event is. A venue is written "<Convention>, <Building>", so the
+// building is the part after the last comma; with no building named, search for the city.
+export function venuePlace(event) {
+  const v = event.venue || '';
+  const i = v.lastIndexOf(', ');
+  return i === -1 ? null : v.slice(i + 2);
+}
+
+export function mapsUrl(event) {
+  const query = [venuePlace(event), event.city, countryName(event.country)].filter(Boolean).join(', ');
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
 export function placeLabel(event) {
   return `${event.city}, ${countryName(event.country)}`;
 }
