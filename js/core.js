@@ -12,7 +12,7 @@ export const TYPES = {
 };
 // The event filter: Pro Tours, Worlds and the Limited Championship share one choice.
 export const FILTER_GROUPS = {
-  pro:       { label: 'Pro Tour & Championships', types: ['pt', 'worlds', 'lc'], color: 'pt' },
+  pro:       { label: 'Pro Tours & Worlds', types: ['pt', 'worlds', 'lc'], color: 'pt' },
   rc:        { label: 'Regional Championships',   types: ['rc'],                 color: 'rc' },
   spotlight: { label: 'Spotlight Series',         types: ['spotlight'],          color: 'spotlight' },
 };
