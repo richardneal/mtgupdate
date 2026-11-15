@@ -282,7 +282,8 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 
 .side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 19px; text-align: right; }
 .countdown { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 2px 16px; margin-top: 8px; }
+.actions:empty { display: none; }
 .act {
   padding: 0; border: 0; background: none; color: var(--muted);
   font: 14.5px var(--text); text-decoration: underline; text-underline-offset: 3px;
@@ -298,7 +299,8 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   background: color-mix(in srgb, var(--accent) var(--tint-mix), var(--paper));
 }
 .event.is-live + .event { border-top-color: transparent; }
-.is-live .countdown { color: var(--live); }
+.is-live .countdown { color: var(--accent); }
+.on-air .countdown { color: var(--live); }
 .live-dot {
   display: inline-block; width: 8px; height: 8px; margin-right: 7px; vertical-align: 1px;
   border-radius: 50%; background: var(--live);
@@ -345,7 +347,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .month h2 { position: static; flex-direction: row; align-items: baseline; gap: 8px; padding: 10px 0 2px; }
   .month h2 .y { margin: 0; }
   .event { grid-template-columns: 96px minmax(0, 1fr) 170px; }
-  .side { grid-column: 2 / -1; flex-direction: row; justify-content: space-between; align-items: baseline; padding-top: 0; text-align: left; }
+  .side { grid-column: 2 / -1; flex-direction: row; align-items: baseline; padding-top: 0; text-align: left; }
 }
 
 @media (max-width: 640px) {
@@ -373,6 +375,5 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .when { grid-row: span 3; }
   .where { flex-direction: row; flex-wrap: wrap; gap: 0 6px; padding-top: 4px; }
   .country::before { content: ", "; margin-left: -6px; }
-  .side { grid-column: 2; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; padding-top: 4px; }
-  .actions { justify-content: flex-start; }
+  .side { grid-column: 2; flex-direction: row; align-items: baseline; padding-top: 4px; }
 }

@@ -206,7 +206,7 @@ function eventLinks(e, s) {
       class: 'act', href: url, target: '_blank', rel: 'noopener', 'data-twitch': twitch || null,
     }, label));
   }
-  if (s !== 'past') {
+  if (s === 'upcoming') {
     out.push(el('button', {
       class: 'act', type: 'button', title: 'Download this event as an .ics file',
       onclick: () => downloadICS([e], `${e.id}.ics`),
@@ -229,6 +229,15 @@ function showLiveStreams() {
     const up = liveChannels.get(a.dataset.twitch) === true;
     a.classList.toggle('live', up);
     a.textContent = up ? 'Watch live' : 'Stream';
+    // "Day 2 of 3" becomes "Live now, day 2 of 3" only while the broadcast is on.
+    const row = a.closest('.event');
+    const status = row?.querySelector('.countdown');
+    if (!status) continue;
+    row.classList.toggle('on-air', up);
+    const text = status.dataset.text;
+    status.replaceChildren(...(up
+      ? [el('span', { class: 'live-dot', 'aria-hidden': 'true' }), `Live now, ${text.charAt(0).toLowerCase()}${text.slice(1)}`]
+      : [text]));
   }
 }
 
@@ -274,15 +283,13 @@ function renderEvent(e) {
     el('div', { class: 'what' },
       el('p', { class: 'fmt' }, formatLabel(e)),
       el('h3', {}, el('a', { href: `#${e.id}` }, e.name)),
-      meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null),
+      meta.length ? el('p', { class: 'meta' }, meta.map((m) => el('span', {}, m))) : null,
+      el('p', { class: 'actions' }, eventLinks(e, s))),
     el('p', { class: 'where' },
       el('span', { class: 'city' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), e.city),
       el('span', { class: 'country' }, countryName(e.country))),
     el('div', { class: 'side' },
-      el('p', { class: 'countdown' },
-        s === 'live' ? el('span', { class: 'live-dot', 'aria-hidden': 'true' }) : null,
-        countdown(e, today)),
-      el('p', { class: 'actions' }, eventLinks(e, s))));
+      el('p', { class: 'countdown', 'data-text': countdown(e, today) }, countdown(e, today))));
 }
 
 function render() {

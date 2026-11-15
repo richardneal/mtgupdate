@@ -10,7 +10,7 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { status, dateRange, todayISO, formatLabel, countryName, sortEvents } from '../js/core.js';
+import { status, countdown, dateRange, todayISO, formatLabel, countryName, sortEvents } from '../js/core.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const out = process.argv[2] || join(root, 'hosting/dist/og.png');
@@ -33,7 +33,7 @@ const rows = upcoming.map((e) => {
         <span class="sub">${esc(formatLabel(e))}</span>
       </span>
       <span class="where">
-        ${live ? '<span class="live"><i></i>Live now</span>' : ''}
+        ${live ? `<span class="live">${esc(countdown(e, today))}</span>` : ''}
         <span class="city">${esc(e.city)}</span>
         <span class="country">${esc(countryName(e.country))}</span>
       </span>
@@ -63,8 +63,7 @@ const html = `<!doctype html>
   .where { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
   .city { font-size: 26px; font-weight: 600; }
   .country { color: #a2a9b8; font-size: 21px; }
-  .live { color: #ff6b5e; font-size: 20px; font-weight: 600; margin-right: 8px; }
-  .live i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: #ff6b5e; margin-right: 8px; vertical-align: 1px; }
+  .live { color: var(--accent); font-size: 20px; font-weight: 600; margin-right: 8px; }
   footer { display: flex; justify-content: space-between; color: #737b8c; font-size: 21px; padding-top: 14px; }
   footer b { color: #e8ebf1; font-weight: 600; }
 </style></head>

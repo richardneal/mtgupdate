@@ -164,7 +164,8 @@ export function countdown(event, today) {
   if (s === 'live') {
     const day = daysBetween(event.start, today) + 1;
     const total = daysBetween(event.start, event.end) + 1;
-    return total > 1 ? `Live, day ${day} of ${total}` : 'Live today';
+    // Underway, not necessarily on air: the page adds "Live now" only while the stream is up.
+    return total > 1 ? `Day ${day} of ${total}` : 'Today';
   }
   if (s === 'past') return 'Completed';
   const n = daysBetween(today, event.start);
