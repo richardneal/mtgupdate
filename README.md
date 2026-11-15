@@ -80,13 +80,9 @@ npm run deploy
 
 `hosting/build.mjs` copies the public files into `hosting/dist`. `hosting/index.mjs` redirects `www.mtgupdate.com` to `mtgupdate.com` and serves `calendar.ics` as `text/calendar`.
 
-### Connecting mtgupdate.com
+### The domain
 
-The domain is registered at Namecheap and its DNS is served by Cloudflare:
-
-1. In Cloudflare, **Add a domain** → `mtgupdate.com` (Free plan) and note the two nameservers it assigns.
-2. In Namecheap, **Domain List → mtgupdate.com → Manage → Nameservers → Custom DNS**, enter Cloudflare's two nameservers and save.
-3. Once Cloudflare shows the zone as **Active**, edit `hosting/wrangler.jsonc`: uncomment `routes` and set `workers_dev` to `false`, then deploy. Wrangler creates the DNS records and certificates for both hostnames.
+mtgupdate.com is registered at Namecheap, with its nameservers pointed at Cloudflare (`chip.ns.cloudflare.com`, `pearl.ns.cloudflare.com`), where the zone is on the Free plan. `hosting/wrangler.jsonc` attaches `mtgupdate.com` and `www.mtgupdate.com` to the Worker as custom domains, so Cloudflare manages their DNS records and certificates. The zone keeps Namecheap's email-forwarding MX and SPF records.
 
 ---
 
