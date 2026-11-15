@@ -17,12 +17,12 @@
 
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
 import { oidcFederationProvider } from '@anthropic-ai/sdk/lib/credentials/oidc-federation';
 import { z } from 'zod';
-import { TYPES, FORMATS, toICS, todayISO } from '../js/core.js';
+import { TYPES, FORMATS, toICS, todayISO, daysBetween, countryName } from '../js/core.js';
 import { applyChanges, toChanges } from './lib/merge.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -262,6 +262,68 @@ async function extract(client, data, doc) {
   return toChanges(response.parsed_output.changes);
 }
 
+// ---- Melee tournament pages -----------------------------------------------
+// Players lean on an event's melee.gg page (pairings, standings, decklists), but Melee has no
+// public search API. So for events starting soon or just finished, Claude searches melee.gg,
+// and a page only counts if its title names the event's city and its start date matches.
+
+const MELEE_AHEAD_DAYS = 60;   // look this far ahead...
+const MELEE_BEHIND_DAYS = 14;  // ...and this far back
+const MELEE_MAX = 6;           // events searched per run
+const MELEE_EVERY_DAYS = 3;    // don't search the same event again sooner than this
+
+export function meleeCandidates(data, seen) {
+  return data.events
+    .filter((e) => !e.links?.melee)
+    .filter((e) => daysBetween(today, e.start) <= MELEE_AHEAD_DAYS && daysBetween(e.end, today) <= MELEE_BEHIND_DAYS)
+    .filter((e) => !seen.melee?.[e.id] || daysBetween(seen.melee[e.id], today) >= MELEE_EVERY_DAYS)
+    .sort((a, b) => a.start.localeCompare(b.start))
+    .slice(0, MELEE_MAX);
+}
+
+const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+async function findMelee(client, e) {
+  const messages = [{
+    role: 'user',
+    content: `Find the melee.gg tournament page for this Magic: The Gathering event. Search melee.gg only.\n\n` +
+      `Event: ${e.name}\nCity: ${e.city}, ${countryName(e.country)}\nDates: ${e.start} to ${e.end}\n` +
+      `Organizer: ${e.organizer || 'Wizards of the Coast'}${e.venue ? `\nVenue: ${e.venue}` : ''}\n\n` +
+      `Answer with the main event's URL, of the form https://melee.gg/Tournament/View/<number>, on a line by itself. ` +
+      `Not a side event, qualifier or last-chance qualifier. If you can't find the main event's page, answer NONE.`,
+  }];
+  let response;
+  for (let i = 0; i < 4; i++) {
+    response = await client.beta.messages.create({
+      model: 'claude-opus-5-5',
+      max_tokens: 4000,
+      betas: ['server-side-fallback-2026-07-01'],
+      fallbacks: 'default',
+      output_config: { effort: 'low' },
+      tools: [{ type: 'web_search_20260209', name: 'web_search', max_uses: 4, allowed_domains: ['melee.gg'] }],
+      messages,
+    });
+    if (response.stop_reason !== 'pause_turn') break;
+    messages.push({ role: 'assistant', content: response.content });
+  }
+  const answer = response.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
+  const url = /https:\/\/melee\.gg\/Tournament\/View\/\d+/i.exec(answer)?.[0];
+  if (!url) return null;
+
+  // Check the page before trusting it: the city in its title, and a start date on our dates.
+  const html = await get(url);
+  const title = decode(html.match(/<meta content="([^"]*)" property="og:title"/)?.[1]
+    || html.match(/<title>([^<]*)<\/title>/i)?.[1] || '').replace(/\s*\|\s*Melee\s*$/, '').trim();
+  const cityWords = fold(e.city).split(/[^a-z]+/).filter((w) => w.length >= 3);
+  const startsOn = html.match(/\b(20\d\d-\d\d-\d\d)T\d\d:\d\d/)?.[1];
+  const datesMatch = startsOn && daysBetween(e.start, startsOn) >= -2 && daysBetween(startsOn, e.end) >= -1;
+  if (!cityWords.some((w) => fold(title).includes(w)) || !datesMatch) {
+    console.log(`  Melee: ${url} ("${title}", starts ${startsOn || '?'}) doesn't match ${e.id}; skipped`);
+    return null;
+  }
+  return { url, title };
+}
+
 // ---- Run -------------------------------------------------------------------
 
 function describe(v) {
@@ -304,6 +366,8 @@ async function main() {
   const docs = await collect(config.sources, seen);
   console.log(`${docs.length} document(s) to read${docs.length > MAX_DOCS ? `; reading the first ${MAX_DOCS}` : ''}`);
   for (const d of docs) console.log(`  ${d.source.id}: ${d.title} <${d.url}>`);
+  const meleeQueue = meleeCandidates(data, seen);
+  console.log(`${meleeQueue.length} event(s) to look up on melee.gg${meleeQueue.length ? `: ${meleeQueue.map((e) => e.id).join(', ')}` : ''}`);
 
   const markSeen = (doc) => {
     if (doc.pageHash) seen.pages[doc.url] = { hash: doc.pageHash, checked: today };
@@ -318,7 +382,7 @@ async function main() {
     output('seen_changed', String(docs.length > 0));
     return;
   }
-  if (!docs.length) return;
+  if (!docs.length && !meleeQueue.length) return;
 
   const client = makeClient();
   const results = [];
@@ -342,6 +406,30 @@ async function main() {
     }
   }
 
+  seen.melee ||= {};
+  let searched = 0;
+  for (const e of meleeQueue) {
+    try {
+      const found = await findMelee(client, e);
+      seen.melee[e.id] = today;
+      searched++;
+      if (!found) { console.log(`  Melee: nothing yet for ${e.id}`); continue; }
+      const result = applyChanges(data, [{
+        action: 'update', id: e.id, reason: 'melee.gg has this event\'s tournament page.', evidence: found.title,
+        fields: { links: { melee: found.url } },
+      }], { source: found.url });
+      data = result.data;
+      results.push({ doc: { source: { name: 'melee.gg search' }, url: found.url, title: `${found.title} (melee.gg)` }, ...result });
+      console.log(`  Melee: ${e.id} -> ${found.url}`);
+    } catch (err) {
+      if (err instanceof Anthropic.AuthenticationError || /token exchange failed|authentication/i.test(err.message)) {
+        throw new Error(`Couldn't sign in to the Claude API: ${err.message}`);
+      }
+      failures.push({ doc: { url: 'https://melee.gg', title: `melee.gg search for ${e.id}` }, error: err.message });
+      console.warn(`! Melee search for ${e.id}: ${err.message}`);
+    }
+  }
+
   const changed = results.some((r) => r.applied.length);
   if (changed) {
     data.updated = today;
@@ -353,12 +441,14 @@ async function main() {
   writeFileSync(paths.summary, summary);
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
   output('events_changed', String(changed));
-  output('seen_changed', String(results.length > 0));
+  output('seen_changed', String(results.length > 0 || searched > 0));
   console.log(changed ? 'Schedule updated.' : 'No changes to the schedule.');
   if (failures.length && !results.length) throw new Error(`None of the ${failures.length} document(s) could be read.`);
 }
 
-main().catch((err) => {
-  console.error(err.message || err);
-  process.exit(1);
-});
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((err) => {
+    console.error(err.message || err);
+    process.exit(1);
+  });
+}
