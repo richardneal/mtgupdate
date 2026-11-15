@@ -71,3 +71,11 @@ test('groups per-field records into one change per event', () => {
   assert.deepEqual(tokyo.fields, { links: { coverage: 'https://example.com/c' }, venue: 'Tokyo Big Sight' });
   assert.equal(tokyo.reason, 'Coverage. Venue.');
 });
+
+test('a rename needs the new name in the quoted source', () => {
+  const guess = applyChanges(data, [{ action: 'update', id: '2027-pt-tokyo', reason: 'Set', evidence: 'The Pro Tour at MagicCon: Tokyo features Draft', fields: { name: 'Pro Tour Marvel Darkhold Destiny' } }]);
+  assert.equal(guess.applied.length, 0);
+  assert.match(guess.rejected[0].why, /new name/);
+  const stated = applyChanges(data, [{ action: 'update', id: '2027-pt-tokyo', reason: 'Named', evidence: 'Pro Tour Darkhold Destiny comes to MagicCon: Tokyo', fields: { name: 'Pro Tour Darkhold Destiny' } }]);
+  assert.equal(stated.applied.length, 1);
+});

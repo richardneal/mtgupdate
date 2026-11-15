@@ -10,6 +10,7 @@ export default {
     }
 
     if (url.pathname === '/api/live') return live(url, ctx);
+    if (url.pathname === '/api/melee') return melee(url);
 
     const response = await env.ASSETS.fetch(request);
 
@@ -51,4 +52,21 @@ async function live(url, ctx) {
   });
   ctx.waitUntil(cache.put(cacheKey, out.clone()));
   return out;
+}
+
+// GET /api/melee?id=471980 -> {"id":"471980","title":"World Championship 32 in Atlanta, USA","start":"2026-11-13"}
+// The daily update check runs on GitHub, whose addresses melee.gg refuses, so it asks here for
+// a tournament's title and start date to confirm a page found by search really is the event.
+async function melee(url) {
+  const id = url.searchParams.get('id') || '';
+  if (!/^\d{1,9}$/.test(id)) return Response.json({ error: 'id must be a Melee tournament number' }, { status: 400 });
+  const res = await fetch(`https://melee.gg/Tournament/View/${id}`, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; mtgupdate; +https://mtgupdate.com)' },
+  });
+  if (!res.ok) return Response.json({ id, error: `melee.gg answered ${res.status}` }, { status: 502 });
+  const html = await res.text();
+  const title = (html.match(/<meta content="([^"]*)" property="og:title"/)?.[1] || '')
+    .replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').trim();
+  const start = html.match(/\b(20\d\d-\d\d-\d\d)T\d\d:\d\d/)?.[1] || null;
+  return Response.json({ id, title, start }, { headers: { 'Cache-Control': 'public, max-age=3600' } });
 }

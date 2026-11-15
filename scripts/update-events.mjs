@@ -267,9 +267,11 @@ async function extract(client, data, doc) {
 // public search API. So for events starting soon or just finished, Claude searches melee.gg,
 // and a page only counts if its title names the event's city and its start date matches.
 
-const MELEE_AHEAD_DAYS = 60;   // look this far ahead...
+const MELEE_AHEAD_DAYS = 90;   // look this far ahead (registration pages go up early)...
 const MELEE_BEHIND_DAYS = 14;  // ...and this far back
-const MELEE_MAX = 6;           // events searched per run
+const MELEE_MAX = 8;           // events searched per run
+// melee.gg refuses GitHub's addresses, so pages are checked through the site's Worker.
+const MELEE_CHECK = process.env.MELEE_CHECK_URL || 'https://mtgupdate.richard-f81.workers.dev/api/melee';
 const MELEE_EVERY_DAYS = 3;    // don't search the same event again sooner than this
 
 export function meleeCandidates(data, seen) {
@@ -311,11 +313,11 @@ async function findMelee(client, e) {
   if (!url) return null;
 
   // Check the page before trusting it: the city in its title, and a start date on our dates.
-  const html = await get(url);
-  const title = decode(html.match(/<meta content="([^"]*)" property="og:title"/)?.[1]
-    || html.match(/<title>([^<]*)<\/title>/i)?.[1] || '').replace(/\s*\|\s*Melee\s*$/, '').trim();
+  const id = url.split('/').pop();
+  const res = await fetch(`${MELEE_CHECK}?id=${id}`, { headers: { 'User-Agent': UA } });
+  if (!res.ok) throw new Error(`couldn't check ${url}: ${res.status} ${await res.text()}`);
+  const { title = '', start: startsOn } = await res.json();
   const cityWords = fold(e.city).split(/[^a-z]+/).filter((w) => w.length >= 3);
-  const startsOn = html.match(/\b(20\d\d-\d\d-\d\d)T\d\d:\d\d/)?.[1];
   const datesMatch = startsOn && daysBetween(e.start, startsOn) >= -2 && daysBetween(startsOn, e.end) >= -1;
   if (!cityWords.some((w) => fold(title).includes(w)) || !datesMatch) {
     console.log(`  Melee: ${url} ("${title}", starts ${startsOn || '?'}) doesn't match ${e.id}; skipped`);

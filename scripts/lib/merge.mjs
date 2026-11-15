@@ -7,6 +7,7 @@ const EDITABLE = ['name', 'start', 'end', 'formats', 'set', 'city', 'country', '
   'organizer', 'venue', 'feeds', 'notes'];
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const fold = (s) => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 // Returns the field-by-field differences a change would make to an event, as [field, old, new].
 function diffFields(event, fields) {
@@ -50,6 +51,12 @@ export function applyChanges(data, changes, { source } = {}) {
       }
       diffs = diffFields(event, fields);
       if (!diffs.length) continue; // Already up to date.
+      // Names are easy to guess wrong (a Pro Tour named after the season's set, say), so a rename
+      // stands only when the quoted source contains the new name.
+      if (fields.name && fields.name !== event.name && !fold(change.evidence || '').includes(fold(fields.name))) {
+        rejected.push({ change, why: `the quoted source doesn't contain the new name "${fields.name}"` });
+        continue;
+      }
       applyFields(event, fields);
     } else if (change.action === 'update') {
       rejected.push({ change, why: `no event with id ${change.id}` });

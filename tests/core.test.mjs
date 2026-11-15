@@ -128,12 +128,13 @@ test('filter by format', () => {
 
 test('qualifying events link to the event they feed', () => {
   const rc = data.events.find((e) => e.id === '2027-rc-st-louis');
-  assert.deepEqual(feedsTarget(data, rc), { id: '2027-pt-tokyo', label: 'Pro Tour Tokyo' });
+  const pt = data.events.find((e) => e.id === '2027-pt-tokyo');
+  assert.deepEqual(feedsTarget(data, rc), { id: pt.id, label: pt.name });
   assert.deepEqual(feedsTarget(data, { feeds: 'A future event' }), { id: null, label: 'A future event' });
   const bad = structuredClone(data);
   bad.events.find((e) => e.id === '2027-rc-st-louis').feeds = '2027-pt-nowhere';
   assert.match(validate(bad).join('\n'), /feeds names no listed event/);
-  assert.match(toICS(data, [rc]).replace(/\r\n /g, ''), /Qualifies for: Pro Tour Tokyo/); // unfold lines first
+  assert.ok(toICS(data, [rc]).replace(/\r\n /g, '').includes(`Qualifies for: ${pt.name}`)); // unfold lines first
 });
 
 test('several choices in one filter match any of them', () => {
