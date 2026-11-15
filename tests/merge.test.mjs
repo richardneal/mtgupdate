@@ -14,7 +14,7 @@ test('updates an event and reports what changed', () => {
   assert.equal(rejected.length, 0);
   assert.deepEqual(applied[0].diffs.map(([f]) => f), ['venue', 'links.event']);
   assert.equal(byId(out, '2027-spotlight-zagreb').venue, 'Zagreb Arena');
-  assert.equal(byId(out, '2027-spotlight-zagreb').links.info, 'comp2027', 'existing links are kept');
+  assert.equal(byId(out, '2027-spotlight-zagreb').links.info, byId(data, '2027-spotlight-zagreb').links.info, 'existing links are kept');
   assert.equal(byId(data, '2027-spotlight-zagreb').venue, undefined, 'the input is not modified');
 });
 

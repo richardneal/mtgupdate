@@ -12,9 +12,16 @@
   <link rel="alternate" type="text/calendar" title="mtgupdate calendar" href="calendar.ics">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mtgupdate.com/">
-  <meta property="og:title" content="mtgupdate: competitive paper Magic schedule">
+  <meta property="og:title" content="mtgupdate: upcoming paper Magic events">
   <meta property="og:description" content="Pro Tours, Worlds, Regional Championships and Spotlight Series events, filterable by type, format and location.">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:site_name" content="mtgupdate">
+  <!-- Rendered by scripts/og-image.mjs on every deploy (and daily): what's live and next. -->
+  <meta property="og:image" content="https://mtgupdate.com/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The next events on mtgupdate, with dates and cities">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://mtgupdate.com/og.png">
   <script>
     // Set the theme before first paint: saved choice, else the system's.
     (function () {
@@ -32,6 +39,7 @@
 <body>
   <a class="skip" href="#events">Skip to events</a>
 
+  <div class="masthead">
   <header class="top">
     <div class="wrap top-inner">
       <a class="brand" href="./" aria-label="mtgupdate home"><b>mtg</b>update</a>
@@ -81,6 +89,7 @@
       </div>
     </div>
   </section>
+  </div>
 
   <main class="wrap" id="events" tabindex="-1">
     <div class="summary">

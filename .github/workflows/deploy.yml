@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Daily, so the link-preview image (what's live and next) keeps up with the schedule.
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
 
 jobs:
   test:
@@ -18,7 +22,7 @@ jobs:
 
   deploy:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -35,5 +39,8 @@ jobs:
         run: npm ci
       - if: env.CLOUDFLARE_API_TOKEN != ''
         run: node hosting/build.mjs
+      - name: Render the link-preview image
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: node scripts/og-image.mjs
       - if: env.CLOUDFLARE_API_TOKEN != ''
         run: npx wrangler deploy --config hosting/wrangler.jsonc

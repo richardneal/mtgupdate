@@ -99,7 +99,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 
 /* ---- Header ---- */
 
-.top-inner { display: flex; align-items: baseline; gap: 18px; padding-top: 22px; padding-bottom: 14px; }
+.top-inner { display: flex; align-items: baseline; gap: 18px; padding-top: 16px; padding-bottom: 10px; }
 .brand {
   font: 500 34px/1 var(--display); letter-spacing: -0.01em; text-decoration: none; color: var(--ink);
 }
@@ -129,11 +129,16 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 
 /* ---- Filters ---- */
 
-.filters {
+/* The header and filter bar stay pinned together, so jumping through the schedule (or turning
+   on Show completed) never leaves the logo, search and filters behind. Phones pin only the
+   filter bar; see the small-screen rules. */
+.masthead {
   position: sticky; top: 0; z-index: 5;
-  padding: 10px 0;
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.filters {
+  padding: 10px 0;
   border-bottom: 1px solid var(--rule);
 }
 .filter-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; }
@@ -345,6 +350,12 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
   .chip { flex: none; }
   .top-inner { flex-wrap: wrap; row-gap: 12px; }
+  .masthead { display: contents; }
+  .filters {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
   .filter-tools { width: 100%; }
   .filter-tools .menu { flex: 1 1 0; min-width: 0; }
   .menu-button { width: 100%; min-width: 0; max-width: none; }

@@ -7,7 +7,9 @@
     "rcRound1": "https://magic.gg/news/play-update-2026-27-round-2-regional-championship-promos-and-qualifiers",
     "rcRound2": "https://magic.gg/news/play-update-2026-27-round-3-regional-championship-promos-and-qualifiers",
     "worlds32": "https://magic.gg/news/world-championship-32-fact-sheet-for-competitors",
-    "scgcon": "https://scgcon.starcitygames.com/"
+    "scgcon": "https://scgcon.starcitygames.com/",
+    "spotlightStarTrek": "https://magic.gg/news/start-your-voyage-at-magic-spotlight-star-trek-in-lille-and-minneapolis",
+    "spotlightNauctis": "https://magic.gg/news/explore-new-depths-at-magic-spotlight-nauctis-in-zagreb-and-toronto"
   },
   "events": [
     {
@@ -256,10 +258,11 @@
       "lat": 50.63,
       "lng": 3.06,
       "organizer": "Fanfinity",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool",
       "links": {
-        "info": "comp2027"
-      }
+        "info": "spotlightStarTrek"
+      },
+      "feeds": "2027-pt-tokyo"
     },
     {
       "id": "2027-spotlight-minneapolis",
@@ -276,12 +279,13 @@
       "lat": 44.98,
       "lng": -93.27,
       "organizer": "Star City Games",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-minneapolis-2027/",
-        "info": "comp2027"
+        "info": "spotlightStarTrek"
       },
-      "venue": "SCG CON Minneapolis, Minneapolis Convention Center"
+      "venue": "SCG CON Minneapolis, Minneapolis Convention Center",
+      "feeds": "2027-pt-tokyo"
     },
     {
       "id": "2027-rc-mexico-city",
@@ -494,10 +498,11 @@
       "lat": 45.81,
       "lng": 15.98,
       "organizer": "Fanfinity",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool",
       "links": {
-        "info": "comp2027"
-      }
+        "info": "spotlightNauctis"
+      },
+      "feeds": "2027-pt-las-vegas"
     },
     {
       "id": "2027-spotlight-toronto",
@@ -514,10 +519,11 @@
       "lat": 43.65,
       "lng": -79.38,
       "organizer": "Face to Face Games",
-      "prize": "$50,000 prize pool; Top 8 earn Pro Tour invitations",
+      "prize": "$50,000 prize pool",
       "links": {
-        "info": "comp2027"
-      }
+        "info": "spotlightNauctis"
+      },
+      "feeds": "2027-pt-las-vegas"
     },
     {
       "id": "2027-rc-louisville",
@@ -658,11 +664,11 @@
       "country": "US",
       "lat": 44.98,
       "lng": -93.27,
-      "prize": "Top 8 earn World Championship invitations",
       "notes": "The last Limited Championship: a fourth, all-Limited Pro Tour replaces it from 2028.",
       "links": {
         "info": "lc2027"
-      }
+      },
+      "feeds": "2027-worlds-33"
     },
     {
       "id": "2027-spotlight-montreal",

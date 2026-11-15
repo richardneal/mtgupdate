@@ -385,10 +385,18 @@ async function main() {
   });
 
   // Keep month headings stuck just under the filter bar.
+  // Whatever is pinned at the top (header and filters, or on phones just the filters) sets how far
+  // below it scroll targets and month headings sit.
+  const masthead = $('.masthead');
   const bar = $('.filters');
-  const setBarHeight = () => document.documentElement.style.setProperty('--filters-h', `${bar.offsetHeight}px`);
+  const setBarHeight = () => {
+    const pinned = getComputedStyle(masthead).display === 'contents' ? bar : masthead;
+    document.documentElement.style.setProperty('--filters-h', `${pinned.offsetHeight}px`);
+  };
   setBarHeight();
-  new ResizeObserver(setBarHeight).observe(bar);
+  const ro = new ResizeObserver(setBarHeight);
+  ro.observe(masthead);
+  ro.observe(bar);
 
   update({ url: false, scroll: false });
   const linked = data.events.some((e) => `#${e.id}` === decodeURIComponent(location.hash));
