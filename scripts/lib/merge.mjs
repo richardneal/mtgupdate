@@ -79,3 +79,31 @@ export function applyChanges(data, changes, { source } = {}) {
   current.events.sort((a, b) => a.start.localeCompare(b.start) || a.id.localeCompare(b.id));
   return { data: current, applied, rejected };
 }
+
+// Claude reports one flat record per field ({ id, action, field, value, reason, evidence }).
+// Groups them into { action, id, reason, evidence, fields } per event.
+export function toChanges(records) {
+  const byId = new Map();
+  for (const r of records) {
+    if (!byId.has(r.id)) byId.set(r.id, { action: 'update', id: r.id, reasons: [], evidence: [], fields: {} });
+    const c = byId.get(r.id);
+    if (r.action === 'add') c.action = 'add';
+    if (r.reason && !c.reasons.includes(r.reason)) c.reasons.push(r.reason);
+    if (r.evidence && !c.evidence.includes(r.evidence)) c.evidence.push(r.evidence);
+    const v = String(r.value ?? '').trim();
+    if (r.field.startsWith('links.')) {
+      c.fields.links = { ...c.fields.links, [r.field.slice(6)]: v };
+    } else if (r.field === 'formats') {
+      c.fields.formats = v.toLowerCase().split(/[\s,+]+/).map((f) => f.replace(/_/g, '-')).filter(Boolean);
+    } else if (r.field === 'lat' || r.field === 'lng') {
+      c.fields[r.field] = Number(v);
+    } else if (r.field === 'country') {
+      c.fields.country = v.toUpperCase();
+    } else {
+      c.fields[r.field] = v;
+    }
+  }
+  return [...byId.values()].map(({ reasons, evidence, ...c }) => ({
+    ...c, reason: reasons.join(' '), evidence: evidence.join(' … '),
+  }));
+}

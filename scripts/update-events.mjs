@@ -23,7 +23,7 @@ import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
 import { oidcFederationProvider } from '@anthropic-ai/sdk/lib/credentials/oidc-federation';
 import { z } from 'zod';
 import { TYPES, FORMATS, toICS, todayISO } from '../js/core.js';
-import { applyChanges } from './lib/merge.mjs';
+import { applyChanges, toChanges } from './lib/merge.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const paths = {
@@ -197,41 +197,23 @@ function makeClient() {
   return new Anthropic();
 }
 
-const Links = z.object({
-  event: z.string().optional().describe("The organizer's page for this event"),
-  info: z.string().optional().describe('The announcement or information page'),
-  coverage: z.string().optional(),
-  results: z.string().optional().describe('Final standings'),
-  decklists: z.string().optional(),
-  stream: z.string().optional(),
-});
-const Fields = z.object({
-  type: z.enum(Object.keys(TYPES)).optional(),
-  name: z.string().optional(),
-  start: z.string().optional().describe('YYYY-MM-DD, local to the venue'),
-  end: z.string().optional().describe('YYYY-MM-DD, local to the venue'),
-  formats: z.array(z.enum(Object.keys(FORMATS))).optional(),
-  set: z.string().optional(),
-  city: z.string().optional(),
-  country: z.string().optional().describe('ISO 3166-1 alpha-2 code'),
-  lat: z.number().optional(),
-  lng: z.number().optional(),
-  organizer: z.string().optional(),
-  venue: z.string().optional(),
-  prize: z.string().optional(),
-  feeds: z.string().optional().describe('What the event qualifies players for: the id of that event when the schedule lists it (e.g. 2027-pt-tokyo), otherwise a short description'),
-  notes: z.string().optional(),
-  links: Links.optional(),
-});
+// One flat record per field changed: a small schema the API compiles quickly. (A nested object
+// with every field optional was rejected as "Schema is too complex".) toChanges() groups the
+// records back into one change per event for applyChanges().
+const FIELDS = ['type', 'name', 'start', 'end', 'formats', 'set', 'city', 'country', 'lat', 'lng',
+  'organizer', 'venue', 'prize', 'feeds', 'notes',
+  'links.event', 'links.info', 'links.coverage', 'links.results', 'links.decklists', 'links.stream'];
 const Output = z.object({
   changes: z.array(z.object({
-    action: z.enum(['add', 'update']),
     id: z.string().describe('An existing id for an update; a new lowercase-kebab id like 2027-spotlight-lille for an add'),
+    action: z.enum(['add', 'update']),
+    field: z.enum(FIELDS),
+    value: z.string().describe('The new value. Dates YYYY-MM-DD; formats comma-separated keys; lat and lng as decimal numbers; country an ISO 3166-1 alpha-2 code; links full https URLs; feeds the id of the event qualified for when the schedule lists it, else a short description'),
     reason: z.string().describe('One sentence: what the source says that calls for this change'),
     evidence: z.string().describe('The words in the source that support it, quoted exactly, under 200 characters'),
-    fields: Fields.describe('Only the fields this source states or changes'),
   })),
 });
+
 
 const INSTRUCTIONS = `You keep the schedule for mtgupdate.com, a site listing large competitive paper Magic: The Gathering events. You are given the current schedule and one document: a news article or an event organizer's schedule page. Report what the document says that the schedule should add or change.
 
@@ -274,7 +256,7 @@ async function extract(client, data, doc) {
   if (response.stop_reason === 'refusal') throw new Error(`declined (${response.stop_details?.category ?? 'no category'})`);
   if (response.stop_reason === 'max_tokens') throw new Error('response was cut off');
   if (!response.parsed_output) throw new Error('no usable output');
-  return response.parsed_output.changes;
+  return toChanges(response.parsed_output.changes);
 }
 
 // ---- Run -------------------------------------------------------------------

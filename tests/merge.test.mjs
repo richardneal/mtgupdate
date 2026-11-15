@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { applyChanges } from '../scripts/lib/merge.mjs';
+import { applyChanges, toChanges } from '../scripts/lib/merge.mjs';
 
 const data = JSON.parse(readFileSync(new URL('../data/events.json', import.meta.url), 'utf8'));
 const byId = (d, id) => d.events.find((e) => e.id === id);
@@ -53,4 +53,21 @@ test('rejects changes that would break the data, and keeps the rest', () => {
   assert.equal(applied.length, 1);
   assert.equal(byId(out, '2027-rc-louisville').start, '2027-04-16');
   assert.equal(byId(out, '2027-pt-tokyo').venue, 'Tokyo Big Sight');
+});
+
+test('groups per-field records into one change per event', () => {
+  const changes = toChanges([
+    { id: '2027-rc-atlanta', action: 'add', field: 'type', value: 'rc', reason: 'Announced.', evidence: 'Atlanta RC' },
+    { id: '2027-rc-atlanta', action: 'add', field: 'formats', value: 'Pioneer, team_limited', reason: 'Announced.', evidence: 'Atlanta RC' },
+    { id: '2027-rc-atlanta', action: 'add', field: 'lat', value: '33.75', reason: 'Announced.', evidence: 'Atlanta RC' },
+    { id: '2027-rc-atlanta', action: 'add', field: 'country', value: 'us', reason: 'Announced.', evidence: 'Atlanta RC' },
+    { id: '2027-pt-tokyo', action: 'update', field: 'links.coverage', value: 'https://example.com/c', reason: 'Coverage.', evidence: 'watch' },
+    { id: '2027-pt-tokyo', action: 'update', field: 'venue', value: 'Tokyo Big Sight', reason: 'Venue.', evidence: 'Big Sight' },
+  ]);
+  assert.equal(changes.length, 2);
+  const [atl, tokyo] = changes;
+  assert.equal(atl.action, 'add');
+  assert.deepEqual(atl.fields, { type: 'rc', formats: ['pioneer', 'team-limited'], lat: 33.75, country: 'US' });
+  assert.deepEqual(tokyo.fields, { links: { coverage: 'https://example.com/c' }, venue: 'Tokyo Big Sight' });
+  assert.equal(tokyo.reason, 'Coverage. Venue.');
 });
