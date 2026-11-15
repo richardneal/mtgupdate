@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-14",
+  "updated": "2026-11-15",
   "sources": {
     "comp2027": "https://magic.wizards.com/en/news/announcements/everything-new-for-competitive-play-in-2027",
     "magiccon2027": "https://magic.wizards.com/en/news/announcements/magiccon-heads-to-japan-europe-and-the-us-in-2027",
@@ -498,7 +498,7 @@
       "lat": 45.81,
       "lng": 15.98,
       "organizer": "Fanfinity",
-      "prize": "$50,000 prize pool",
+      "prize": "$50,000",
       "links": {
         "info": "spotlightNauctis"
       },
@@ -519,7 +519,7 @@
       "lat": 43.65,
       "lng": -79.38,
       "organizer": "Face to Face Games",
-      "prize": "$50,000 prize pool",
+      "prize": "$50,000",
       "links": {
         "info": "spotlightNauctis"
       },
