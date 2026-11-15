@@ -1,0 +1,21 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "mtgupdate",
+  "account_id": "f81e0f0d52bb815d2073e9e646641867",
+  "main": "index.mjs",
+  "compatibility_date": "2026-11-01",
+  // On until mtgupdate.com is active in Cloudflare; then turn it off and uncomment routes.
+  "workers_dev": true,
+  // "routes": [
+  //   { "pattern": "mtgupdate.com", "custom_domain": true },
+  //   // Redirected to mtgupdate.com by index.mjs
+  //   { "pattern": "www.mtgupdate.com", "custom_domain": true }
+  // ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none",
+    "run_worker_first": true
+  }
+}

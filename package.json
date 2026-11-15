@@ -1,0 +1,19 @@
+{
+  "name": "mtgupdate",
+  "private": true,
+  "description": "Schedule of large competitive paper Magic: The Gathering events",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "test": "node --test tests/*.test.mjs && node scripts/build.mjs --check",
+    "dev": "python3 -m http.server 8642",
+    "deploy": "npm test && node hosting/build.mjs && wrangler deploy --config hosting/wrangler.jsonc"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.1"
+  }
+}
