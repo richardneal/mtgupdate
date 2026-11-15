@@ -1,4 +1,19 @@
 {
-  "articles": {},
-  "pages": {}
+  "articles": {
+    "https://magic.gg/news/explore-new-depths-at-magic-spotlight-nauctis-in-zagreb-and-toronto": "2026-11-15",
+    "https://magic.gg/news/magic-world-championship-32-day-one-highlights": "2026-11-15",
+    "https://magic.gg/news/magic-world-championship-32-standard-decklists": "2026-11-15",
+    "https://magic.gg/news/the-spiciest-standard-decklists-from-magic-world-championship-32": "2026-11-15",
+    "https://magic.gg/news/magic-world-championship-32-standard-metagame-breakdown": "2026-11-15",
+    "https://magic.gg/news/inside-the-team-rooms-of-world-championship-32": "2026-11-15",
+    "https://magic.gg/news/the-week-that-was-around-the-world-on-the-pro-tour": "2026-11-15",
+    "https://magic.gg/news/metagame-mentor-mapping-the-standard-frontier-before-magic-world-championship-32": "2026-11-15",
+    "https://magic.gg/news/the-cards-competitors-love-standard-favorites-ahead-of-world-championship-32": "2026-11-15"
+  },
+  "pages": {
+    "https://scgcon.starcitygames.com/": {
+      "hash": "c72f34a04115096b",
+      "checked": "2026-11-15"
+    }
+  }
 }

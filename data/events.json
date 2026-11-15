@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-14",
+  "updated": "2026-11-15",
   "sources": {
     "comp2027": "https://magic.wizards.com/en/news/announcements/everything-new-for-competitive-play-in-2027",
     "magiccon2027": "https://magic.wizards.com/en/news/announcements/magiccon-heads-to-japan-europe-and-the-us-in-2027",
@@ -202,7 +202,9 @@
       "notes": "Star Trek Booster Draft and Standard. The winner is invited to the 2027 Limited Championship.",
       "links": {
         "info": "worlds32",
-        "stream": "https://www.twitch.tv/magic"
+        "stream": "https://www.twitch.tv/magic",
+        "coverage": "https://magic.gg/news/magic-world-championship-32-day-one-highlights",
+        "decklists": "https://magic.gg/news/magic-world-championship-32-standard-decklists"
       }
     },
     {
