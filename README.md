@@ -34,12 +34,14 @@ All the data lives in [`data/events.json`](data/events.json). Each event looks l
 | optional | `set`, `organizer`, `venue`, `feeds` (what it qualifies for: the id of a listed event, which the page links to, or plain text), `notes` |
 | `links` | Any of `event` (the organizer's page), `info`, `stream`, `coverage`, `results`, `decklists`, `melee` (the melee.gg tournament): a full `https://` URL, or a key of the top-level `sources` map |
 
-Then bump `updated` and run:
+Then run:
 
 ```sh
-npm run build   # checks the data and regenerates calendar.ics
+npm run build   # checks the data, puts it in canonical order, and writes calendar.ics
 npm test
 ```
+
+`calendar.ics` isn't kept in git: the deploy builds it. The footer's "Schedule last updated" date is the date of the last commit that changed `data/events.json`.
 
 ## Working on the site
 
@@ -51,7 +53,7 @@ npm run dev     # http://localhost:8642
 
 ## Automatic updates
 
-Once a day the **Check for event updates** workflow (`.github/workflows/update-events.yml`) runs `scripts/update-events.mjs`. It reads the sources in [`sources/sources.json`](sources/sources.json): magic.gg news, Wizards announcements, Star City Games articles and organizer schedule pages such as SCG CON. Each new article that mentions premier events, and each organizer page whose text changed, goes to Claude, which reports what the schedule should add or change. Changes that pass the same checks as a hand edit go into a pull request, with every change listed beside the words in its source. Review and merge it to publish. What was read is kept in `sources/seen.json`, so nothing is read twice.
+Once a day the **Check for event updates** workflow (`.github/workflows/update-events.yml`) runs `scripts/update-events.mjs`. It reads the sources in [`sources/sources.json`](sources/sources.json): magic.gg news, Wizards announcements, Star City Games articles and organizer schedule pages such as SCG CON. Each new article that mentions premier events, and each organizer page whose text changed, goes to Claude, which reports what the schedule should add or change. Changes that pass the same checks as a hand edit go into a pull request of their own (one per run, holding only `data/events.json`), with every change listed beside the words in its source. Review and merge it to publish. What was read is recorded in `sources/seen.json`, committed straight to `main` on every run, so nothing is read twice and open pull requests never conflict over it. For events within 90 days, the check also looks for their melee.gg tournament pages and links those it can confirm.
 
 `sources/sources.json` also records, for each organizer, what it hosts and where to check its schedule. Organizer pages are the most reliable source for dates and venues. To watch a new source, such as an independent series' schedule, add an entry there.
 

@@ -54,25 +54,25 @@ jobs:
         if: steps.update.outputs.events_changed == 'true'
         run: npm test
 
-      - name: Open a pull request
-        if: steps.update.outputs.events_changed == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: auto/event-updates
-          delete-branch: true
-          title: "Event updates from new announcements"
-          body-path: .update-summary.md
-          commit-message: "Update events from new announcements"
-          add-paths: |
-            data/events.json
-            calendar.ics
-            sources/seen.json
-
-      # Nothing to change on the site, but remember what was read so it isn't read again.
+      # The list of what was read goes straight to main on every run, never into a pull
+      # request, so open update PRs can't conflict over it.
       - name: Save what was read
-        if: steps.update.outputs.events_changed != 'true' && steps.update.outputs.seen_changed == 'true'
+        if: steps.update.outputs.seen_changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add sources/seen.json
           git diff --cached --quiet || { git commit -m "Record sources read by the event update check"; git push; }
+
+      # Each run with changes opens its own pull request, holding only data/events.json.
+      - name: Open a pull request
+        if: steps.update.outputs.events_changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: auto/event-updates-${{ github.run_number }}
+          delete-branch: true
+          title: "Event updates (${{ github.run_number }})"
+          body-path: .update-summary.md
+          commit-message: "Update events from new announcements"
+          add-paths: |
+            data/events.json

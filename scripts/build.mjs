@@ -1,7 +1,7 @@
 // Checks data/events.json, keeps it in canonical form (sorted by date, 2-space JSON), and
-// writes calendar.ics, the feed behind "Subscribe".
-// Usage: node scripts/build.mjs [--check]   (--check fails instead of writing when anything is out of date)
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+// writes calendar.ics, the feed behind "Subscribe" (made at deploy, not kept in git).
+// Usage: node scripts/build.mjs [--check]   (--check only checks; it fails if events.json isn't canonical)
+import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { validate, toICS } from '../js/core.js';
 
@@ -22,14 +22,11 @@ const ics = toICS(data, data.events);
 const out = `${root}calendar.ics`;
 
 if (process.argv.includes('--check')) {
-  const stale = [];
-  if (raw !== canonical) stale.push('data/events.json is not in canonical form');
-  if (!existsSync(out) || readFileSync(out, 'utf8') !== ics) stale.push('calendar.ics is out of date');
-  if (stale.length) {
-    console.error(`${stale.join('; ')}. Run: npm run build`);
+  if (raw !== canonical) {
+    console.error('data/events.json is not in canonical form. Run: npm run build');
     process.exit(1);
   }
-  console.log(`OK: ${data.events.length} events, calendar.ics up to date`);
+  console.log(`OK: ${data.events.length} events`);
 } else {
   writeFileSync(eventsPath, canonical);
   writeFileSync(out, ics);

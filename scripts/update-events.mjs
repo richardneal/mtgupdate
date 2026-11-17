@@ -22,13 +22,12 @@ import Anthropic from '@anthropic-ai/sdk';
 import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
 import { oidcFederationProvider } from '@anthropic-ai/sdk/lib/credentials/oidc-federation';
 import { z } from 'zod';
-import { TYPES, FORMATS, toICS, todayISO, daysBetween, countryName } from '../js/core.js';
+import { TYPES, FORMATS, todayISO, daysBetween, countryName } from '../js/core.js';
 import { applyChanges, toChanges } from './lib/merge.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const paths = {
   events: `${root}data/events.json`,
-  calendar: `${root}calendar.ics`,
   sources: `${root}sources/sources.json`,
   seen: `${root}sources/seen.json`,
   summary: `${root}.update-summary.md`,
@@ -224,6 +223,7 @@ Rules:
 - Report only facts that are new or different. If the schedule already says the same thing, even in other words ("Star City Games" and "SCG"), leave it alone: never reword, shorten or restyle existing text.
 - Only paper events of the types above. Not Magic Online or Arena events, not RCQs or store events, not other games.
 - Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, format, what it qualifies for, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists). A melee.gg tournament page for the event (pairings, standings, decklists) is links.melee.
+- Once an event has finished, an article with its final standings, its winner or its Top 8 is links.results; prefer the final standings or the finals report over a Top 8 article. Coverage that follows the event day by day is links.coverage: a later day's coverage replaces an earlier day's.
 - Add an event only when the document clearly announces one we don't list, with its dates and city. Give lat and lng for the city, its ISO country code, and an id of the form <year>-<type>-<city>.
 - Events run Friday to Sunday, or Saturday and Sunday. Use the dates of the event itself as the source gives them; a convention's Friday-to-Sunday dates are right for an event held at it unless the source says the event runs fewer days.
 - An organizer's own schedule page is the most reliable source for its events' dates and venues. Write a venue at a convention as "<Convention name>, <venue name>", e.g. "SCG CON Richmond, Greater Richmond Convention Center".
@@ -439,9 +439,9 @@ async function main() {
 
   const changed = results.some((r) => r.applied.length);
   if (changed) {
-    data.updated = today;
+    // Only the schedule goes into the pull request. The calendar feed and the "last updated"
+    // date are made at deploy time, so update pull requests never collide over them.
     writeFileSync(paths.events, JSON.stringify(data, null, 2) + '\n');
-    writeFileSync(paths.calendar, toICS(data, data.events));
   }
   writeFileSync(paths.seen, JSON.stringify(seen, null, 2) + '\n');
   const summary = summarize(results, failures);
