@@ -1,8 +1,9 @@
 name: Check for event updates
 
 # Reads new articles and changed organizer pages listed in sources/sources.json, asks Claude
-# what they change in data/events.json, and opens a pull request with the changes for review.
-# Merging the pull request deploys the site. Signs in to the Claude API with the job's GitHub
+# what they change in data/events.json, and opens a pull request with the changes. Once the
+# tests pass, the pull request merges itself and the site deploys; the PR stays as the record
+# of what changed and why. Signs in to the Claude API with the job's GitHub
 # identity (Workload Identity Federation), so no API key is stored: the ANTHROPIC_* repository
 # variables name the federation rule, organization and service account. See README.
 on:
@@ -22,6 +23,7 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  actions: write   # to start the deploy after merging (a bot's merge doesn't trigger it)
   id-token: write  # lets the job sign in to the Claude API as itself
 
 jobs:
@@ -66,6 +68,7 @@ jobs:
 
       # Each run with changes opens its own pull request, holding only data/events.json.
       - name: Open a pull request
+        id: pr
         if: steps.update.outputs.events_changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
@@ -76,3 +79,14 @@ jobs:
           commit-message: "Update events from new announcements"
           add-paths: |
             data/events.json
+
+      # The tests passed above, so merge and deploy. (GitHub doesn't run other workflows for a
+      # pull request or merge made by its own bot, so the deploy is started here.)
+      - name: Merge and deploy
+        if: steps.pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ steps.pr.outputs.pull-request-number }}
+        run: |
+          gh pr merge "$PR" --squash --delete-branch
+          gh workflow run deploy.yml --ref main
