@@ -9,7 +9,8 @@
     "worlds32": "https://magic.gg/news/world-championship-32-fact-sheet-for-competitors",
     "scgcon": "https://scgcon.starcitygames.com/",
     "spotlightStarTrek": "https://magic.gg/news/start-your-voyage-at-magic-spotlight-star-trek-in-lille-and-minneapolis",
-    "spotlightNauctis": "https://magic.gg/news/explore-new-depths-at-magic-spotlight-nauctis-in-zagreb-and-toronto"
+    "spotlightNauctis": "https://magic.gg/news/explore-new-depths-at-magic-spotlight-nauctis-in-zagreb-and-toronto",
+    "scgcon2027": "https://articles.starcitygames.com/magic-the-gathering/full-scg-con-2027-schedule-announced/"
   },
   "organizers": {
     "Star City Games": "https://scgcon.starcitygames.com/",
@@ -863,6 +864,26 @@
       "feeds": "Pro Tour TBD"
     },
     {
+      "id": "2027-rc-pittsburgh",
+      "type": "rc",
+      "name": "Regional Championship",
+      "formats": [
+        "tbd"
+      ],
+      "country": "US",
+      "organizer": "Star City Games",
+      "start": "2027-11-19",
+      "end": "2027-11-21",
+      "city": "Pittsburgh",
+      "lat": 40.44,
+      "lng": -80,
+      "venue": "SCG CON Pittsburgh, David L. Lawrence Convention Center",
+      "links": {
+        "event": "https://scgcon.starcitygames.com/event/scg-con-pittsburgh-2027/",
+        "info": "scgcon2027"
+      }
+    },
+    {
       "id": "2027-worlds-33",
       "type": "worlds",
       "name": "World Championship 33",
@@ -880,6 +901,26 @@
       "notes": "Draft and Standard.",
       "links": {
         "info": "magiccon2027"
+      }
+    },
+    {
+      "id": "2027-rc-portland",
+      "type": "rc",
+      "name": "Regional Championship",
+      "formats": [
+        "tbd"
+      ],
+      "country": "US",
+      "organizer": "Star City Games",
+      "start": "2027-12-17",
+      "end": "2027-12-19",
+      "city": "Portland",
+      "lat": 45.52,
+      "lng": -122.68,
+      "venue": "SCG CON Portland, Oregon Convention Center",
+      "links": {
+        "event": "https://scgcon.starcitygames.com/event/scg-con-portland-2027/",
+        "info": "scgcon2027"
       }
     }
   ]

@@ -30,6 +30,8 @@ export const FORMATS = {
   legacy: 'Legacy',
   vintage: 'Vintage',
   pauper: 'Pauper',
+  // Listed before its format is announced.
+  tbd: 'Format TBD',
 };
 
 export const REGIONS = {
