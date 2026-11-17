@@ -233,9 +233,10 @@
       "links": {
         "info": "worlds32",
         "stream": "https://www.twitch.tv/magic",
-        "coverage": "https://magic.gg/news/magic-world-championship-32-day-one-highlights",
+        "coverage": "https://magic.gg/news/magic-world-championship-32-top-8-highlights",
         "decklists": "https://magic.gg/news/magic-world-championship-32-standard-decklists",
-        "melee": "https://melee.gg/Tournament/View/471980"
+        "melee": "https://melee.gg/Tournament/View/471980",
+        "results": "https://magic.gg/news/the-finals-of-magic-world-championship-32"
       }
     },
     {
@@ -819,6 +820,44 @@
         "info": "comp2027"
       },
       "feeds": "Pro Tour TBD"
+    },
+    {
+      "id": "2027-rc-atlanta",
+      "type": "rc",
+      "name": "Regional Championship",
+      "start": "2027-09-10",
+      "end": "2027-09-12",
+      "formats": [
+        "modern"
+      ],
+      "city": "Atlanta",
+      "country": "US",
+      "lat": 33.749,
+      "lng": -84.388,
+      "organizer": "Star City Games",
+      "venue": "SCG CON Atlanta, Georgia World Congress Center",
+      "links": {
+        "info": "https://articles.starcitygames.com/magic-the-gathering/full-scg-con-2027-schedule-announced/"
+      }
+    },
+    {
+      "id": "2027-rc-milwaukee",
+      "type": "rc",
+      "name": "Regional Championship",
+      "start": "2027-10-01",
+      "end": "2027-10-03",
+      "formats": [
+        "modern"
+      ],
+      "city": "Milwaukee",
+      "country": "US",
+      "lat": 43.0389,
+      "lng": -87.9065,
+      "organizer": "Star City Games",
+      "venue": "SCG CON Milwaukee, Baird Center",
+      "links": {
+        "info": "https://articles.starcitygames.com/magic-the-gathering/full-scg-con-2027-schedule-announced/"
+      }
     },
     {
       "id": "2027-spotlight-valencia",
