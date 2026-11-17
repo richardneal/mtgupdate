@@ -1,5 +1,5 @@
 import {
-  TYPES, FILTER_GROUPS, REGIONS, FORMATS, feedsTarget, EMPTY_FILTERS, venuePlace, mapsUrl,
+  TYPES, FILTER_GROUPS, REGIONS, FORMATS, feedsTarget, EMPTY_FILTERS, venuePlace, mapsUrl, cityKnown,
   regionOf, countryName, flag, todayISO, status, dateRange, weekdayRange,
   monthKey, monthLabel, countdown, resolveLink, formatLabel, filterEvents,
   sortEvents, filtersFromParams, filtersToParams, toICS, matchesLoc, weekendOf,
@@ -302,8 +302,8 @@ function renderEvent(e, { row = true } = {}) {
     el('p', { class: 'where' },
       el('span', { class: 'city' },
         // With a venue named, its link is in the details; otherwise the city opens the map.
-        venuePlace(e) ? e.city : el('a', { class: 'map', href: mapsUrl(e), target: '_blank', rel: 'noopener', title: 'Open in Google Maps' }, e.city)),
-      el('span', { class: 'country' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country))),
+        venuePlace(e) || !mapsUrl(e) ? (cityKnown(e) ? e.city : 'Location TBD') : el('a', { class: 'map', href: mapsUrl(e), target: '_blank', rel: 'noopener', title: 'Open in Google Maps' }, e.city)),
+      e.country ? el('span', { class: 'country' }, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country)) : null),
     el('div', { class: 'side' },
       el('p', { class: 'countdown', 'data-text': countdown(e, today) }, countdown(e, today))));
 }
@@ -325,7 +325,7 @@ function renderCompactRow(e) {
   el('span', { class: 'c-days' }, weekdayRange(e.start, e.end)),
   el('span', { class: 'c-name' }, e.name),
   el('span', { class: 'c-fmt' }, formatLabel(e)),
-  el('span', { class: 'c-place' }, `${e.city}, `, el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country)),
+  el('span', { class: 'c-place' }, cityKnown(e) ? e.city : 'Location TBD', ...(e.country ? [', ', el('span', { class: 'flag', 'aria-hidden': 'true' }, flag(e.country)), countryName(e.country)] : [])),
   el('span', { class: 'c-status countdown', 'data-text': countdown(e, today) }, countdown(e, today)));
   const li = el('li', { class: `crow t-${e.type} is-${s}`, id: e.id, 'data-row': true }, button, details);
   return li;

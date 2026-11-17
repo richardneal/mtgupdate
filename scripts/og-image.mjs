@@ -35,8 +35,8 @@ const rows = upcoming.map((e) => {
       </span>
       <span class="where">
         ${live ? `<span class="live">${esc(countdown(e, today))}</span>` : ''}
-        <span class="city">${esc(e.city)}</span>
-        <span class="country">${esc(countryName(e.country))}</span>
+        <span class="city">${esc(e.city && e.city !== 'TBD' ? e.city : 'Location TBD')}</span>
+        ${e.country ? `<span class="country">${esc(countryName(e.country))}</span>` : ''}
       </span>
     </li>`;
 }).join('');

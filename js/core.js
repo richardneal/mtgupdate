@@ -204,13 +204,17 @@ export function venuePlace(event) {
   return i === -1 ? null : v.slice(i + 2);
 }
 
+// Whether the city is known yet (an event goes on the schedule as soon as its dates are).
+export const cityKnown = (event) => !!event.city && event.city !== 'TBD';
+
 export function mapsUrl(event) {
-  const query = [venuePlace(event), event.city, countryName(event.country)].filter(Boolean).join(', ');
+  if (!cityKnown(event) && !venuePlace(event)) return null;
+  const query = [venuePlace(event), cityKnown(event) && event.city, event.country && countryName(event.country)].filter(Boolean).join(', ');
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
 export function placeLabel(event) {
-  return `${event.city}, ${countryName(event.country)}`;
+  return event.country ? `${event.city}, ${countryName(event.country)}` : event.city;
 }
 
 export function searchText(event) {
@@ -352,7 +356,7 @@ export function toICS(data, events, { calName = 'mtgupdate: competitive paper Ma
       `DTEND;VALUE=DATE:${addDays(e.end, 1).replace(/-/g, '')}`,
       `SUMMARY:${icsEscape(eventTitle(e))}`,
       `LOCATION:${icsEscape(e.venue ? `${e.venue}, ${placeLabel(e)}` : placeLabel(e))}`,
-      `GEO:${e.lat};${e.lng}`,
+      typeof e.lat === 'number' && typeof e.lng === 'number' ? `GEO:${e.lat};${e.lng}` : null,
       `DESCRIPTION:${icsEscape(desc)}`,
       `URL:${url}`,
       `CATEGORIES:${icsEscape(TYPES[e.type].label)}`,
@@ -361,7 +365,7 @@ export function toICS(data, events, { calName = 'mtgupdate: competitive paper Ma
     );
   }
   lines.push('END:VCALENDAR');
-  return lines.map(fold).join('\r\n') + '\r\n';
+  return lines.filter(Boolean).map(fold).join('\r\n') + '\r\n';
 }
 
 // ---- Validation (used by the build and tests) --------------------------
@@ -389,10 +393,14 @@ export function validate(data) {
     if (e.feeds && /^\d{4}-[a-z0-9-]+$/.test(e.feeds) && !data.events.some((x) => x.id === e.feeds)) {
       errors.push(`${at}: feeds names no listed event (${e.feeds})`);
     }
-    if (!/^[A-Z]{2}$/.test(e.country || '')) errors.push(`${at}: country must be an ISO 3166 alpha-2 code`);
-    else if (regionOf(e.country) === 'other') errors.push(`${at}: country ${e.country} has no region in js/core.js`);
-    if (typeof e.lat !== 'number' || typeof e.lng !== 'number' ||
-        Math.abs(e.lat) > 90 || Math.abs(e.lng) > 180) errors.push(`${at}: lat/lng missing or out of range`);
+    // Only the type and dates are required: an event is listed as soon as its dates are known,
+    // and the city ("TBD" until known), country and coordinates follow when announced.
+    if (e.country !== undefined) {
+      if (!/^[A-Z]{2}$/.test(e.country)) errors.push(`${at}: country must be an ISO 3166 alpha-2 code`);
+      else if (regionOf(e.country) === 'other') errors.push(`${at}: country ${e.country} has no region in js/core.js`);
+    }
+    if ((e.lat !== undefined || e.lng !== undefined) && (typeof e.lat !== 'number' || typeof e.lng !== 'number' ||
+        Math.abs(e.lat) > 90 || Math.abs(e.lng) > 180)) errors.push(`${at}: lat/lng out of range`);
     for (const [k, v] of Object.entries(e.links || {})) {
       const url = resolveLink(data, v);
       if (!/^https:\/\//.test(url)) errors.push(`${at}: links.${k} is neither a source key nor an https URL`);

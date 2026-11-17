@@ -40,7 +40,7 @@ test('rejects changes that would break the data, and keeps the rest', () => {
     { action: 'update', id: '2027-rc-louisville', reason: 'Bad dates', evidence: '', fields: { start: '2027-04-17', end: '2027-04-19' } }, // Sat–Mon
     { action: 'update', id: 'no-such-event', reason: '', evidence: '', fields: { venue: 'X' } },
     { action: 'update', id: '2027-pt-tokyo', reason: 'Type change', evidence: '', fields: { type: 'worlds' } },
-    { action: 'add', id: '2027-rc-nowhere', reason: 'Incomplete', evidence: '', fields: { type: 'rc', name: 'Regional Championship', city: 'Nowhere' } },
+    { action: 'add', id: '2027-rc-nowhere', reason: 'Incomplete', evidence: '', fields: { type: 'rc', name: 'Regional Championship', city: 'Nowhere' } }, // no dates
     { action: 'update', id: '2027-pt-tokyo', reason: 'Bad link', evidence: '', fields: { links: { results: 'http://insecure.example' } } },
     { action: 'update', id: '2027-pt-tokyo', reason: 'Venue', evidence: '', fields: { venue: 'Tokyo Big Sight' } },
   ]);
@@ -78,4 +78,14 @@ test('a rename needs the new name in the quoted source', () => {
   assert.match(guess.rejected[0].why, /new name/);
   const stated = applyChanges(data, [{ action: 'update', id: '2027-pt-tokyo', reason: 'Named', evidence: 'Pro Tour Darkhold Destiny comes to MagicCon: Tokyo', fields: { name: 'Pro Tour Darkhold Destiny' } }]);
   assert.equal(stated.applied.length, 1);
+});
+
+test('an event goes on the schedule once its type and dates are known', () => {
+  const { data: out, applied } = applyChanges(data, [{
+    action: 'add', id: '2027-pt-december', reason: 'Announced', evidence: 'a Pro Tour on December 10-12, 2027',
+    fields: { type: 'pt', start: '2027-12-10', end: '2027-12-12' },
+  }]);
+  assert.equal(applied.length, 1);
+  const e = byId(out, '2027-pt-december');
+  assert.deepEqual([e.name, e.formats, e.city, e.country], ['Pro Tour', ['tbd'], 'TBD', undefined]);
 });

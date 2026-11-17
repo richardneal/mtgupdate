@@ -2,7 +2,10 @@
 // leave the data valid. Used by scripts/update-events.mjs; tested in tests/merge.test.mjs.
 import { validate, withinWeekend } from '../../js/core.js';
 
-const REQUIRED_FOR_ADD = ['type', 'name', 'start', 'end', 'formats', 'city', 'country', 'lat', 'lng'];
+// An event goes on the schedule as soon as its type and dates are known; the rest is filled in
+// as it's announced.
+const REQUIRED_FOR_ADD = ['type', 'start', 'end'];
+const DEFAULT_NAMES = { pt: 'Pro Tour', worlds: 'World Championship', lc: 'Limited Championship', rc: 'Regional Championship', spotlight: 'Spotlight' };
 const EDITABLE = ['name', 'start', 'end', 'formats', 'set', 'city', 'country', 'lat', 'lng',
   'organizer', 'venue', 'feeds', 'notes'];
 
@@ -67,7 +70,7 @@ export function applyChanges(data, changes, { source } = {}) {
         rejected.push({ change, why: `new event is missing ${missing.join(', ')}` });
         continue;
       }
-      event = { id: change.id, type: fields.type };
+      event = { id: change.id, type: fields.type, name: DEFAULT_NAMES[fields.type] || 'Event', formats: ['tbd'], city: 'TBD' };
       applyFields(event, fields);
       next.events.push(event);
       diffs = [['added', null, `${event.name}, ${event.city}, ${event.start}–${event.end}`]];
