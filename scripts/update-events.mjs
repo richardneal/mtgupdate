@@ -153,8 +153,12 @@ async function collect(sources, seen) {
     docs.push({ source: { id: 'manual', name: 'Requested page', check: 'A page someone asked the workflow to read.' }, url: ONLY, title: ONLY });
   }
   if (ONLY) return docs.filter((d) => d.url === ONLY);
-  // Organizer pages first: they are the most reliable source, and the per-run limit must not crowd them out.
-  return [...docs.filter((d) => d.pageHash), ...docs.filter((d) => !d.pageHash)];
+  // Organizer pages first: they are the most reliable source, and the per-run limit must not
+  // crowd them out. Then articles oldest first, so a later article (Top 8 after Day Two, say)
+  // has the last word.
+  const when = (d) => { const t = Date.parse(d.date || ''); return Number.isNaN(t) ? 0 : t; };
+  const articles = docs.filter((d) => !d.pageHash).sort((a, b) => when(a) - when(b));
+  return [...docs.filter((d) => d.pageHash), ...articles];
 }
 
 // ---- Asking Claude ---------------------------------------------------------
@@ -223,7 +227,7 @@ Rules:
 - Report only facts that are new or different. If the schedule already says the same thing, even in other words ("Star City Games" and "SCG"), leave it alone: never reword, shorten or restyle existing text.
 - Only paper events of the types above. Not Magic Online or Arena events, not RCQs or store events, not other games.
 - Update an existing event (by its id) when the document gives better or newer facts for it: dates, venue, organizer, format, what it qualifies for, or links to its results, decklists, coverage or stream. Use the document's URL for the link when the document itself is that page (for example a decklists article is links.decklists). A melee.gg tournament page for the event (pairings, standings, decklists) is links.melee.
-- Once an event has finished, an article with its final standings, its winner or its Top 8 is links.results; prefer the final standings or the finals report over a Top 8 article. Coverage that follows the event day by day is links.coverage: a later day's coverage replaces an earlier day's.
+- Once an event has finished, an article with its final standings, its winner or its Top 8 is links.results; prefer the final standings or the finals report over a Top 8 article, and magic.gg's or the organizer's own report over another site's. Coverage that follows the event day by day is links.coverage: a later day's coverage replaces an earlier day's.
 - Add an event only when the document clearly announces one we don't list, with its dates and city. Give lat and lng for the city, its ISO country code, and an id of the form <year>-<type>-<city>.
 - Events run Friday to Sunday, or Saturday and Sunday. Use the dates of the event itself as the source gives them; a convention's Friday-to-Sunday dates are right for an event held at it unless the source says the event runs fewer days.
 - An organizer's own schedule page is the most reliable source for its events' dates and venues. Write a venue at a convention as "<Convention name>, <venue name>", e.g. "SCG CON Richmond, Greater Richmond Convention Center".
@@ -239,7 +243,7 @@ function compactSchedule(data) {
   })));
 }
 
-async function extract(client, schedule, doc) {
+async function extract(client, schedule, doc, sofar = '') {
   const text = (doc.text ?? '').slice(0, MAX_CHARS);
   const response = await client.beta.messages.parse({
     model: 'claude-opus-5-5',
@@ -253,7 +257,7 @@ async function extract(client, schedule, doc) {
     ],
     messages: [{
       role: 'user',
-      content: `Source: ${doc.source.name}\nHow to read this source: ${doc.source.check}\nURL: ${doc.url}\nTitle: ${doc.title}${doc.date ? `\nPublished: ${doc.date}` : ''}\n\n<document>\n${text}\n</document>`,
+      content: `${sofar ? `Already changed in this run, from earlier documents (the schedule above doesn't show these yet):\n${sofar}\n\n` : ''}Source: ${doc.source.name}\nHow to read this source: ${doc.source.check}\nURL: ${doc.url}\nTitle: ${doc.title}${doc.date ? `\nPublished: ${doc.date}` : ''}\n\n<document>\n${text}\n</document>`,
     }],
   });
   if (response.stop_reason === 'refusal') throw new Error(`declined (${response.stop_details?.category ?? 'no category'})`);
@@ -397,7 +401,9 @@ async function main() {
   for (const doc of docs.slice(0, MAX_DOCS)) {
     try {
       if (doc.text === undefined) doc.text = doc.content ? pageText(doc.content) : pageText(await get(doc.url));
-      const changes = await extract(client, schedule, doc);
+      const sofar = results.flatMap((r) => r.applied.flatMap(({ change, diffs }) =>
+        diffs.map(([field, , to]) => `- ${change.id} ${field}: ${typeof to === 'string' ? to : JSON.stringify(to)} (from ${r.doc.url})`))).join('\n');
+      const changes = await extract(client, schedule, doc, sofar);
       const result = applyChanges(data, changes, { source: doc.url });
       data = result.data;
       results.push({ doc, ...result });
