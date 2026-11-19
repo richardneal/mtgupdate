@@ -21,7 +21,8 @@
     "https://magic.gg/news/magic-world-championship-32-day-two-highlights": "2026-11-17",
     "https://magic.gg/news/the-finals-of-magic-world-championship-32": "2026-11-17",
     "https://articles.starcitygames.com/magic-the-gathering/full-scg-con-2027-schedule-announced/": "2026-11-17",
-    "https://articles.starcitygames.com/magic-the-gathering/schutz-izzet-mission-wins-magic-world-championship-32/": "2026-11-17"
+    "https://articles.starcitygames.com/magic-the-gathering/schutz-izzet-mission-wins-magic-world-championship-32/": "2026-11-17",
+    "https://magic.gg/news/metagame-mentor-standard-win-rates-and-lessons-from-magic-world-championship-32": "2026-11-19"
   },
   "pages": {
     "https://scgcon.starcitygames.com/": {
@@ -38,10 +39,10 @@
     "2027-rc-sao-paulo": "2026-11-18",
     "2027-rc-st-louis": "2026-11-15",
     "2027-rc-melbourne": "2026-11-18",
-    "2027-rc-san-diego": "2026-11-16",
-    "2027-rc-vancouver": "2026-11-16",
-    "2027-rc-aichi": "2026-11-16",
-    "2027-rc-bilbao": "2026-11-16",
-    "2027-rc-taipei": "2026-11-16"
+    "2027-rc-san-diego": "2026-11-19",
+    "2027-rc-vancouver": "2026-11-19",
+    "2027-rc-aichi": "2026-11-19",
+    "2027-rc-bilbao": "2026-11-19",
+    "2027-rc-taipei": "2026-11-19"
   }
 }
