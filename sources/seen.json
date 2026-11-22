@@ -44,5 +44,34 @@
     "2027-rc-aichi": "2026-11-19",
     "2027-rc-bilbao": "2026-11-19",
     "2027-rc-taipei": "2026-11-19"
+  },
+  "meleeRejected": {
+    "2027-rc-bangkok": [
+      "https://melee.gg/Tournament/View/482105"
+    ],
+    "2027-rc-shanghai": [
+      "https://melee.gg/Tournament/View/420325"
+    ],
+    "2027-spotlight-lille": [
+      "https://melee.gg/Tournament/View/301756"
+    ],
+    "2027-rc-mexico-city": [
+      "https://melee.gg/Tournament/View/471573"
+    ],
+    "2027-rc-sao-paulo": [
+      "https://melee.gg/Tournament/View/425324"
+    ],
+    "2027-rc-melbourne": [
+      "https://melee.gg/Tournament/View/241092"
+    ],
+    "2027-rc-vancouver": [
+      "https://melee.gg/Tournament/View/393283"
+    ],
+    "2027-rc-aichi": [
+      "https://melee.gg/Tournament/View/411350"
+    ],
+    "2027-rc-san-diego": [
+      "https://melee.gg/Tournament/View/439572"
+    ]
   }
 }

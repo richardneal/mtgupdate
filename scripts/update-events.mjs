@@ -291,14 +291,17 @@ export function meleeCandidates(data, seen) {
 
 const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-async function findMelee(client, e) {
+// Returns { url, title } for a confirmed page, { rejected: url } for a page that failed the check
+// (remembered in seen.json so it isn't checked again), or null when nothing turned up.
+async function findMelee(client, e, rejected = []) {
   const messages = [{
     role: 'user',
     content: `Find the melee.gg tournament page for this Magic: The Gathering event. Search melee.gg only.\n\n` +
       `Event: ${e.name}\nCity: ${e.city}, ${countryName(e.country)}\nDates: ${e.start} to ${e.end}\n` +
       `Organizer: ${e.organizer || 'Wizards of the Coast'}${e.venue ? `\nVenue: ${e.venue}` : ''}\n\n` +
       `Answer with the main event's URL, of the form https://melee.gg/Tournament/View/<number>, on a line by itself. ` +
-      `Not a side event, qualifier or last-chance qualifier. If you can't find the main event's page, answer NONE.`,
+      `Not a side event, qualifier or last-chance qualifier. If you can't find the main event's page, answer NONE.` +
+      (rejected.length ? `\n\nThese pages were already checked and are not this event, so don't answer with them:\n${rejected.join('\n')}` : ''),
   }];
   let response;
   for (let i = 0; i < 4; i++) {
@@ -317,6 +320,10 @@ async function findMelee(client, e) {
   const answer = response.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
   const url = /https:\/\/melee\.gg\/Tournament\/View\/\d+/i.exec(answer)?.[0];
   if (!url) return null;
+  if (rejected.includes(url)) {
+    console.log(`  Melee: ${url} was already rejected for ${e.id}; skipped`);
+    return null;
+  }
 
   // Check the page before trusting it: the city in its title, and a start date on our dates.
   const id = url.split('/').pop();
@@ -327,7 +334,7 @@ async function findMelee(client, e) {
   const datesMatch = startsOn && daysBetween(e.start, startsOn) >= -2 && daysBetween(startsOn, e.end) >= -1;
   if (!cityWords.some((w) => fold(title).includes(w)) || !datesMatch) {
     console.log(`  Melee: ${url} ("${title}", starts ${startsOn || '?'}) doesn't match ${e.id}; skipped`);
-    return null;
+    return { rejected: url };
   }
   return { url, title };
 }
@@ -420,12 +427,18 @@ async function main() {
   }
 
   seen.melee ||= {};
+  seen.meleeRejected ||= {};
   let searched = 0;
   for (const e of meleeQueue) {
     try {
-      const found = await findMelee(client, e);
+      const rejected = seen.meleeRejected[e.id] || [];
+      let found = await findMelee(client, e, rejected);
       seen.melee[e.id] = today;
       searched++;
+      if (found?.rejected) {
+        seen.meleeRejected[e.id] = [...new Set([...rejected, found.rejected])];
+        found = null;
+      }
       if (!found) { console.log(`  Melee: nothing yet for ${e.id}`); continue; }
       const result = applyChanges(data, [{
         action: 'update', id: e.id, reason: 'melee.gg has this event\'s tournament page.', evidence: found.title,
