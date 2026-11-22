@@ -35,6 +35,48 @@
       "kind": "page",
       "url": "https://scgcon.starcitygames.com/",
       "check": "The organizer's own list of every upcoming SCG CON: city, convention dates and venue, with a link per show (scgcon.starcitygames.com/event/...). An SCG CON runs Friday to Sunday; the premier event inside it may run all three days or only two. Use it to confirm dates and venues of US Regional Championships and US Spotlight stops (venue as \"SCG CON <City>, <Convention center>\", links.event as the show's page). A show that hosts no event we list is not an event to add."
+    },
+    {
+      "id": "fanfinity-events",
+      "name": "Fanfinity upcoming events",
+      "organizer": "Fanfinity",
+      "kind": "page",
+      "url": "https://www.fanfinity.gg/magic-the-gathering/",
+      "check": "Fanfinity's own list of its upcoming Magic events in Europe: Spotlight stops, Ultimate Guard European Magic Series Regional Championships, and CommandFest weekends held alongside the Spotlights. Use it to confirm dates and cities of European Spotlights and RCs, and to add any it lists that we don't. CommandFest and side events are not events we list."
+    },
+    {
+      "id": "fanfinity-news",
+      "name": "Fanfinity news",
+      "kind": "rss",
+      "url": "https://www.fanfinity.gg/feed/",
+      "check": "Fanfinity's blog: event announcements, venue and schedule details, and recaps for its European Spotlights and Regional Championships (the Ultimate Guard European Magic Series).",
+      "match": "spotlight|regional|european magic series|\\bems\\b|championship",
+      "exclude": "lorcana|pok[eé]mon|star wars|flesh and blood|one piece|riftbound|\\brcq\\b"
+    },
+    {
+      "id": "f2f-destination",
+      "name": "F2F Tour destination events",
+      "organizer": "Face to Face Games",
+      "kind": "page",
+      "url": "https://f2ftour.com/destination-events/",
+      "check": "Face to Face Games' list of its Canadian Tour Weekends, which host the Canadian Regional Championships and Spotlight stops. Use it for their dates, cities and venues."
+    },
+    {
+      "id": "f2f-news",
+      "name": "F2F Tour news",
+      "kind": "rss",
+      "url": "https://f2ftour.com/feed/",
+      "check": "F2F Tour news: announcements and details for Canadian Regional Championships, Spotlight stops and Tour Weekends. Store qualifiers (RCQs, last-chance qualifiers) are not events we list.",
+      "match": "spotlight|regional championship|tour weekend|destination",
+      "exclude": "last chance|\\blcq\\b|\\brcq\\b"
+    },
+    {
+      "id": "cams",
+      "name": "Central America Magic Series",
+      "organizer": "Necrotower",
+      "kind": "page",
+      "url": "https://camagicseries.com/",
+      "check": "The site of Necrotower's Central America Magic Series, which runs the Mexico, Central America and Caribbean Regional Championships (in Mexico City). Use it to confirm their dates and venue. In Spanish."
     }
   ],
   "organizers": [
@@ -46,47 +88,47 @@
     {
       "name": "Fanfinity",
       "hosts": "Europe, Middle East and Africa Regional Championships and European Spotlight stops",
-      "check": "No 2027 schedule page found as of 2026-11-14. Look for one at https://fanfinity.gg and add it here as a 'page' source when it appears."
+      "check": "Watched: its upcoming-events page and news feed (sources 'fanfinity-events', 'fanfinity-news'). Site: https://www.fanfinity.gg"
     },
     {
       "name": "Face to Face Games",
       "hosts": "Canadian Regional Championships and Canadian Spotlight stops (at F2F Tour weekends)",
-      "check": "Tour weekends are listed at https://facetofacegames.com/pages/destination-events and announced at https://magic.facetofacegames.com. No 2027 dates found as of 2026-11-14; add the destination events page as a 'page' source once 2027 stops appear."
+      "check": "Watched: the F2F Tour destination-events page and news feed (sources 'f2f-destination', 'f2f-news'). Its events iCal feed (https://f2ftour.com/events/?ical=1) is mostly store qualifiers, so it isn't watched."
     },
     {
       "name": "BIG MAGIC",
       "hosts": "Japanese Regional Championships and Japanese Spotlight stops",
-      "check": "Event pages under https://ssl.bigmagic.net (Japanese, some English). No 2027 pages found as of 2026-11-14."
+      "check": "Not watched yet: the Champions Cup pages (Japan's Regional Championship series, https://ssl.bigmagic.net/championscup/) are drawn by JavaScript, so a plain fetch gets no text, and https://mtg.bigmagic.net is mostly shop and strategy articles. Japanese RCs and Spotlights come in through magic.gg."
     },
     {
       "name": "Let's Play Games",
       "hosts": "Australia and New Zealand Regional Championships and Spotlight stops",
-      "check": "No 2027 page found as of 2026-11-14. A store listing gave the Sydney RC as Nov 6–8, 2026 against magic.gg's Oct 23–25; confirm with the organizer if a page turns up. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
+      "check": "Not watched: its site blocks automated visitors. ANZ RCs and Spotlights come in through magic.gg."
     },
     {
       "name": "Kadou",
       "hosts": "Regional Championships and Spotlight stops in mainland China",
-      "check": "No English schedule page known. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
+      "check": "Not watched: no official schedule page found (as of 2026-11-22). China's RC (the MTG China Open) comes in through magic.gg."
     },
     {
       "name": "Necrotower",
       "hosts": "Mexico, Central America and Caribbean Regional Championships",
-      "check": "No schedule page known."
+      "check": "Watched: the Central America Magic Series site (source 'cams')."
     },
     {
       "name": "Devir Brasil",
       "hosts": "South American Regional Championships",
-      "check": "No schedule page known."
+      "check": "Not watched: no current schedule page. https://southamericamagicseries.com belongs to the previous organizer (Magicsur) and hasn't been updated since June 2025. South American RCs come in through magic.gg."
     },
     {
       "name": "Game Square",
       "hosts": "Chinese Taipei Regional Championships",
-      "check": "No schedule page known. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
+      "check": "Not watched: no official schedule page found (as of 2026-11-22). Chinese Taipei's RC comes in through magic.gg."
     },
     {
       "name": "Oracle Events",
       "hosts": "Southeast Asia Regional Championships",
-      "check": "No schedule page known. No website confirmed as of 2026-11-15, so the page shows its name without a link; add it to data/events.json organizers once confirmed."
+      "check": "Not watched: no official schedule page found (as of 2026-11-22). Southeast Asia's RC (the SEA Championship) comes in through magic.gg."
     }
   ]
 }
