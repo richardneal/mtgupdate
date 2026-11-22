@@ -417,7 +417,8 @@
       "feeds": "2027-pt-tokyo",
       "links": {
         "event": "https://scgcon.starcitygames.com/event/scg-con-san-diego-2027/",
-        "info": "rcRound2"
+        "info": "rcRound2",
+        "melee": "https://melee.gg/Tournament/View/451441"
       },
       "venue": "SCG CON San Diego, San Diego Convention Center"
     },
@@ -426,7 +427,7 @@
       "type": "rc",
       "name": "Regional Championship",
       "start": "2027-02-05",
-      "end": "2027-02-06",
+      "end": "2027-02-07",
       "formats": [
         "standard"
       ],
@@ -438,7 +439,8 @@
       "feeds": "2027-pt-tokyo",
       "links": {
         "info": "rcRound2"
-      }
+      },
+      "venue": "Vancouver Convention Centre"
     },
     {
       "id": "2027-rc-aichi",
