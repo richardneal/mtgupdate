@@ -22,12 +22,29 @@
     "https://magic.gg/news/the-finals-of-magic-world-championship-32": "2026-11-17",
     "https://articles.starcitygames.com/magic-the-gathering/full-scg-con-2027-schedule-announced/": "2026-11-17",
     "https://articles.starcitygames.com/magic-the-gathering/schutz-izzet-mission-wins-magic-world-championship-32/": "2026-11-17",
-    "https://magic.gg/news/metagame-mentor-standard-win-rates-and-lessons-from-magic-world-championship-32": "2026-11-19"
+    "https://magic.gg/news/metagame-mentor-standard-win-rates-and-lessons-from-magic-world-championship-32": "2026-11-19",
+    "https://f2ftour.com/magic-the-gathering-regional-championship-round-11-comes-to-vancouver/": "2026-11-22",
+    "https://f2ftour.com/announcing-magic-spotlight-lorwyn-eclipsed-at-tour-weekend-toronto/": "2026-11-22",
+    "https://f2ftour.com/tour-weekend-update-more-cities-more-events-more-prizes/": "2026-11-22",
+    "https://f2ftour.com/2026-27-round-2-regional-championship-is-coming-to-vancouver/": "2026-11-22",
+    "https://www.fanfinity.gg/blog/mtg-ultimate-guard-ems-26-27-season-round-3/": "2026-11-22"
   },
   "pages": {
     "https://scgcon.starcitygames.com/": {
       "hash": "c72f34a04115096b",
       "checked": "2026-11-15"
+    },
+    "https://www.fanfinity.gg/magic-the-gathering/": {
+      "hash": "590983ac82ecc245",
+      "checked": "2026-11-22"
+    },
+    "https://f2ftour.com/destination-events/": {
+      "hash": "f830d6aa5c7d5832",
+      "checked": "2026-11-22"
+    },
+    "https://camagicseries.com/": {
+      "hash": "6649021f8b5b70b5",
+      "checked": "2026-11-22"
     }
   },
   "melee": {
@@ -39,11 +56,11 @@
     "2027-rc-sao-paulo": "2026-11-21",
     "2027-rc-st-louis": "2026-11-15",
     "2027-rc-melbourne": "2026-11-21",
-    "2027-rc-san-diego": "2026-11-19",
-    "2027-rc-vancouver": "2026-11-19",
-    "2027-rc-aichi": "2026-11-19",
-    "2027-rc-bilbao": "2026-11-19",
-    "2027-rc-taipei": "2026-11-19"
+    "2027-rc-san-diego": "2026-11-22",
+    "2027-rc-vancouver": "2026-11-22",
+    "2027-rc-aichi": "2026-11-22",
+    "2027-rc-bilbao": "2026-11-22",
+    "2027-rc-taipei": "2026-11-22"
   },
   "meleeRejected": {
     "2027-rc-bangkok": [
@@ -72,6 +89,9 @@
     ],
     "2027-rc-san-diego": [
       "https://melee.gg/Tournament/View/439572"
+    ],
+    "2027-rc-taipei": [
+      "https://melee.gg/Tournament/View/447099"
     ]
   }
 }
