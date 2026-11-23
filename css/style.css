@@ -413,6 +413,6 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   .days { font-size: 30px; white-space: nowrap; }
   .when { grid-row: span 3; }
   .where { flex-direction: row; flex-wrap: wrap; gap: 0 6px; padding-top: 4px; }
-  .country::before { content: ", "; margin-left: -6px; }
+  .where .country::before { content: ", "; margin-left: -6px; }
   .side { grid-column: 2; flex-direction: row; align-items: baseline; padding-top: 4px; }
 }
