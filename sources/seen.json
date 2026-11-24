@@ -35,8 +35,8 @@
       "checked": "2026-11-15"
     },
     "https://www.fanfinity.gg/magic-the-gathering/": {
-      "hash": "590983ac82ecc245",
-      "checked": "2026-11-22"
+      "hash": "25d4a345ad73d5ee",
+      "checked": "2026-11-24"
     },
     "https://f2ftour.com/destination-events/": {
       "hash": "f830d6aa5c7d5832",
@@ -48,14 +48,14 @@
     }
   },
   "melee": {
-    "2027-rc-bangkok": "2026-11-21",
-    "2027-rc-shanghai": "2026-11-21",
-    "2027-spotlight-lille": "2026-11-21",
+    "2027-rc-bangkok": "2026-11-24",
+    "2027-rc-shanghai": "2026-11-24",
+    "2027-spotlight-lille": "2026-11-24",
     "2027-spotlight-minneapolis": "2026-11-15",
-    "2027-rc-mexico-city": "2026-11-21",
-    "2027-rc-sao-paulo": "2026-11-21",
+    "2027-rc-mexico-city": "2026-11-24",
+    "2027-rc-sao-paulo": "2026-11-24",
     "2027-rc-st-louis": "2026-11-15",
-    "2027-rc-melbourne": "2026-11-21",
+    "2027-rc-melbourne": "2026-11-24",
     "2027-rc-san-diego": "2026-11-22",
     "2027-rc-vancouver": "2026-11-22",
     "2027-rc-aichi": "2026-11-22",
@@ -67,16 +67,19 @@
       "https://melee.gg/Tournament/View/482105"
     ],
     "2027-rc-shanghai": [
-      "https://melee.gg/Tournament/View/420325"
+      "https://melee.gg/Tournament/View/420325",
+      "https://melee.gg/Tournament/View/451148"
     ],
     "2027-spotlight-lille": [
       "https://melee.gg/Tournament/View/301756"
     ],
     "2027-rc-mexico-city": [
-      "https://melee.gg/Tournament/View/471573"
+      "https://melee.gg/Tournament/View/471573",
+      "https://melee.gg/Tournament/View/247957"
     ],
     "2027-rc-sao-paulo": [
-      "https://melee.gg/Tournament/View/425324"
+      "https://melee.gg/Tournament/View/425324",
+      "https://melee.gg/Tournament/view/424851"
     ],
     "2027-rc-melbourne": [
       "https://melee.gg/Tournament/View/241092"
