@@ -282,7 +282,7 @@
       "id": "2027-spotlight-lille",
       "type": "spotlight",
       "name": "Spotlight: Star Trek",
-      "start": "2027-01-09",
+      "start": "2027-01-08",
       "end": "2027-01-10",
       "formats": [
         "limited"
@@ -524,7 +524,7 @@
       "id": "2027-spotlight-zagreb",
       "type": "spotlight",
       "name": "Spotlight: Nauctis",
-      "start": "2027-03-13",
+      "start": "2027-03-12",
       "end": "2027-03-14",
       "formats": [
         "limited"
@@ -787,6 +787,25 @@
       }
     },
     {
+      "id": "2027-spotlight-utrecht",
+      "type": "spotlight",
+      "name": "Spotlight: Team Limited",
+      "start": "2027-09-03",
+      "end": "2027-09-05",
+      "formats": [
+        "team-limited"
+      ],
+      "city": "Utrecht",
+      "country": "NL",
+      "lat": 52.09,
+      "lng": 5.12,
+      "organizer": "Fanfinity",
+      "links": {
+        "info": "comp2027"
+      },
+      "feeds": "Pro Tour TBD"
+    },
+    {
       "id": "2027-spotlight-sydney",
       "type": "spotlight",
       "name": "Spotlight: Team Limited",
@@ -800,25 +819,6 @@
       "lat": -33.87,
       "lng": 151.21,
       "organizer": "Let's Play Games",
-      "links": {
-        "info": "comp2027"
-      },
-      "feeds": "Pro Tour TBD"
-    },
-    {
-      "id": "2027-spotlight-utrecht",
-      "type": "spotlight",
-      "name": "Spotlight: Team Limited",
-      "start": "2027-09-04",
-      "end": "2027-09-05",
-      "formats": [
-        "team-limited"
-      ],
-      "city": "Utrecht",
-      "country": "NL",
-      "lat": 52.09,
-      "lng": 5.12,
-      "organizer": "Fanfinity",
       "links": {
         "info": "comp2027"
       },
@@ -866,7 +866,7 @@
       "id": "2027-spotlight-valencia",
       "type": "spotlight",
       "name": "Spotlight: Zhalfir",
-      "start": "2027-10-16",
+      "start": "2027-10-15",
       "end": "2027-10-17",
       "formats": [
         "pioneer"
