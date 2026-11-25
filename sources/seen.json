@@ -35,8 +35,8 @@
       "checked": "2026-11-15"
     },
     "https://www.fanfinity.gg/magic-the-gathering/": {
-      "hash": "25d4a345ad73d5ee",
-      "checked": "2026-11-24"
+      "hash": "ad82b8580200f2d5",
+      "checked": "2026-11-25"
     },
     "https://f2ftour.com/destination-events/": {
       "hash": "f830d6aa5c7d5832",
@@ -57,10 +57,10 @@
     "2027-rc-st-louis": "2026-11-15",
     "2027-rc-melbourne": "2026-11-24",
     "2027-rc-san-diego": "2026-11-22",
-    "2027-rc-vancouver": "2026-11-22",
-    "2027-rc-aichi": "2026-11-22",
-    "2027-rc-bilbao": "2026-11-22",
-    "2027-rc-taipei": "2026-11-22"
+    "2027-rc-vancouver": "2026-11-25",
+    "2027-rc-aichi": "2026-11-25",
+    "2027-rc-bilbao": "2026-11-25",
+    "2027-rc-taipei": "2026-11-25"
   },
   "meleeRejected": {
     "2027-rc-bangkok": [
@@ -95,6 +95,9 @@
     ],
     "2027-rc-taipei": [
       "https://melee.gg/Tournament/View/447099"
+    ],
+    "2027-rc-bilbao": [
+      "https://melee.gg/Tournament/View/370856"
     ]
   }
 }
