@@ -582,6 +582,24 @@
       "venue": "SCG CON Louisville, Kentucky International Convention Center"
     },
     {
+      "id": "2027-rc-prague",
+      "type": "rc",
+      "name": "Regional Championship",
+      "formats": [
+        "tbd"
+      ],
+      "city": "Prague",
+      "start": "2027-04-23",
+      "end": "2027-04-25",
+      "country": "CZ",
+      "lat": 50.0755,
+      "lng": 14.4378,
+      "organizer": "Fanfinity",
+      "links": {
+        "info": "https://www.fanfinity.gg/magic-the-gathering/"
+      }
+    },
+    {
       "id": "2027-spotlight-seattle",
       "type": "spotlight",
       "name": "Spotlight: Marvel Darkhold Destiny",
