@@ -35,8 +35,8 @@
       "checked": "2026-11-15"
     },
     "https://www.fanfinity.gg/magic-the-gathering/": {
-      "hash": "3698e2f27d6f3ba8",
-      "checked": "2026-11-26"
+      "hash": "f2a9f2aef42260d5",
+      "checked": "2026-11-27"
     },
     "https://f2ftour.com/destination-events/": {
       "hash": "f830d6aa5c7d5832",
@@ -48,14 +48,14 @@
     }
   },
   "melee": {
-    "2027-rc-bangkok": "2026-11-24",
-    "2027-rc-shanghai": "2026-11-24",
-    "2027-spotlight-lille": "2026-11-24",
+    "2027-rc-bangkok": "2026-11-27",
+    "2027-rc-shanghai": "2026-11-27",
+    "2027-spotlight-lille": "2026-11-27",
     "2027-spotlight-minneapolis": "2026-11-15",
-    "2027-rc-mexico-city": "2026-11-24",
-    "2027-rc-sao-paulo": "2026-11-24",
+    "2027-rc-mexico-city": "2026-11-27",
+    "2027-rc-sao-paulo": "2026-11-27",
     "2027-rc-st-louis": "2026-11-15",
-    "2027-rc-melbourne": "2026-11-24",
+    "2027-rc-melbourne": "2026-11-27",
     "2027-rc-san-diego": "2026-11-22",
     "2027-rc-vancouver": "2026-11-25",
     "2027-rc-aichi": "2026-11-25",
